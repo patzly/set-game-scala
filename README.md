@@ -1,35 +1,23 @@
-# Htwg Scala Seed Project 
-=====================================================
-## the easiest way to start a project for the lecture SE
+# SET Game
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/license/mit/)  [![Release](https://img.shields.io/github/v/release/patzly/set-game-scala?label=Release)](https://github.com/patzly/set-game-scala/releases)
 
-This is a seed project to create a basic scala project as used in the
-class Software Engineering at the University of Applied Science HTWG Konstanz.
+This is an unofficial Scala version of the SET game for Software Engineering classes at HTWG Konstanz.
 
-It requires Java 8 on your local platform.
-The project has
-* a folder structure prepared for a MVC-style application
-* *ScalaTest* and as dependency aswell as dependencies to other libraries in the build.sbt (commented out at start).
-* *scalastyle-sbt-plugin* and *sbt-scoverage* sbt plugins
-* .gitignore defaults
+## Features
 
-The easiest way to create your own project from this seed is
-* create an account on github
-* navigate to this project on github (https://github.com/markoboger/htwg-scala-seed)
-* fork this project on github (button on top right "Fork")
-* copy the URL to your fork
-* clone the forked project from your local git (git clone <URL>) or IDE (IDEA: File > New > Import from Version Controll > github)
+* Singleplayer/Multiplayer mode
 
-After that, please rename
-* the Project name from htwg-scala-seed to <your game name>
-* the the package structure from de.htwg.se.yourgame to de.htwg.se.<your game name>
-* the name of the project in the build.sbt file from htwg-scala-seed to <your game name>
-* the main Class YourGame to <YourGameName>
+## License
 
-Then
-* push to git
-* add team partner to your project on github (Settings > Collaborators)
-* clone on partners account
-* push and pull back and forth
+Copyright &copy; 2023 Matthias Elbel & Patrick Zedler. All rights reserved.
 
+[MIT License](http://www.apache.org/licenses/LICENSE-2.0)
 
+> Copyright 2023 Matthias Elbel, Patrick Zedler
+>
+> Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+>
+> The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+>
+> THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
