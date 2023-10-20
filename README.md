@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/license/mit/)  [![Release](https://img.shields.io/github/v/release/patzly/set-game-scala?label=Release)](https://github.com/patzly/set-game-scala/releases)
 
-This is an unofficial Scala version of the SET game for Software Engineering classes at HTWG Konstanz.
+This is an official Scala version of the SET game for Software Engineering classes at HTWG Konstanz.
 
 ## Features
 
