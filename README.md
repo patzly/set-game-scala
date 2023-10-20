@@ -4,11 +4,24 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/license/mit/)  [![Release](https://img.shields.io/github/v/release/patzly/set-game-scala?label=Release)](https://github.com/patzly/set-game-scala/releases)
 
-This is an official Scala version of the SET game for Software Engineering classes at HTWG Konstanz.
+This is an unofficial Scala version of the SET game for Software Engineering classes at HTWG Konstanz.
+
+The object of the game is to identify a 'SET' of three cards from 12 cards placed face up on the table. Each card has four features:
+
+* **Number:** 1, 2, 3
+* **Symbol:** oval, squiggle, diamond
+* **Shading:** solid, striped, outlined
+* **Color:** red, green, purple
+
+A set contains of three cards in which each of the cards' features, looked at one-by-one, are the same on each card, or, are different on each card.
+If two cards are the same and one card is different in any feature, then it is not a SET. A SET must be either all the same or all different in each individual feature.
 
 ## Features
 
 * Singleplayer/Multiplayer mode
+* Multiple rounds possible
+* Easy start mode
+* Interactive GUI, state-representation as text-based UI
 
 ## License
 
