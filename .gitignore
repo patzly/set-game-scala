@@ -1,46 +1,32 @@
-# Mac
+# macOS
 .DS_Store
 
-# Eclipse
-bin/
-.settings/
-.classpath
-
-# Intellij
-.idea/
-target/
-
-# Maven
-log/
-target/
-
-# Gradle
-.gradle/
-build/
-pom.xml
-
-# sbt
-.cache
-.history
-.lib/
+# sbt specific
 dist/*
 target/
 lib_managed/
 src_managed/
 project/boot/
 project/plugins/project/
-project/target/
-project/project/
-logs/
-project/.sbtserver
-.sbtserver/
+project/local-plugins.sbt
+.history
+.ensime
+.ensime_cache/
+.sbt-scripted/
+local.sbt
 
-# Scala-IDE specific
-.scala_dependencies
-.worksheet
+# Bloop
+.bsp
 
-# Sonar
-.sonar/
+# VS Code
+.vscode/
 
-# Application
-yourgame.log
+# Metals
+.bloop/
+.metals/
+metals.sbt
+
+# IDEA
+.idea
+.idea_modules
+/.worksheet/
