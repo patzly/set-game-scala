@@ -1,6 +1,6 @@
 package de.htwg.se.set.model
 
-class Card(val number: Int, val color: Color, val symbol: Symbol, val shading: Shading):
+case class Card(number: Int, color: Color, symbol: Symbol, shading: Shading):
 
   override def toString: String = s"$number$color$symbol$shading"
 
