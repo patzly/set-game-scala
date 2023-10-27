@@ -8,7 +8,7 @@ import scala.io.StdIn
 import scala.util.Random
 
 val rows = 3
-val easy = true
+val easy = false
 val allCards: List[Card] =
   if easy then
     val all = for
@@ -38,13 +38,13 @@ def loop(rows: Int, columns: Int, input: String, easy: Boolean): Unit =
     if textInput.hasCoordinates then
       val coordinates = textInput.coordinates
       coordinates.foreach: coordinate =>
-        val index = indexFromCoordinate(coordinate)
+        val index = cardIndex(coordinate, columns)
         selected = selected.updated(index, true)
       val grid = new Grid(rows, columns, cards, selected, easy)
       println("\n" + grid)
-      val card1 = cards(indexFromCoordinate(coordinates.head))
-      val card2 = cards(indexFromCoordinate(coordinates(1)))
-      val card3 = cards(indexFromCoordinate(coordinates(2)))
+      val card1 = cards(cardIndex(coordinates.head, columns))
+      val card2 = cards(cardIndex(coordinates(1), columns))
+      val card3 = cards(cardIndex(coordinates(2), columns))
       val triplet = new Triplet(card1, card2, card3)
       if triplet.isSet then
         println(PrintUtil.green("That's a SET!\n"))
@@ -58,10 +58,9 @@ def loop(rows: Int, columns: Int, input: String, easy: Boolean): Unit =
   println(s"Select 3 cards for a SET (e.g. A1 B2 C3):")
   loop(rows, columns, StdIn.readLine, easy)
 
-def indexFromCoordinate(coordinate: String): Int =
+def cardIndex(coordinate: String, columns: Int): Int =
   val column = coordinate.head
   val row = coordinate.tail.toInt
-  val columnIdx = column - 'A'
-  val rowIdx = row - 1
-  val numberOfColumns = 4
-  rowIdx * numberOfColumns + columnIdx
+  val indexColumn = column - 'A'
+  val indexRow = row - 1
+  indexRow * columns + indexColumn
