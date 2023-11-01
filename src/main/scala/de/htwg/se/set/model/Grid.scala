@@ -1,8 +1,6 @@
 package de.htwg.se.set.model
 
-import de.htwg.se.set.util.PrintUtil
-
-class Grid(val rows : Int, val columns: Int, val cards: List[Card], val selected: List[Boolean], val easy: Boolean):
+class Grid(val rows : Int, val columns: Int, val cards: List[Card], val easy: Boolean):
 
   private def legend(columns: Int): String =
     " " + (65 until 65 + columns).map(_.toChar).map("│" + _ + (if easy then "  " else "   ")).mkString
@@ -11,17 +9,15 @@ class Grid(val rows : Int, val columns: Int, val cards: List[Card], val selected
     if easy then "─" + "┼───" * columns else "─" + "┼────" * columns
 
   override def toString: String =
-    val iterator = cards.zip(selected).iterator
+    val iterator = cards.iterator
     var result = legend(columns) + "\n"
     for index <- 0 until rows do
       result += line(columns) + "\n"
       result += index + 1
       result += (1 to columns).map(_ =>
         if iterator.hasNext then
-          val tuple = iterator.next()
-          val card = if easy then tuple._1.toStringEasy else tuple._1.toString
-          val selected = tuple._2
-          if selected then "│" + PrintUtil.cyan(card) else "│" + PrintUtil.yellow(card)
+          val card = iterator.next()
+          "│" + (if easy then card.toStringEasy else card.toString)
         else "│"
       ).mkString + "\n"
     result
