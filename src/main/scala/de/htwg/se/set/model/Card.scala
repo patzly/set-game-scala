@@ -4,7 +4,9 @@ import de.htwg.se.set.util.PrintUtil
 
 case class Card(number: Int, color: Color, symbol: Symbol, shading: Shading, selected: Boolean):
 
-  def toggleSelection: Card = copy(selected = !selected)
+  def select: Card = copy(selected = true)
+
+  def unselect: Card = copy(selected = false)
 
   override def toString: String =
     if selected then PrintUtil.cyan(s"$number$color$symbol$shading")

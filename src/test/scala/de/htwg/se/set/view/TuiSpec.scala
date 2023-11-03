@@ -13,6 +13,7 @@ class TuiSpec extends AnyWordSpec with Matchers:
         val input = " test "
         Console.withIn(new StringReader(input)):
           Tui.stringInput should be("test")
+
     "inputting an integer" should:
       "return the integer" in:
         val input = "42\n"
@@ -22,6 +23,7 @@ class TuiSpec extends AnyWordSpec with Matchers:
         val input = "invalid\n42\n"
         Console.withIn(new StringReader(input)):
           Tui.intInput should be(42)
+
     "inputting an integer with min and max" should:
       "return the integer within bounds" in:
         val input = "42\n"
@@ -31,6 +33,7 @@ class TuiSpec extends AnyWordSpec with Matchers:
         val input = "0\n42\n"
         Console.withIn(new StringReader(input)):
           Tui.intInput(1, 100) should be(42)
+
     "inputting an integer with min" should:
       "return the integer above min" in:
         val input = "42\n"
@@ -40,6 +43,7 @@ class TuiSpec extends AnyWordSpec with Matchers:
         val input = "0\n42\n"
         Console.withIn(new StringReader(input)):
           Tui.intInput(1) should be(42)
+
     "inputting coordinates" should:
       "return a list of coordinates when valid" in:
         val input = " A1  B2 C3 \n"

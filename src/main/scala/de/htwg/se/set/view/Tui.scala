@@ -41,7 +41,13 @@ object Tui:
     val input = stringInput
     val coordinatesPattern = "^([A-Za-z][1-3] +){2}[A-Za-z][1-3]$".r
     input match {
-      case coordinatesPattern(_*) => input.split(" +").toList
+      case coordinatesPattern(_*) =>
+        val coordinates = input.split(" +").toSet
+        if coordinates.size == 3 then
+          coordinates.toList
+        else
+          println(PrintUtil.red("Nur verschiedene Koordinaten möglich. Erneut versuchen:"))
+          coordinatesInput
       case _ =>
         println(PrintUtil.red(s"Ungültige Eingabe. Erneut versuchen:"))
         coordinatesInput

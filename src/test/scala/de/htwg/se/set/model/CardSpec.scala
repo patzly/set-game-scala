@@ -7,6 +7,16 @@ import org.scalatest.wordspec.AnyWordSpec
 class CardSpec extends AnyWordSpec with Matchers:
 
   "A Card" should:
+    "be able to be selected using the select function" in:
+      val card = Card(1, Color.RED, Symbol.OVAL, Shading.SOLID, selected = false)
+      val selectedCard = card.select
+      selectedCard.selected shouldBe true
+
+    "be able to be unselected using the unselect function" in:
+      val card = Card(1, Color.RED, Symbol.OVAL, Shading.SOLID, selected = true)
+      val unselectedCard = card.unselect
+      unselectedCard.selected shouldBe false
+
     "be equal to another card with the same number, color, symbol, and shading, regardless of selection status" in:
       val card1 = Card(1, Color.RED, Symbol.OVAL, Shading.SOLID, selected = true)
       val card2 = Card(1, Color.RED, Symbol.OVAL, Shading.SOLID, selected = false)
@@ -15,15 +25,14 @@ class CardSpec extends AnyWordSpec with Matchers:
       val card1 = Card(1, Color.RED, Symbol.OVAL, Shading.SOLID, selected = false)
       val card2 = Card(2, Color.GREEN, Symbol.SQUIGGLE, Shading.STRIPED, selected = false)
       card1 should not equal card2
-    "toggle its selection status when toggleSelection is invoked" in:
-      val card = Card(1, Color.RED, Symbol.OVAL, Shading.SOLID, selected = false)
-      val toggledCard = card.toggleSelection
-      toggledCard.selected shouldBe true
+
     "produce a string representation with color when toString is invoked" in:
       val selectedCard = Card(1, Color.RED, Symbol.OVAL, Shading.SOLID, selected = true)
       val unselectedCard = Card(1, Color.RED, Symbol.OVAL, Shading.SOLID, selected = false)
       selectedCard.toString shouldEqual PrintUtil.cyan("1ROF")
       unselectedCard.toString shouldEqual PrintUtil.yellow("1ROF")
+
     "produce a simple string representation without shading when toStringEasy is invoked" in:
-      val card = Card(1, Color.RED, Symbol.OVAL, Shading.SOLID, selected = true)
-      card.toStringEasy should not include "S"
+      val shading = Shading.SOLID
+      val card = Card(1, Color.RED, Symbol.OVAL, shading, selected = true)
+      card.toStringEasy should not include shading.toString

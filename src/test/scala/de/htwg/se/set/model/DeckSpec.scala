@@ -24,7 +24,7 @@ class DeckSpec extends AnyWordSpec with Matchers:
       val deck = new Deck(easy = true)
       val table = List.empty[Card]
       val number = 12
-      val newTable = deck.tableCards(number, table, deck.allCards)
+      val newTable = deck.tableCards(number, table, List[Card]())
       "add the right number of cards to the table" in:
         newTable.length shouldBe number
     "selecting cards" should:
