@@ -6,40 +6,58 @@ import org.scalatest.wordspec.AnyWordSpec
 class DeckSpec extends AnyWordSpec with Matchers:
 
   "A Deck" when:
-    "constructed with easy mode" should:
-      val easyDeck = new Deck(easy = true)
-      "have all cards with SOLID shading" in:
-        easyDeck.allCards.forall(_.shading == Shading.SOLID) shouldBe true
-      "have a shuffled list of cards" in:
-        val testDeck = new Deck(easy = true)
-        easyDeck.allCards should not equal testDeck.allCards
-    "constructed with normal mode" should:
-      val normalDeck = new Deck(easy = false)
-      "have cards with all types of shading" in:
-        Shading.values.forall(shading => normalDeck.allCards.exists(_.shading == shading)) shouldBe true
-      "have a shuffled list of cards" in:
-        val testDeck = new Deck(easy = false)
-        normalDeck.allCards should not equal testDeck.allCards
-    "dealing cards to the table" should:
-      val deck = new Deck(easy = true)
-      val table = List.empty[Card]
-      val number = 12
-      val newTable = deck.tableCards(number, table, List[Card]())
-      "add the right number of cards to the table" in:
-        newTable.length shouldBe number
+    val deck = new Deck(easy = true)
+    val tableSinglePlayer = deck.tableCardsSinglePlayer(12)
+    val tableMultiPlayer = deck.tableCards(12, List[Card](), List[Card]())
+    "initialized in easy mode" should:
+      "contain 27 unique cards with SOLID shading" in:
+        deck.allCards.length shouldBe 27
+      "ensure all cards have SOLID shading" in:
+        deck.allCards.forall(_.shading == Shading.SOLID) shouldBe true
+    "initialized in normal mode" should:
+      val deckNormal = new Deck(easy = false)
+      "contain 81 unique cards with all kinds of shading" in:
+        deckNormal.allCards.length shouldBe 81
+      "ensure the cards have all kinds of shading" in:
+        deckNormal.allCards.map(_.shading).distinct should contain allElementsOf Shading.values
+
+    "dealing cards for table in multi-player mode" should:
+      "deal the correct number of cards" in:
+        tableMultiPlayer.length shouldBe 12
+      "deal unique cards" in:
+        tableMultiPlayer.distinct.length shouldBe tableMultiPlayer.length
+
+    "dealing cards for table in single-player mode" should:
+      "deal the correct number of cards" in :
+        tableSinglePlayer.length shouldBe 12
+      "deal unique cards" in:
+        tableSinglePlayer.distinct.length shouldBe tableSinglePlayer.length
+
     "selecting cards" should:
-      val deck = new Deck(easy = true)
-      val table = deck.allCards.take(12)
-      val card1 = table.head
-      val card2 = table(1)
-      val card3 = table(2)
-      val newTable = deck.selectCards(table, card1, card2, card3)
-      "toggle the selection of the selected cards" in:
-        newTable.count(_.selected) shouldBe 3
-      "leave other cards unselected" in:
-        newTable.drop(3).forall(_.selected == false) shouldBe true
+      "correctly mark cards as selected" in:
+        val card1 = tableSinglePlayer.head
+        val card2 = tableSinglePlayer(1)
+        val card3 = tableSinglePlayer(2)
+        val updatedTable = deck.selectCards(tableSinglePlayer, card1, card2, card3)
+        updatedTable.count(_.selected) shouldBe 3
+
+    "unselecting cards" should:
+      "correctly mark all cards as unselected" in:
+        val card1 = tableSinglePlayer.head
+        val card2 = tableSinglePlayer(1)
+        val card3 = tableSinglePlayer(2)
+        val selectedTable = deck.selectCards(tableSinglePlayer, card1, card2, card3)
+        val unselectedTable = deck.unselectCards(selectedTable)
+        unselectedTable.count(_.selected) shouldBe 0
+
+    "adding cards to players cards" should:
+      "add a set of cards to the player's collection" in:
+        val initialPlayersCards = List.empty[Card]
+        val set = Triplet(deck.allCards.head, deck.allCards(1), deck.allCards(2))
+        val updatedPlayersCards = deck.playersCardsAdd(initialPlayersCards, set)
+        updatedPlayersCards should contain allOf (set.card1, set.card2, set.card3)
+
     "accessing a card by coordinate" should:
-      val deck = new Deck(easy = true)
       val table = deck.allCards.take(12)
       val columns = 3
       val coordinate = "B2"
