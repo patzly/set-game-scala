@@ -23,11 +23,11 @@ def settingsLoop(playerCount: Int, easy: Boolean): Unit =
   if input == 1 then
     val rows = 3
     val columns = if easy then 3 else 4
-    val deck = new Deck(easy)
+    val deck = Deck(easy)
     val cardsMultiPlayer = deck.tableCards(rows * columns, List[Card](), List[Card]())
     val cardsSinglePlayer = deck.tableCardsSinglePlayer(rows * columns)
     val cards = if playerCount == 1 then cardsSinglePlayer else cardsMultiPlayer
-    println("\n" + new Grid(rows, columns, cards, easy))
+    println("\n" + Grid(rows, columns, cards, easy))
     val players = (1 to playerCount).map(i => Player(i, playerCount == 1, easy, List[Triplet]())).toList
     gameLoop(rows, columns, deck, cards, List[Card](), players)
   else if input == 2 then
@@ -44,14 +44,13 @@ def gameLoop(rows: Int, columns: Int, deck: Deck, tableCards: List[Card], player
     println(s"Player who found a SET (e.g. 1):")
   val player = if singlePlayer then players.head else players(Tui.intInput(1, players.length) - 1)
 
-  println(s"Select 3 cards for a SET (e.g. A1 B2 C3):")
   val coordinates = Tui.coordinatesInput
   val cards = deck.tableCards(rows * columns, tableCards, playersCards)
   val card1 = deck.cardAtCoordinate(cards, coordinates.head, columns)
   val card2 = deck.cardAtCoordinate(cards, coordinates(1), columns)
   val card3 = deck.cardAtCoordinate(cards, coordinates(2), columns)
   val cardsSelected = deck.selectCards(cards, card1, card2, card3)
-  println("\n" + new Grid(rows, columns, cardsSelected, deck.easy))
+  println("\n" + Grid(rows, columns, cardsSelected, deck.easy))
 
   val triplet = Triplet(card1.select, card2.select, card3.select)
   val playerUpdated = player.foundSet(triplet)
@@ -69,8 +68,6 @@ def gameLoop(rows: Int, columns: Int, deck: Deck, tableCards: List[Card], player
     if finished then
       println("\n" + PrintUtil.yellow(PrintUtil.bold("All SETs found. Good job!")))
       settingsLoop(players.length, deck.easy)
-  else
-    // TODO: multiplayer game end or column extending
 
-  println("\n" + new Grid(rows, columns, cardsUpdated, deck.easy))
+  println("\n" + Grid(rows, columns, cardsUpdated, deck.easy))
   gameLoop(rows, columns, deck, cards, playersCardsAdded, playersUpdated)

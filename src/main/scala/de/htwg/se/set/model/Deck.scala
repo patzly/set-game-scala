@@ -2,7 +2,7 @@ package de.htwg.se.set.model
 
 import scala.util.Random
 
-class Deck(val easy: Boolean):
+case class Deck(easy: Boolean):
 
   val allCards: List[Card] =
     if easy then

@@ -1,6 +1,6 @@
 package de.htwg.se.set.model
 
-class Grid(val rows : Int, val columns: Int, val cards: List[Card], val easy: Boolean):
+case class Grid(rows : Int, columns: Int, cards: List[Card], easy: Boolean):
 
   private def legend(columns: Int): String =
     "  " + (65 until 65 + columns).map(_.toChar).map("│" + _ + (" " * (if easy then 2 else 3))).mkString

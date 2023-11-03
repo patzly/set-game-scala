@@ -38,6 +38,7 @@ object Tui:
 
   @tailrec
   def coordinatesInput: List[String] =
+    println(s"Select 3 cards for a SET (e.g. A1 B2 C3):")
     val input = stringInput
     val coordinatesPattern = "^([A-Za-z][1-3] +){2}[A-Za-z][1-3]$".r
     input match {

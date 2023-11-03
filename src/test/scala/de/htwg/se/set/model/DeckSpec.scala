@@ -6,7 +6,7 @@ import org.scalatest.wordspec.AnyWordSpec
 class DeckSpec extends AnyWordSpec with Matchers:
 
   "A Deck" when:
-    val deck = new Deck(easy = true)
+    val deck = Deck(easy = true)
     val tableSinglePlayer = deck.tableCardsSinglePlayer(12)
     val tableMultiPlayer = deck.tableCards(12, List[Card](), List[Card]())
     "initialized in easy mode" should:
@@ -15,7 +15,7 @@ class DeckSpec extends AnyWordSpec with Matchers:
       "ensure all cards have SOLID shading" in:
         deck.allCards.forall(_.shading == Shading.SOLID) shouldBe true
     "initialized in normal mode" should:
-      val deckNormal = new Deck(easy = false)
+      val deckNormal = Deck(easy = false)
       "contain 81 unique cards with all kinds of shading" in:
         deckNormal.allCards.length shouldBe 81
       "ensure the cards have all kinds of shading" in:
