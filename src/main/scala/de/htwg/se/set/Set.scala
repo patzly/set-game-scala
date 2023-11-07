@@ -37,13 +37,30 @@ def settingsLoop(playerCount: Int, easy: Boolean): Unit =
   else if input == 3 then
     settingsLoop(playerCount, !easy)
 
-@tailrec
 def gameLoop(rows: Int, columns: Int, deck: Deck, tableCards: List[Card], playersCards: List[Card], players: List[Player]): Unit =
   val singlePlayer = players.length == 1
   if !singlePlayer then
-    println(s"Player who found a SET (e.g. 1):")
-  val player = if singlePlayer then players.head else players(Tui.intInput(1, players.length) - 1)
+    println(s"Input player who found a SET (e.g. 1) or 0 if no SET can be found:")
+  val input = if singlePlayer then 1 else Tui.intInput(0, players.length)
+  if input == 0 then
+    val columnsUpdated = columns + 1
+    val cardsAdded = deck.tableCards(rows * columnsUpdated, tableCards, playersCards)
+    if cardsAdded.length > tableCards.length then
+      println("One column of cards added to the table.")
+      println("\n" + Grid(rows, columnsUpdated, cardsAdded, deck.easy))
+      gameLoop(rows, columnsUpdated, deck, cardsAdded, playersCards, players)
+    else if deck.findSets(tableCards).nonEmpty then
+      println(PrintUtil.red("No more cards left, but there still is at least one SET to be found!\n"))
+      gameLoop(rows, columns, deck, tableCards, playersCards, players)
+    else
+      println("\n" + PrintUtil.yellow(PrintUtil.bold("All SETs found!")))
+      players.foreach(player => println(player))
+      settingsLoop(players.length, deck.easy)
+  val player = if singlePlayer then players.head
+  else if input != 0 then players(input - 1)
+  else players(Tui.intInput(1, players.length) - 1)
 
+  println(s"Select 3 cards for a SET (e.g. A1 B2 C3):")
   val coordinates = Tui.coordinatesInput
   val cards = deck.tableCards(rows * columns, tableCards, playersCards)
   val card1 = deck.cardAtCoordinate(cards, coordinates.head, columns)
@@ -56,8 +73,9 @@ def gameLoop(rows: Int, columns: Int, deck: Deck, tableCards: List[Card], player
   val playerUpdated = player.foundSet(triplet)
   val replaceSet = !singlePlayer && triplet.isSet
   val playersCardsAdded = if replaceSet then deck.playersCardsAdd(playersCards, triplet) else playersCards
+  val columnsUpdated = if replaceSet && columns > (if deck.easy then 3 else 4) then columns - 1 else columns
   val cardsUpdated = if replaceSet then
-    deck.tableCards(rows * columns, cardsSelected, playersCardsAdded) else deck.unselectCards(cardsSelected)
+    deck.tableCards(rows * columnsUpdated, cardsSelected, playersCardsAdded) else deck.unselectCards(cardsSelected)
 
   if singlePlayer && playerUpdated.sets.nonEmpty then
     println(playerUpdated)
@@ -66,8 +84,8 @@ def gameLoop(rows: Int, columns: Int, deck: Deck, tableCards: List[Card], player
   if singlePlayer then
     val finished = if deck.easy then playerUpdated.sets.length == 3 else playerUpdated.sets.length == 6
     if finished then
-      println("\n" + PrintUtil.yellow(PrintUtil.bold("All SETs found. Good job!")))
+      println("\n" + PrintUtil.yellow(PrintUtil.bold("All SETs found!")))
       settingsLoop(players.length, deck.easy)
 
-  println("\n" + Grid(rows, columns, cardsUpdated, deck.easy))
-  gameLoop(rows, columns, deck, cards, playersCardsAdded, playersUpdated)
+  println("\n" + Grid(rows, columnsUpdated, cardsUpdated, deck.easy))
+  gameLoop(rows, columnsUpdated, deck, cards, playersCardsAdded, playersUpdated)

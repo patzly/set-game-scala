@@ -21,27 +21,34 @@ case class Deck(easy: Boolean):
       yield Card(number, color, symbol, shading, false)
       Random.shuffle(all.toList)
 
-  def tableCards(n: Int, table: List[Card], players: List[Card]): List[Card] =
-    val staple = stapleCards(table, players)
-    val stapleIterator = staple.iterator
-    val tableUpdated = table.map {
-      case card if players.contains(card) => if stapleIterator.hasNext then stapleIterator.next() else card
-      case card => card
-    }
-    val tableRemoved = tableUpdated.filterNot(card => players.contains(card))
-    if n > tableRemoved.length then
-      val staple = stapleCards(table, players)
-      tableRemoved ++ staple.take(n - table.length)
-    else
-      tableRemoved.take(n)
-
-  def tableCardsSinglePlayer(n: Int): List[Card] =
-    val allSets = for {
-      card1 <- allCards
-      card2 <- allCards if card2 != card1
-      card3 <- allCards if card3 != card1 && card3 != card2
+  def findSets(cards: List[Card]): List[Triplet] =
+    val sets = for {
+      card1 <- cards
+      card2 <- cards if card2 != card1
+      card3 <- cards if card3 != card1 && card3 != card2
       triplet = Triplet(card1, card2, card3) if triplet.isSet
     } yield triplet
+    sets.toSet.toList
+
+  def tableCards(n: Int, table: List[Card], players: List[Card]): List[Card] =
+    if n < table.length then
+      table.filterNot(card => players.contains(card)).take(n)
+    else
+      val staple = stapleCards(table, players)
+      val stapleIterator = staple.iterator
+      val tableUpdated = table.map {
+        case card if players.contains(card) => if stapleIterator.hasNext then stapleIterator.next() else card
+        case card => card
+      }
+      val tableRemoved = tableUpdated.filterNot(card => players.contains(card))
+      if n > tableRemoved.length then
+        val staple = stapleCards(table, players)
+        tableRemoved ++ staple.take(n - table.length)
+      else
+        tableRemoved.take(n)
+
+  def tableCardsSinglePlayer(n: Int): List[Card] =
+    val allSets = findSets(allCards)
     val selectedSets = Random.shuffle(allSets).take(if easy then 3 else 6)
     val cards = selectedSets.flatMap(triplet => List(triplet.card1, triplet.card2, triplet.card3)).distinct
     if n > cards.length then
@@ -64,8 +71,7 @@ case class Deck(easy: Boolean):
     table.map(card => if card.selected then card.unselect else card)
 
   def cardAtCoordinate(tableCards: List[Card], coordinate: String, columns: Int): Card =
-    val column = coordinate.head
-    val row = coordinate.tail.toInt
-    val indexColumn = column - 'A'
-    val indexRow = row - 1
-    tableCards(indexRow * columns + indexColumn)
+    val column = coordinate.head.toUpper - 'A'
+    val row = coordinate.tail.toInt - 1
+    val index = column * tableCards.length / columns + row
+    tableCards(index)

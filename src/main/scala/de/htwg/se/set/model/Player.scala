@@ -28,4 +28,4 @@ case class Player(number: Int, singlePlayer: Boolean, easy: Boolean, sets: List[
       val setStrings = sets.map(set => if easy then set.toStringEasy else set.toString)
       sets.length + " of " + max + " SETs found:\n" + setStrings.mkString("\n")
     else
-      "Player " + number + ": " + sets.length + " SETs found"
+      "Player " + number + ": " + PrintUtil.purple(sets.length.toString)

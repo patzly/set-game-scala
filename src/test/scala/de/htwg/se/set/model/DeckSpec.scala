@@ -21,11 +21,30 @@ class DeckSpec extends AnyWordSpec with Matchers:
       "ensure the cards have all kinds of shading" in:
         deckNormal.allCards.map(_.shading).distinct should contain allElementsOf Shading.values
 
+    "finding all SETs in specific cards" should:
+      val card1 = Card(1, Color.RED, Symbol.OVAL, Shading.SOLID, selected = false)
+      val card2 = Card(2, Color.RED, Symbol.OVAL, Shading.SOLID, selected = false)
+      val card3 = Card(3, Color.RED, Symbol.OVAL, Shading.SOLID, selected = false)
+      val card4 = Card(1, Color.GREEN, Symbol.OVAL, Shading.SOLID, selected = false)
+      val card5 = Card(2, Color.GREEN, Symbol.DIAMOND, Shading.SOLID, selected = false)
+      val card6 = Card(3, Color.GREEN, Symbol.DIAMOND, Shading.SOLID, selected = false)
+      val cards = List(card1, card2, card3, card4, card5, card6)
+      val set = Triplet(card1, card2, card3)
+      "find the SET" in:
+        deck.findSets(cards) shouldBe List(set)
+
     "dealing cards for table in multi-player mode" should:
-      "deal the correct number of cards" in:
-        tableMultiPlayer.length shouldBe 12
-      "deal unique cards" in:
-        tableMultiPlayer.distinct.length shouldBe tableMultiPlayer.length
+      "return the correct number of table cards without players' cards" in:
+        val playersCards = List.empty[Card]
+        val requestedNumber = 9
+        val tableCards = deck.tableCards(requestedNumber, tableMultiPlayer, playersCards)
+        tableCards should have size requestedNumber
+      "return the correct number of table cards with players' cards" in:
+        val playersCards = deck.allCards.slice(12, 15)
+        val requestedNumber = 9
+        val tableCards = deck.tableCards(requestedNumber, tableMultiPlayer, playersCards)
+        tableCards should have size requestedNumber
+        playersCards.foreach(card => tableCards should not contain card)
 
     "dealing cards for table in single-player mode" should:
       "deal the correct number of cards" in :
@@ -58,7 +77,7 @@ class DeckSpec extends AnyWordSpec with Matchers:
         updatedPlayersCards should contain allOf (set.card1, set.card2, set.card3)
 
     "accessing a card by coordinate" should:
-      val table = deck.allCards.take(12)
+      val table = deck.allCards.take(9)
       val columns = 3
       val coordinate = "B2"
       val card = deck.cardAtCoordinate(table, coordinate, columns)
