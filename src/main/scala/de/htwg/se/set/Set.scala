@@ -1,43 +1,18 @@
 package de.htwg.se.set
 
+import de.htwg.se.set.controller.Controller
 import de.htwg.se.set.view.Tui
 import util.PrintUtil
-import model.{Card, Deck, Grid, Player, Triplet}
-
-import scala.annotation.tailrec
+import model.Settings
 
 @main
 def main(): Unit =
   println(PrintUtil.bold("Welcome to the SET Game!"))
-  settingsLoop(1, false)
+  val settings = Settings(1, false)
+  val controller = Controller(settings)
+  Tui(controller).run()
 
-@tailrec
-def settingsLoop(playerCount: Int, easy: Boolean): Unit =
-  val playersString = if playerCount == 1 then "1 player" else s"$playerCount players"
-  val easyString = if easy then "easy mode" else "normal mode"
-  println(PrintUtil.blue(PrintUtil.bold("\nSettings: ") + PrintUtil.yellow(playersString + ", " + easyString)))
-  println(PrintUtil.bold("1") + " Start game")
-  println(PrintUtil.bold("2") + " Change number of players")
-  println(PrintUtil.bold("3") + " Switch to " + (if easy then "normal" else "easy") + " mode")
-  val input = Tui.intInput(1, 3)
-  if input == 1 then
-    val rows = 3
-    val columns = if easy then 3 else 4
-    val deck = Deck(easy)
-    val cardsMultiPlayer = deck.tableCards(rows * columns, List[Card](), List[Card]())
-    val cardsSinglePlayer = deck.tableCardsSinglePlayer(rows * columns)
-    val cards = if playerCount == 1 then cardsSinglePlayer else cardsMultiPlayer
-    println("\n" + Grid(rows, columns, cards, easy))
-    val players = (1 to playerCount).map(i => Player(i, playerCount == 1, easy, List[Triplet]())).toList
-    gameLoop(rows, columns, deck, cards, List[Card](), players)
-  else if input == 2 then
-    println("Enter number of players:")
-    val playerCount = Tui.intInput(1)
-    settingsLoop(playerCount, easy)
-  else if input == 3 then
-    settingsLoop(playerCount, !easy)
-
-def gameLoop(rows: Int, columns: Int, deck: Deck, tableCards: List[Card], playersCards: List[Card], players: List[Player]): Unit =
+/*def gameLoop(rows: Int, columns: Int, deck: Deck, tableCards: List[Card], playersCards: List[Card], players: List[Player]): Unit =
   val singlePlayer = players.length == 1
   if !singlePlayer then
     println(s"Input player who found a SET (e.g. 1) or 0 if no SET can be found:")
@@ -88,4 +63,4 @@ def gameLoop(rows: Int, columns: Int, deck: Deck, tableCards: List[Card], player
       settingsLoop(players.length, deck.easy)
 
   println("\n" + Grid(rows, columnsUpdated, cardsUpdated, deck.easy))
-  gameLoop(rows, columnsUpdated, deck, cards, playersCardsAdded, playersUpdated)
+  gameLoop(rows, columnsUpdated, deck, cards, playersCardsAdded, playersUpdated)*/
