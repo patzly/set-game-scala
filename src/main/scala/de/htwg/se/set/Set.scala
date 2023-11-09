@@ -74,6 +74,7 @@ def gameLoop(rows: Int, columns: Int, deck: Deck, tableCards: List[Card], player
   val replaceSet = !singlePlayer && triplet.isSet
   val playersCardsAdded = if replaceSet then deck.playersCardsAdd(playersCards, triplet) else playersCards
   val columnsUpdated = if replaceSet && columns > (if deck.easy then 3 else 4) then columns - 1 else columns
+  // TODO: remove min columns condition and replace with isStapleEmpty condition
   val cardsUpdated = if replaceSet then
     deck.tableCards(rows * columnsUpdated, cardsSelected, playersCardsAdded) else deck.unselectCards(cardsSelected)
 
