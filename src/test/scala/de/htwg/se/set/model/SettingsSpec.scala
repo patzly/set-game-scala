@@ -12,18 +12,18 @@ class SettingsSpec extends AnyWordSpec with Matchers:
         val easy = true
         val settings = Settings(playerCount, easy)
         settings.playerCount should be(playerCount)
-        settings.isSinglePlayer should be(playerCount == 1)
+        settings.singlePlayer should be(playerCount == 1)
         settings.easy should be(easy)
     "initialized with a single player" should:
       "create a Settings object representing a single player" in:
         val settings = Settings(1, false)
         settings.toString should include("1 player")
-        settings.isSinglePlayer should be(true)
+        settings.singlePlayer should be(true)
     "initialized with multiple players" should:
       "create a Settings object representing multiple players" in:
         val settings = Settings(3, false)
         settings.toString should include("3 players")
-        settings.isSinglePlayer should be(false)
+        settings.singlePlayer should be(false)
     "initialized with easy mode" should:
       "create a Settings object in easy mode" in:
         val settings = Settings(1, true)

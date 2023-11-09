@@ -7,7 +7,7 @@ case class Settings(playerCount: Int, easy: Boolean):
   if playerCount < 1 then
     throw new IllegalArgumentException("Game must have at least one player")
 
-  def isSinglePlayer: Boolean = playerCount == 1
+  def singlePlayer: Boolean = playerCount == 1
 
   override def toString: String =
     val playersString = if playerCount == 1 then "1 player" else s"$playerCount players"
