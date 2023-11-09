@@ -2,6 +2,9 @@ package de.htwg.se.set.model
 
 case class Grid(rows : Int, columns: Int, cards: List[Card], easy: Boolean):
 
+  if rows * columns != cards.length then
+    throw new IllegalArgumentException("Amount of cards has to be equal to the grid size")
+
   private def legend(columns: Int): String =
     "  " + (65 until 65 + columns).map(_.toChar).map("│" + _ + (" " * (if easy then 2 else 3))).mkString
 
