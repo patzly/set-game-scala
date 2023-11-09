@@ -34,3 +34,13 @@ class GridSpec extends AnyWordSpec with Matchers:
         grid.toString should include("A")
         grid.toString should include("B")
         grid.toString should include("C")
+    "constructed with a grid size unequal to the amount of cards" should:
+      "throw an IllegalArgumentException" in:
+        val card1 = Card(1, Color.RED, Symbol.OVAL, Shading.SOLID, selected = false)
+        val card2 = Card(2, Color.GREEN, Symbol.SQUIGGLE, Shading.OUTLINED, selected = true)
+        val card3 = Card(3, Color.BLUE, Symbol.DIAMOND, Shading.STRIPED, selected = false)
+        val cards = List(card1, card2, card3, card1, card2, card3)
+        val exception = intercept[IllegalArgumentException] {
+          Grid(3, 3, cards, true)
+        }
+        exception.getMessage shouldBe "Amount of cards has to be equal to the grid size"
