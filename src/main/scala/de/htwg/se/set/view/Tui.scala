@@ -18,15 +18,7 @@ class Tui(controller: Controller) extends Observer:
 
   override def update(e: Event): Unit =
     e match
-      case Event.SETTINGS_CHANGED | Event.CARDS_CHANGED =>
-        println()
-        val tableCards = controller.game.tableCards
-        val playerCards = controller.game.playersCards
-        val stapleCards = controller.game.deck.stapleCards(tableCards, playerCards)
-        println("TableCards: " + tableCards.mkString(", "))
-        println("PlayerCards: " + playerCards.mkString(", "))
-        println("StapleCards: " + stapleCards.mkString(", "))
-        println(controller)
+      case Event.SETTINGS_CHANGED | Event.CARDS_CHANGED => println(controller)
       case _ =>
 
   @tailrec
@@ -40,10 +32,8 @@ class Tui(controller: Controller) extends Observer:
         controller.setColumns(if controller.settings.easy then 3 else 4)
         controller.setDeck(Deck(controller.settings.easy))
         val deck = controller.game.deck
-        val cardsMultiPlayer = deck.tableCards(
-          controller.game.rows * controller.game.columns, List[Card](), List[Card]()
-        )
-        val cardsSinglePlayer = deck.tableCardsSinglePlayer(controller.game.rows * controller.game.columns)
+        val cardsMultiPlayer = deck.tableCards(controller.game.columns, List[Card](), List[Card]())
+        val cardsSinglePlayer = deck.tableCardsSinglePlayer(controller.game.columns)
         controller.setTableCards(if controller.settings.singlePlayer then cardsSinglePlayer else cardsMultiPlayer)
         controller.setPlayers((1 to controller.settings.playerCount)
           .map(i => Player(i, controller.settings.singlePlayer, controller.settings.easy, List[Triplet]())).toList)
@@ -63,7 +53,7 @@ class Tui(controller: Controller) extends Observer:
     if input == 0 then
       controller.addColumn()
       val cardsAdded = controller.game.deck.tableCards(
-        controller.game.cellCount, controller.game.tableCards, controller.game.playersCards
+        controller.game.columns, controller.game.tableCards, controller.game.playersCards
       )
       if cardsAdded.length > controller.game.tableCards.length then
         println("One column of cards added to the table.")
@@ -85,7 +75,7 @@ class Tui(controller: Controller) extends Observer:
     println(s"Select 3 cards for a SET (e.g. A1 B2 C3):")
     val coordinates = coordinatesInput
     val deck = controller.game.deck
-    val cards = deck.tableCards(controller.game.cellCount, controller.game.tableCards, controller.game.playersCards)
+    val cards = deck.tableCards(controller.game.columns, controller.game.tableCards, controller.game.playersCards)
     val card1 = deck.cardAtCoordinate(cards, coordinates.head, controller.game.columns)
     val card2 = deck.cardAtCoordinate(cards, coordinates(1), controller.game.columns)
     val card3 = deck.cardAtCoordinate(cards, coordinates(2), controller.game.columns)
@@ -96,8 +86,10 @@ class Tui(controller: Controller) extends Observer:
     controller.setPlayers(controller.game.players.updated(player.index, playerUpdated))
     val replaceOrRemoveSet = !controller.settings.singlePlayer && triplet.isSet
     controller.setPlayersCards(
-      if replaceOrRemoveSet then controller.game.deck.playersCardsAdd(controller.game.playersCards, triplet)
-      else controller.game.playersCards
+      if replaceOrRemoveSet then
+        controller.game.deck.playersCardsAdd(controller.game.playersCards, triplet)
+      else
+        controller.game.playersCards
     )
     val stapleEmpty = controller.game.deck.stapleCards(controller.game.tableCards, controller.game.playersCards).isEmpty
     val minColumns = if stapleEmpty then 1 else if controller.game.deck.easy then 3 else 4
@@ -109,9 +101,10 @@ class Tui(controller: Controller) extends Observer:
     controller.setTableCards(
       if replaceOrRemoveSet then
         controller.game.deck.tableCards(
-          controller.game.cellCount, controller.game.tableCards, controller.game.playersCards
+          controller.game.columns, controller.game.tableCards, controller.game.playersCards
         )
-      else controller.game.deck.unselectCards(controller.game.tableCards)
+      else
+        controller.game.deck.unselectCards(controller.game.tableCards)
     )
 
     if controller.settings.singlePlayer then

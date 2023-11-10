@@ -30,7 +30,8 @@ case class Deck(easy: Boolean):
     } yield triplet
     sets.toSet.toList
 
-  def tableCards(n: Int, table: List[Card], players: List[Card]): List[Card] =
+  def tableCards(columns: Int, table: List[Card], players: List[Card]): List[Card] =
+    val n = columns * 3
     if n < table.length then
       table.filterNot(card => players.contains(card)).take(n)
     else
@@ -47,7 +48,8 @@ case class Deck(easy: Boolean):
       else
         tableRemoved.take(n)
 
-  def tableCardsSinglePlayer(n: Int): List[Card] =
+  def tableCardsSinglePlayer(columns: Int): List[Card] =
+    val n = columns * 3
     val allSets = findSets(allCards)
     val selectedSets = Random.shuffle(allSets).take(if easy then 3 else 6)
     val cards = selectedSets.flatMap(triplet => List(triplet.card1, triplet.card2, triplet.card3)).distinct
