@@ -118,7 +118,7 @@ class Tui(controller: Controller) extends Observer:
   private def gameEnd(): Unit =
     println("\n" + PrintUtil.yellow(PrintUtil.bold("All SETs found!")))
     if !controller.settings.singlePlayer then
-      controller.game.players.sortBy(_.sets.length).reverse.foreach(player => println(player))
+      controller.game.players.sortBy(player => (-player.sets.length, player.number)).foreach(player => println(player))
     controller.setInGame(false)
     println(controller)
     settingsLoop()
