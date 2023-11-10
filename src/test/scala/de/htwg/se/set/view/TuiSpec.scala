@@ -1,7 +1,7 @@
 package de.htwg.se.set.view
 
 import de.htwg.se.set.controller.Controller
-import de.htwg.se.set.model.Settings
+import de.htwg.se.set.model.{Card, Deck, Game, Player, Settings, Triplet}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -11,7 +11,11 @@ class TuiSpec extends AnyWordSpec with Matchers:
 
   "A Tui" when:
     val settings = Settings(1, false)
-    val controller = Controller(settings)
+    val deck = Deck(false)
+    val cards = deck.tableCardsSinglePlayer(12)
+    val players = List[Player](Player(1, true, false, List[Triplet]()))
+    val game = Game(4, deck, cards, List[Card](), players)
+    val controller = Controller(settings, game)
     val tui = Tui(controller)
     "inputting a string" should:
       "return the trimmed string" in:

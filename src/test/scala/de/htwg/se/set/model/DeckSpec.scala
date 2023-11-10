@@ -7,8 +7,8 @@ class DeckSpec extends AnyWordSpec with Matchers:
 
   "A Deck" when:
     val deck = Deck(easy = true)
-    val tableSinglePlayer = deck.tableCardsSinglePlayer(12)
-    val tableMultiPlayer = deck.tableCards(12, List[Card](), List[Card]())
+    val tableSinglePlayer = deck.tableCardsSinglePlayer(3)
+    val tableMultiPlayer = deck.tableCards(3, List[Card](), List[Card]())
     "initialized in easy mode" should:
       "contain 27 unique cards with SOLID shading" in:
         deck.allCards.length shouldBe 27
@@ -37,18 +37,18 @@ class DeckSpec extends AnyWordSpec with Matchers:
       "return the correct number of table cards without players' cards" in:
         val playersCards = List.empty[Card]
         val requestedNumber = 9
-        val tableCards = deck.tableCards(requestedNumber, tableMultiPlayer, playersCards)
+        val tableCards = deck.tableCards(requestedNumber / 3, tableMultiPlayer, playersCards)
         tableCards should have size requestedNumber
       "return the correct number of table cards with players' cards" in:
         val playersCards = deck.allCards.slice(12, 15)
         val requestedNumber = 9
-        val tableCards = deck.tableCards(requestedNumber, tableMultiPlayer, playersCards)
+        val tableCards = deck.tableCards(requestedNumber / 3, tableMultiPlayer, playersCards)
         tableCards should have size requestedNumber
         playersCards.foreach(card => tableCards should not contain card)
 
     "dealing cards for table in single-player mode" should:
       "deal the correct number of cards" in :
-        tableSinglePlayer.length shouldBe 12
+        tableSinglePlayer.length shouldBe 9
       "deal unique cards" in:
         tableSinglePlayer.distinct.length shouldBe tableSinglePlayer.length
 

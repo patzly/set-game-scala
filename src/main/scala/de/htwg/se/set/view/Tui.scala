@@ -123,17 +123,17 @@ class Tui(controller: Controller) extends Observer:
     println(controller)
     settingsLoop()
     
-  private def stringInput: String = StdIn.readLine().trim
+  final def stringInput: String = StdIn.readLine().trim
 
   @tailrec
-  private def intInput: Int = Try(stringInput.toInt) match
+  final def intInput: Int = Try(stringInput.toInt) match
     case Success(value) => value
     case _ =>
       println(PrintUtil.red("Ungültige Eingabe. Erneut versuchen:"))
       intInput
 
   @tailrec
-  private def intInput(min: Int, max: Int): Int =
+  final def intInput(min: Int, max: Int): Int =
     val user = intInput
     if min <= user && user <= max then
       user
@@ -142,7 +142,7 @@ class Tui(controller: Controller) extends Observer:
       intInput(min, max)
 
   @tailrec
-  private def intInput(min: Int): Int =
+  final def intInput(min: Int): Int =
     val user = intInput
     if min <= user then
       user
@@ -151,7 +151,7 @@ class Tui(controller: Controller) extends Observer:
       intInput(min)
 
   @tailrec
-  private def coordinatesInput: List[String] =
+  final def coordinatesInput: List[String] =
     val input = stringInput
     val coordinatesPattern = "^([A-Za-z][1-3] +){2}[A-Za-z][1-3]$".r
     input match

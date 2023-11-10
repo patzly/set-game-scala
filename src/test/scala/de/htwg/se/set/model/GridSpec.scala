@@ -11,8 +11,8 @@ class GridSpec extends AnyWordSpec with Matchers:
       "have a correct String representation" in:
         val card1 = Card(1, Color.RED, Symbol.OVAL, Shading.SOLID, selected = false)
         val card2 = Card(2, Color.GREEN, Symbol.SQUIGGLE, Shading.OUTLINED, selected = true)
-        val cards = List(card1, card2, card1, card2)
-        val grid = Grid(2, 2, cards, false)
+        val cards = List(card1, card2, card1, card2, card1, card2)
+        val grid = Grid(2, cards, false)
         grid.toString should include(PrintUtil.yellow("1ROF"))
         grid.toString should include(PrintUtil.cyan("2GSL"))
         grid.toString should include("1")
@@ -24,8 +24,8 @@ class GridSpec extends AnyWordSpec with Matchers:
         val card1 = Card(1, Color.RED, Symbol.OVAL, Shading.SOLID, selected = false)
         val card2 = Card(2, Color.GREEN, Symbol.SQUIGGLE, Shading.OUTLINED, selected = true)
         val card3 = Card(3, Color.BLUE, Symbol.DIAMOND, Shading.STRIPED, selected = false)
-        val cards = List(card1, card2, card3, card1, card2, card3)
-        val grid = Grid(2, 3, cards, true)
+        val cards = List(card1, card2, card3, card1, card2, card3, card1, card2, card3)
+        val grid = Grid(3, cards, true)
         grid.toString should include(PrintUtil.yellow("1RO"))
         grid.toString should include(PrintUtil.cyan("2GS"))
         grid.toString should include(PrintUtil.yellow("3BD"))
@@ -41,6 +41,6 @@ class GridSpec extends AnyWordSpec with Matchers:
         val card3 = Card(3, Color.BLUE, Symbol.DIAMOND, Shading.STRIPED, selected = false)
         val cards = List(card1, card2, card3, card1, card2, card3)
         val exception = intercept[IllegalArgumentException] {
-          Grid(3, 3, cards, true)
+          Grid(3, cards, true)
         }
         exception.getMessage shouldBe "Amount of cards has to be equal to the grid size"
