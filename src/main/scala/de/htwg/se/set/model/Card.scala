@@ -16,11 +16,10 @@ case class Card(number: Int, color: Color, symbol: Symbol, shading: Shading, sel
     if selected then PrintUtil.cyan(s"$number$color$symbol")
     else PrintUtil.yellow(s"$number$color$symbol")
 
-  override def equals(obj: Any): Boolean = obj match {
+  override def equals(obj: Any): Boolean = obj match
     case other: Card =>
       number == other.number && color == other.color && symbol == other.symbol && shading == other.shading
     case _ => false
-  }
 
   override def hashCode: Int =
     val prime = 31

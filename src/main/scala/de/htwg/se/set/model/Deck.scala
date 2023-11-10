@@ -57,7 +57,7 @@ case class Deck(easy: Boolean):
     else
       Random.shuffle(cards.take(n))
   
-  private def stapleCards(table: List[Card], players: List[Card]): List[Card] =
+  def stapleCards(table: List[Card], players: List[Card]): List[Card] =
     allCards.filterNot(card => table.contains(card) || players.contains(card))
 
   def playersCardsAdd(playersCards: List[Card], set: Triplet): List[Card] =

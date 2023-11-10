@@ -26,9 +26,8 @@ case class Triplet(card1: Card, card2: Card, card3: Card):
 
   private def cardsSet: Set[Card] = Set(card1, card2, card3)
 
-  override def equals(obj: Any): Boolean = obj match {
+  override def equals(obj: Any): Boolean = obj match
     case other: Triplet => cardsSet == other.cardsSet
     case _ => false
-  }
 
   override def hashCode: Int = cardsSet.hashCode
