@@ -30,6 +30,7 @@ jobs:
     - name: Run tests
       run: sbt test
   run-tests:
+    name: test
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
