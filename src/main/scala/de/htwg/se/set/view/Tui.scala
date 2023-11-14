@@ -13,12 +13,13 @@ class Tui(controller: Controller) extends Observer:
   controller.add(this)
 
   def run(): Unit =
-    println(controller)
+    println(controller.settingsToString)
     settingsLoop()
 
   override def update(e: Event): Unit =
     e match
-      case Event.SETTINGS_CHANGED | Event.CARDS_CHANGED => println(controller)
+      case Event.SETTINGS_CHANGED => println(controller.settingsToString)
+      case Event.CARDS_CHANGED => println(controller.gameToString)
       case _ =>
 
   @tailrec
@@ -28,7 +29,6 @@ class Tui(controller: Controller) extends Observer:
     println(PrintUtil.bold("3") + " Switch to " + (if controller.settings.easy then "normal" else "easy") + " mode")
     intInput(1, 3) match
       case 1 =>
-        controller.setInGame(true)
         controller.setColumns(if controller.settings.easy then 3 else 4)
         controller.setDeck(Deck(controller.settings.easy))
         val deck = controller.game.deck
@@ -119,8 +119,7 @@ class Tui(controller: Controller) extends Observer:
     println("\n" + PrintUtil.yellow(PrintUtil.bold("All SETs found!")))
     if !controller.settings.singlePlayer then
       controller.game.players.sortBy(player => (-player.sets.length, player.number)).foreach(player => println(player))
-    controller.setInGame(false)
-    println(controller)
+    println(controller.settingsToString)
     settingsLoop()
     
   final def stringInput: String = StdIn.readLine().trim
