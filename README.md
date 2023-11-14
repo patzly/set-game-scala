@@ -2,7 +2,7 @@
 
 # SET Game
 
-[![License: GPLv3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl.txt) [![Coverage Status](https://coveralls.io/repos/github/patzly/set-game-scala/badge.svg?branch=main)](https://coveralls.io/github/patzly/set-game-scala?branch=main)
+[![License: GPLv3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl.txt) [![Tests](https://github.com/patzly/set-game-scala/actions/workflows/scala.yml/badge.svg)](https://github.com/patzly/set-game-scala/actions/workflows/scala.yml) [![Coverage](https://coveralls.io/repos/github/patzly/set-game-scala/badge.svg?branch=main)](https://coveralls.io/github/patzly/set-game-scala?branch=main)
 
 This is an unofficial Scala version of the SET game for Software Engineering classes at HTWG Konstanz.
 
