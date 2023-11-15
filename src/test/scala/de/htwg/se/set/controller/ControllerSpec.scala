@@ -14,7 +14,10 @@ class ControllerSpec extends AnyWordSpec with Matchers with BeforeAndAfter:
 
   before:
     settings = Settings(playerCount = 2, easy = false)
-    game = Game(3, Deck(false), List(), List(), List())
+    val columns = 3
+    val deck = Deck(false)
+    val cards = deck.tableCards(columns, List(), List())
+    game = Game(columns, deck, cards, List(), List())
     controller = Controller(settings, game)
 
   "A Controller" when:
@@ -22,6 +25,16 @@ class ControllerSpec extends AnyWordSpec with Matchers with BeforeAndAfter:
       "have initial settings and game state" in:
         controller.settings shouldBe settings
         controller.game shouldBe game
+      "have a correct settings string representation" in:
+        controller.settingsToString should include("2 players")
+        controller.settingsToString should include("normal mode")
+      "have a correct game string representation" in:
+        controller.gameToString should include("1")
+        controller.gameToString should include("2")
+        controller.gameToString should include("3")
+        controller.gameToString should include("A")
+        controller.gameToString should include("B")
+        controller.gameToString should include("C")
 
     "changing settings" should:
       "update the player count and notify observers" in:
@@ -42,6 +55,36 @@ class ControllerSpec extends AnyWordSpec with Matchers with BeforeAndAfter:
         )
         controller.setEasy(true)
         controller.settings.easy should be(true)
+        notified should be(true)
+
+      "update the columns and notify observers" in:
+        var notified = false
+        controller.add((e: Event) =>
+          e should be(Event.COLUMNS_CHANGED)
+          notified = true
+        )
+        controller.setColumns(1)
+        controller.game.columns should be(1)
+        notified should be(true)
+
+      "add column and notify observers" in:
+        var notified = false
+        controller.add((e: Event) =>
+          e should be(Event.COLUMNS_CHANGED)
+          notified = true
+        )
+        controller.addColumn()
+        controller.game.columns should be(4)
+        notified should be(true)
+
+      "remove column and notify observers" in:
+        var notified = false
+        controller.add((e: Event) =>
+          e should be(Event.COLUMNS_CHANGED)
+          notified = true
+        )
+        controller.removeColumn()
+        controller.game.columns should be(2)
         notified should be(true)
 
     "modifying the game" should:
@@ -70,16 +113,17 @@ class ControllerSpec extends AnyWordSpec with Matchers with BeforeAndAfter:
         controller.setDeck(newDeck)
         controller.game.deck shouldBe newDeck
 
-      /*"update table cards and notify observers" in:
+      "update table cards and notify observers" in:
         var notified = false
-        val newCards = List(Card(Card.Color.Red, Shape.Oval, Fill.Solid, Number.One))
+        val deck = Deck(false)
+        val newCards = deck.tableCards(3, List(), List())
         controller.add((e: Event) =>
           e should be(Event.CARDS_CHANGED)
           notified = true
         )
         controller.setTableCards(newCards)
         controller.game.tableCards should be(newCards)
-        notified should be(true)*/
+        notified should be(true)
 
       "update players and notify observers" in:
         var notified = false
