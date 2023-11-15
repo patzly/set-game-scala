@@ -25,9 +25,9 @@ case class Card(number: Int, color: Color, symbol: Symbol, shading: Shading, sel
     val prime = 31
     var result = 1
     result = prime * result + number
-    result = prime * result + (if (color != null) color.hashCode else 0)
-    result = prime * result + (if (symbol != null) symbol.hashCode else 0)
-    result = prime * result + (if (shading != null) shading.hashCode else 0)
+    result = prime * result + color.hashCode
+    result = prime * result + symbol.hashCode
+    result = prime * result + shading.hashCode
     result
 
 enum Color:

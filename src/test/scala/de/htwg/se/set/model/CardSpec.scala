@@ -25,6 +25,10 @@ class CardSpec extends AnyWordSpec with Matchers:
       val card1 = Card(1, Color.RED, Symbol.OVAL, Shading.SOLID, selected = false)
       val card2 = Card(2, Color.GREEN, Symbol.SQUIGGLE, Shading.STRIPED, selected = false)
       card1 should not equal card2
+    "not be equal to an instance of a different class" in:
+      val card = Card(1, Color.RED, Symbol.OVAL, Shading.SOLID, selected = false)
+      val player = Player(1, true, true, List())
+      card should not equal player
 
     "produce a string representation with color when toString is invoked" in:
       val selectedCard = Card(1, Color.RED, Symbol.OVAL, Shading.SOLID, selected = true)

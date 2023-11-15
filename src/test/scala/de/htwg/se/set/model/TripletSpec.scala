@@ -44,3 +44,5 @@ class TripletSpec extends AnyWordSpec with Matchers:
       tripletSet shouldEqual Triplet(card3, card2, card1)
     "not be equal to another triplet with different cards" in:
       tripletSet should not equal tripletNoSet
+    "not be equal to an instance of another class" in:
+      tripletSet should not equal card1

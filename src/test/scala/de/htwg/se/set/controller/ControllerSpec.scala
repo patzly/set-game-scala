@@ -39,8 +39,8 @@ class ControllerSpec extends AnyWordSpec with Matchers with BeforeAndAfter:
     "changing settings" should:
       "update the player count and notify observers" in:
         var notified = false
-        controller.add((e: Event) =>
-          e should be(Event.SETTINGS_CHANGED)
+        controller.add((event: Event) =>
+          event should be(Event.SETTINGS_CHANGED)
           notified = true
         )
         controller.setPlayerCount(3)
@@ -49,8 +49,8 @@ class ControllerSpec extends AnyWordSpec with Matchers with BeforeAndAfter:
 
       "update the difficulty and notify observers" in:
         var notified = false
-        controller.add((e: Event) =>
-          e should be(Event.SETTINGS_CHANGED)
+        controller.add((event: Event) =>
+          event should be(Event.SETTINGS_CHANGED)
           notified = true
         )
         controller.setEasy(true)
@@ -59,8 +59,8 @@ class ControllerSpec extends AnyWordSpec with Matchers with BeforeAndAfter:
 
       "update the columns and notify observers" in:
         var notified = false
-        controller.add((e: Event) =>
-          e should be(Event.COLUMNS_CHANGED)
+        controller.add((event: Event) =>
+          event should be(Event.COLUMNS_CHANGED)
           notified = true
         )
         controller.setColumns(1)
@@ -69,8 +69,8 @@ class ControllerSpec extends AnyWordSpec with Matchers with BeforeAndAfter:
 
       "add column and notify observers" in:
         var notified = false
-        controller.add((e: Event) =>
-          e should be(Event.COLUMNS_CHANGED)
+        controller.add((event: Event) =>
+          event should be(Event.COLUMNS_CHANGED)
           notified = true
         )
         controller.addColumn()
@@ -79,8 +79,8 @@ class ControllerSpec extends AnyWordSpec with Matchers with BeforeAndAfter:
 
       "remove column and notify observers" in:
         var notified = false
-        controller.add((e: Event) =>
-          e should be(Event.COLUMNS_CHANGED)
+        controller.add((event: Event) =>
+          event should be(Event.COLUMNS_CHANGED)
           notified = true
         )
         controller.removeColumn()
@@ -90,8 +90,8 @@ class ControllerSpec extends AnyWordSpec with Matchers with BeforeAndAfter:
     "modifying the game" should:
       "update columns when adding and notify observers" in:
         var notified = false
-        controller.add((e: Event) =>
-          e should be(Event.COLUMNS_CHANGED)
+        controller.add((event: Event) =>
+          event should be(Event.COLUMNS_CHANGED)
           notified = true
         )
         controller.addColumn()
@@ -100,8 +100,8 @@ class ControllerSpec extends AnyWordSpec with Matchers with BeforeAndAfter:
 
       "update columns when removing and notify observers" in:
         var notified = false
-        controller.add((e: Event) =>
-          e should be(Event.COLUMNS_CHANGED)
+        controller.add((event: Event) =>
+          event should be(Event.COLUMNS_CHANGED)
           notified = true
         )
         controller.removeColumn()
@@ -117,19 +117,25 @@ class ControllerSpec extends AnyWordSpec with Matchers with BeforeAndAfter:
         var notified = false
         val deck = Deck(false)
         val newCards = deck.tableCards(3, List(), List())
-        controller.add((e: Event) =>
-          e should be(Event.CARDS_CHANGED)
+        controller.add((event: Event) =>
+          event should be(Event.CARDS_CHANGED)
           notified = true
         )
         controller.setTableCards(newCards)
         controller.game.tableCards should be(newCards)
         notified should be(true)
 
+      "update players cards" in:
+        val deck = Deck(false)
+        val newCards = deck.tableCards(1, List(), List())
+        controller.setPlayersCards(newCards)
+        controller.game.playersCards should be(newCards)
+
       "update players and notify observers" in:
         var notified = false
         val newPlayers = List(Player(1, false, true, List()), Player(2, false, true, List()))
-        controller.add((e: Event) =>
-          e should be(Event.PLAYERS_CHANGED)
+        controller.add((event: Event) =>
+          event should be(Event.PLAYERS_CHANGED)
           notified = true
         )
         controller.setPlayers(newPlayers)
