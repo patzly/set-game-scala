@@ -13,12 +13,13 @@ class Tui(controller: Controller) extends Observer:
   controller.add(this)
 
   def run(): Unit =
-    println(controller)
+    println(controller.settingsToString)
     settingsLoop()
 
-  override def update(e: Event): Unit =
-    e match
-      case Event.SETTINGS_CHANGED | Event.CARDS_CHANGED => println(controller)
+  override def update(event: Event): Unit =
+    event match
+      case Event.SETTINGS_CHANGED => println(controller.settingsToString)
+      case Event.CARDS_CHANGED => println(controller.gameToString)
       case _ =>
 
   @tailrec
@@ -28,7 +29,6 @@ class Tui(controller: Controller) extends Observer:
     println(PrintUtil.bold("3") + " Switch to " + (if controller.settings.easy then "normal" else "easy") + " mode")
     intInput(1, 3) match
       case 1 =>
-        controller.setInGame(true)
         controller.setColumns(if controller.settings.easy then 3 else 4)
         controller.setDeck(Deck(controller.settings.easy))
         val deck = controller.game.deck
@@ -46,32 +46,9 @@ class Tui(controller: Controller) extends Observer:
         controller.setEasy(!controller.settings.easy)
         settingsLoop()
 
+  @tailrec
   private def gameLoop(): Unit =
-    if !controller.settings.singlePlayer then
-      println(s"Input player who found a SET (e.g. 1) or 0 if no SET can be found:")
-    val input = if controller.settings.singlePlayer then 1 else intInput(0, controller.settings.playerCount)
-    if input == 0 then
-      controller.addColumn()
-      val cardsAdded = controller.game.deck.tableCards(
-        controller.game.columns, controller.game.tableCards, controller.game.playersCards
-      )
-      if cardsAdded.length > controller.game.tableCards.length then
-        println("One column of cards added to the table.")
-        controller.setTableCards(cardsAdded)
-        gameLoop()
-      else if controller.game.deck.findSets(controller.game.tableCards).nonEmpty then
-        println(PrintUtil.red("No more cards left, but there still is at least one SET to be found!\n"))
-        controller.removeColumn()
-        gameLoop()
-      else
-        gameEnd()
-    val player = if controller.settings.singlePlayer then
-      controller.game.players.head
-    else if input != 0 then
-      controller.game.players(input - 1)
-    else
-      controller.game.players(intInput(1, controller.game.players.length) - 1)
-
+    val player = selectPlayerOrAddColumn
     println(s"Select 3 cards for a SET (e.g. A1 B2 C3):")
     val coordinates = coordinatesInput
     val deck = controller.game.deck
@@ -115,12 +92,33 @@ class Tui(controller: Controller) extends Observer:
 
     gameLoop()
 
+  private def selectPlayerOrAddColumn: Player =
+    val singlePlayer = controller.settings.singlePlayer
+    if !singlePlayer then
+      println(s"Input player who found a SET (e.g. 1) or 0 if no SET can be found:")
+    val input = if singlePlayer then 1 else intInput(0, controller.settings.playerCount)
+    if input == 0 then
+      controller.addColumn()
+      val cardsAdded = controller.game.deck.tableCards(
+        controller.game.columns, controller.game.tableCards, controller.game.playersCards
+      )
+      if cardsAdded.length > controller.game.tableCards.length then
+        println("One column of cards added to the table.")
+        controller.setTableCards(cardsAdded)
+        gameLoop()
+      else if controller.game.deck.findSets(controller.game.tableCards).nonEmpty then
+        println(PrintUtil.red("No more cards left, but there still is at least one SET to be found!\n"))
+        controller.removeColumn()
+        gameLoop()
+      else
+        gameEnd()
+    if singlePlayer then controller.game.players.head else controller.game.players(input - 1)
+
   private def gameEnd(): Unit =
     println("\n" + PrintUtil.yellow(PrintUtil.bold("All SETs found!")))
     if !controller.settings.singlePlayer then
       controller.game.players.sortBy(player => (-player.sets.length, player.number)).foreach(player => println(player))
-    controller.setInGame(false)
-    println(controller)
+    println(controller.settingsToString)
     settingsLoop()
     
   final def stringInput: String = StdIn.readLine().trim

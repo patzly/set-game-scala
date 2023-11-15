@@ -12,8 +12,6 @@ case class Controller(var settings: Settings, var game: Game) extends Observable
   def setEasy(easy: Boolean): Unit =
     settings = settings.copy(easy = easy)
     notifyObservers(Event.SETTINGS_CHANGED)
-
-  def setInGame(inGame: Boolean): Unit = settings = settings.copy(inGame = inGame)
     
   def setColumns(columns: Int): Unit =
     game = game.copy(columns = columns)
@@ -39,4 +37,6 @@ case class Controller(var settings: Settings, var game: Game) extends Observable
     game = game.copy(players = players)
     notifyObservers(Event.PLAYERS_CHANGED)
 
-  override def toString: String = if settings.inGame then game.toString else settings.toString
+  def settingsToString: String = settings.toString
+
+  def gameToString: String = game.toString

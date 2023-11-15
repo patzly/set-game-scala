@@ -1,13 +1,13 @@
 package de.htwg.se.set.util
 
 trait Observer:
-  def update(e: Event): Unit
+  def update(event: Event): Unit
 
 trait Observable:
   var subscribers: Vector[Observer] = Vector()
   def add(s: Observer): Unit = subscribers = subscribers :+ s
   def remove(s: Observer): Unit = subscribers = subscribers.filterNot(o => o == s)
-  def notifyObservers(e: Event): Unit = subscribers.foreach(o => o.update(e))
+  def notifyObservers(event: Event): Unit = subscribers.foreach(o => o.update(event))
 
 enum Event:
   case SETTINGS_CHANGED

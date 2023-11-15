@@ -58,6 +58,10 @@ class TuiSpec extends AnyWordSpec with Matchers:
         val input = " A1  B2 C3 \n"
         Console.withIn(new StringReader(input)):
           tui.coordinatesInput should contain theSameElementsAs List("A1", "B2", "C3")
+      "ask again if not all coordinates are different" in :
+        val input = "A1 A1 B2\nA1 B2 C3\n"
+        Console.withIn(new StringReader(input)):
+          tui.coordinatesInput should contain theSameElementsAs List("A1", "B2", "C3")
       "ask again if the input is invalid" in:
         val input = "invalid\nA1 B2 C3\n"
         Console.withIn(new StringReader(input)):
