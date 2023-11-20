@@ -44,3 +44,12 @@ class GridSpec extends AnyWordSpec with Matchers:
           Grid(3, cards, true)
         }
         exception.getMessage shouldBe "Amount of cards has to be equal to the grid size"
+    "constructed with different numbers of columns" should:
+      "have a correct String representation for various grid sizes" in:
+        for (columns <- 1 to 4)
+          val cards = List.fill(columns * 3)(Card(1, Color.RED, Symbol.OVAL, Shading.SOLID, selected = false))
+          val grid = Grid(columns, cards, false)
+          (65 until 65 + columns).foreach: charCode =>
+            grid.toString should include(charCode.toChar.toString)
+          (1 to 3).foreach: number =>
+            grid.toString should include(number.toString)
