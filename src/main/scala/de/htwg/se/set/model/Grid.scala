@@ -1,14 +1,16 @@
 package de.htwg.se.set.model
 
-case class Grid(columns: Int, cards: List[Card], easy: Boolean):
+sealed trait Grid(columns: Int, cards: List[Card]):
 
   if columns * 3 != cards.length then
     throw new IllegalArgumentException("Amount of cards has to be equal to the grid size")
+  
+  def columnWidth: Int
 
   private def legend(columns: Int): String =
-    "  " + (65 until 65 + columns).map(_.toChar).map("│" + _ + (" " * (if easy then 2 else 3))).mkString
+    "  " + (65 until 65 + columns).map(_.toChar).map("│" + _ + (" " * (columnWidth - 1))).mkString
 
-  private def line(columns: Int): String = "──" + ("┼" + "─" * (if easy then 3 else 4)) * columns
+  private def line(columns: Int): String = "──" + ("┼" + "─" * columnWidth) * columns
 
   override def toString: String =
     val result = new StringBuilder(legend(columns) + "\n")
@@ -20,7 +22,20 @@ case class Grid(columns: Int, cards: List[Card], easy: Boolean):
         val cardStr = if cardIndex < cards.length then
           cards(cardIndex).toString
         else
-          " " * (if easy then 3 else 4)
+          " " * columnWidth
         result.append("│" + cardStr)
       result.append("\n")
     result.toString
+
+object Grid:
+
+  private class NormalGrid(columns: Int, cards: List[Card]) extends Grid(columns, cards):
+
+    override def columnWidth: Int = 4
+
+  private class EasyGrid(columns: Int, cards: List[Card]) extends Grid(columns, cards):
+
+    override def columnWidth: Int = 3
+
+  def apply(columns: Int, cards: List[Card], easy: Boolean): Grid =
+    if easy then EasyGrid(columns, cards) else NormalGrid(columns, cards)
