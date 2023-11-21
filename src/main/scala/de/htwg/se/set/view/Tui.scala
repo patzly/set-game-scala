@@ -1,7 +1,7 @@
 package de.htwg.se.set.view
 
 import de.htwg.se.set.controller.Controller
-import de.htwg.se.set.model.{Card, Deck, Player, Triplet}
+import de.htwg.se.set.model.{Card, ChangePlayerCountCommand, Command, Deck, Player, StartGameCommand, SwitchEasyCommand, Triplet}
 import de.htwg.se.set.util.{Event, Observer, PrintUtil}
 
 import scala.annotation.tailrec
@@ -27,24 +27,15 @@ class Tui(controller: Controller) extends Observer:
     println(PrintUtil.bold("1") + " Start game")
     println(PrintUtil.bold("2") + " Change number of players")
     println(PrintUtil.bold("3") + " Switch to " + (if controller.settings.easy then "normal" else "easy") + " mode")
-    intInput(1, 3) match
-      case 1 =>
-        controller.setColumns(if controller.settings.easy then 3 else 4)
-        controller.setDeck(Deck(controller.settings.easy))
-        val deck = controller.game.deck
-        val cardsMultiPlayer = deck.tableCards(controller.game.columns, List[Card](), List[Card]())
-        val cardsSinglePlayer = deck.tableCardsSinglePlayer(controller.game.columns)
-        controller.setTableCards(if controller.settings.singlePlayer then cardsSinglePlayer else cardsMultiPlayer)
-        controller.setPlayers((1 to controller.settings.playerCount)
-          .map(i => Player(i, controller.settings.singlePlayer, controller.settings.easy, List[Triplet]())).toList)
-        gameLoop()
+    val command: Command = intInput(1, 3) match
+      case 1 => StartGameCommand(controller)
       case 2 =>
         println("Enter number of players:")
-        controller.setPlayerCount(intInput(1))
-        settingsLoop()
-      case 3 =>
-        controller.setEasy(!controller.settings.easy)
-        settingsLoop()
+        val playerCount = intInput(1, 10)
+        ChangePlayerCountCommand(controller, playerCount)
+      case 3 => SwitchEasyCommand(controller)
+    command.execute()
+    if command.isInstanceOf[StartGameCommand] then gameLoop() else settingsLoop()
 
   @tailrec
   private def gameLoop(): Unit =
@@ -138,15 +129,6 @@ class Tui(controller: Controller) extends Observer:
     else
       println(PrintUtil.red(s"Only whole numbers from $min to $max allowed. Try again:"))
       intInput(min, max)
-
-  @tailrec
-  final def intInput(min: Int): Int =
-    val user = intInput
-    if min <= user then
-      user
-    else
-      println(PrintUtil.red(s"Only whole numbers from $min allowed. Try again:"))
-      intInput(min)
 
   @tailrec
   final def coordinatesInput: List[String] =

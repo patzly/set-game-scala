@@ -43,16 +43,6 @@ class TuiSpec extends AnyWordSpec with Matchers:
         Console.withIn(new StringReader(input)):
           tui.intInput(1, 100) should be(42)
 
-    "inputting an integer with min" should:
-      "return the integer above min" in:
-        val input = "42\n"
-        Console.withIn(new StringReader(input)):
-          tui.intInput(1) should be(42)
-      "ask again if the integer is below min" in:
-        val input = "0\n42\n"
-        Console.withIn(new StringReader(input)):
-          tui.intInput(1) should be(42)
-
     "inputting coordinates" should:
       "return a list of coordinates when valid" in:
         val input = " A1  B2 C3 \n"
