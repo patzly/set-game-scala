@@ -127,7 +127,7 @@ class Tui(controller: Controller) extends Observer:
   final def intInput: Int = Try(stringInput.toInt) match
     case Success(value) => value
     case _ =>
-      println(PrintUtil.red("Ungültige Eingabe. Erneut versuchen:"))
+      println(PrintUtil.red("Invalid input. Try again:"))
       intInput
 
   @tailrec
@@ -136,7 +136,7 @@ class Tui(controller: Controller) extends Observer:
     if min <= user && user <= max then
       user
     else
-      println(PrintUtil.red(s"Nur ganze Zahlen von $min bis $max zulässig. Erneut versuchen:"))
+      println(PrintUtil.red(s"Only whole numbers from $min to $max allowed. Try again:"))
       intInput(min, max)
 
   @tailrec
@@ -145,7 +145,7 @@ class Tui(controller: Controller) extends Observer:
     if min <= user then
       user
     else
-      println(PrintUtil.red(s"Nur ganze Zahlen ab $min zulässig. Erneut versuchen:"))
+      println(PrintUtil.red(s"Only whole numbers from $min allowed. Try again:"))
       intInput(min)
 
   @tailrec
@@ -158,8 +158,8 @@ class Tui(controller: Controller) extends Observer:
         if coordinates.size == 3 then
           coordinates.toList
         else
-          println(PrintUtil.red("Nur verschiedene Koordinaten möglich. Erneut versuchen:"))
+          println(PrintUtil.red("Only different coordinates possible. Try again:"))
           coordinatesInput
       case _ =>
-        println(PrintUtil.red(s"Ungültige Eingabe. Erneut versuchen:"))
+        println(PrintUtil.red("Invalid input. Try again:"))
         coordinatesInput
