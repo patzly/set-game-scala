@@ -10,7 +10,7 @@ case class Deck(easy: Boolean):
         number <- 1 to 3
         color <- Color.values
         symbol <- Symbol.values
-      yield Card(number, color, symbol, Shading.SOLID, false)
+      yield Card(number, color, symbol)
       Random.shuffle(all.toList)
     else
       val all = for
@@ -18,7 +18,7 @@ case class Deck(easy: Boolean):
         color <- Color.values
         symbol <- Symbol.values
         shading <- Shading.values
-      yield Card(number, color, symbol, shading, false)
+      yield Card(number, color, symbol, shading)
       Random.shuffle(all.toList)
 
   def findSets(cards: List[Card]): List[Triplet] =

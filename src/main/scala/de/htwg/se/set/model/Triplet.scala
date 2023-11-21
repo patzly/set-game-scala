@@ -22,8 +22,6 @@ case class Triplet(card1: Card, card2: Card, card3: Card):
 
   override def toString: String = card1.toString + "+" + card2.toString + "+" + card3.toString
 
-  def toStringEasy: String = card1.toStringEasy + "+" + card2.toStringEasy + "+" + card3.toStringEasy
-
   private def cardsSet: Set[Card] = Set(card1, card2, card3)
 
   override def equals(obj: Any): Boolean = obj match

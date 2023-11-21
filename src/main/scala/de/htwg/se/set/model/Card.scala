@@ -2,19 +2,11 @@ package de.htwg.se.set.model
 
 import de.htwg.se.set.util.PrintUtil
 
-case class Card(number: Int, color: Color, symbol: Symbol, shading: Shading, selected: Boolean):
+sealed trait Card(val number: Int, val color: Color, val symbol: Symbol, val shading: Shading, val selected: Boolean):
 
-  def select: Card = copy(selected = true)
+  def select: Card
 
-  def unselect: Card = copy(selected = false)
-
-  override def toString: String =
-    if selected then PrintUtil.cyan(s"$number$color$symbol$shading")
-    else PrintUtil.yellow(s"$number$color$symbol$shading")
-
-  def toStringEasy: String =
-    if selected then PrintUtil.cyan(s"$number$color$symbol")
-    else PrintUtil.yellow(s"$number$color$symbol")
+  def unselect: Card
 
   override def equals(obj: Any): Boolean = obj match
     case other: Card =>
@@ -29,6 +21,36 @@ case class Card(number: Int, color: Color, symbol: Symbol, shading: Shading, sel
     result = prime * result + symbol.hashCode
     result = prime * result + shading.hashCode
     result
+
+object Card:
+
+  private class NormalCard(number: Int, color: Color, symbol: Symbol, shading: Shading, selected: Boolean)
+    extends Card(number, color, symbol, shading, selected):
+
+    override def select: NormalCard = new NormalCard(number, color, symbol, shading, true)
+
+    override def unselect: NormalCard = new NormalCard(number, color, symbol, shading, false)
+
+    override def toString: String =
+      val string = s"$number$color$symbol$shading"
+      if selected then PrintUtil.cyan(string) else PrintUtil.yellow(string)
+
+  private class EasyCard(number: Int, color: Color, symbol: Symbol, selected: Boolean)
+    extends Card(number, color, symbol, Shading.SOLID, selected):
+
+    override def select: EasyCard = new EasyCard(number, color, symbol, true)
+
+    override def unselect: EasyCard = new EasyCard(number, color, symbol, false)
+
+    override def toString: String =
+      val string = s"$number$color$symbol"
+      if selected then PrintUtil.cyan(string) else PrintUtil.yellow(string)
+
+  def apply(number: Int, color: Color, symbol: Symbol, shading: Shading): Card =
+    NormalCard(number, color, symbol, shading, false)
+
+  def apply(number: Int, color: Color, symbol: Symbol): Card =
+    EasyCard(number, color, symbol, false)
 
 enum Color:
   case RED, GREEN, BLUE

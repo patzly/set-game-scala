@@ -6,9 +6,9 @@ import org.scalatest.wordspec.AnyWordSpec
 class PlayerSpec extends AnyWordSpec with Matchers:
 
   "A Player" when:
-    val card1 = Card(1, Color.RED, Symbol.OVAL, Shading.SOLID, selected = false)
-    val card2 = Card(2, Color.RED, Symbol.OVAL, Shading.SOLID, selected = false)
-    val card3 = Card(3, Color.RED, Symbol.OVAL, Shading.SOLID, selected = false)
+    val card1 = Card(1, Color.RED, Symbol.OVAL, Shading.SOLID)
+    val card2 = Card(2, Color.RED, Symbol.OVAL, Shading.SOLID)
+    val card3 = Card(3, Color.RED, Symbol.OVAL, Shading.SOLID)
     val set = Triplet(card1, card2, card3)
 
     "new" should:
@@ -17,9 +17,9 @@ class PlayerSpec extends AnyWordSpec with Matchers:
         player.index shouldBe 0
 
     "found a set" should:
-      val nonSetCard1 = Card(1, Color.RED, Symbol.OVAL, Shading.SOLID, selected = false)
-      val nonSetCard2 = Card(1, Color.GREEN, Symbol.OVAL, Shading.SOLID, selected = false)
-      val nonSetCard3 = Card(3, Color.RED, Symbol.OVAL, Shading.SOLID, selected = false)
+      val nonSetCard1 = Card(1, Color.RED, Symbol.OVAL, Shading.SOLID)
+      val nonSetCard2 = Card(1, Color.GREEN, Symbol.OVAL, Shading.SOLID)
+      val nonSetCard3 = Card(3, Color.RED, Symbol.OVAL, Shading.SOLID)
       val nonSet = Triplet(nonSetCard1, nonSetCard2, nonSetCard3)
       "add the set to the player's sets if it's not already found" in:
         val player = Player(1, singlePlayer = true, easy = true, List())

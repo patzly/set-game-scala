@@ -22,12 +22,12 @@ class DeckSpec extends AnyWordSpec with Matchers:
         deckNormal.allCards.map(_.shading).distinct should contain allElementsOf Shading.values
 
     "finding all SETs in specific cards" should:
-      val card1 = Card(1, Color.RED, Symbol.OVAL, Shading.SOLID, selected = false)
-      val card2 = Card(2, Color.RED, Symbol.OVAL, Shading.SOLID, selected = false)
-      val card3 = Card(3, Color.RED, Symbol.OVAL, Shading.SOLID, selected = false)
-      val card4 = Card(1, Color.GREEN, Symbol.OVAL, Shading.SOLID, selected = false)
-      val card5 = Card(2, Color.GREEN, Symbol.DIAMOND, Shading.SOLID, selected = false)
-      val card6 = Card(3, Color.GREEN, Symbol.DIAMOND, Shading.SOLID, selected = false)
+      val card1 = Card(1, Color.RED, Symbol.OVAL, Shading.SOLID)
+      val card2 = Card(2, Color.RED, Symbol.OVAL, Shading.SOLID)
+      val card3 = Card(3, Color.RED, Symbol.OVAL, Shading.SOLID)
+      val card4 = Card(1, Color.GREEN, Symbol.OVAL, Shading.SOLID)
+      val card5 = Card(2, Color.GREEN, Symbol.DIAMOND, Shading.SOLID)
+      val card6 = Card(3, Color.GREEN, Symbol.DIAMOND, Shading.SOLID)
       val cards = List(card1, card2, card3, card4, card5, card6)
       val set = Triplet(card1, card2, card3)
       "find the SET" in:

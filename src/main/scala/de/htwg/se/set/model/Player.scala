@@ -25,7 +25,7 @@ case class Player(number: Int, singlePlayer: Boolean, easy: Boolean, sets: List[
   override def toString: String =
     if singlePlayer then
       val max = if easy then 3 else 6
-      val setStrings = sets.map(set => if easy then set.toStringEasy else set.toString)
+      val setStrings = sets.map(set => set.toString)
       sets.length + " of " + max + " SETs found:\n" + setStrings.mkString("\n")
     else
       "Player " + number + ": " + PrintUtil.purple(sets.length.toString)

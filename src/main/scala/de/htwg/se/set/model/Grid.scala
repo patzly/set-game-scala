@@ -18,7 +18,7 @@ case class Grid(columns: Int, cards: List[Card], easy: Boolean):
       for colIndex <- 0 until columns do
         val cardIndex = rowIndex + 3 * colIndex
         val cardStr = if cardIndex < cards.length then
-          if easy then cards(cardIndex).toStringEasy else cards(cardIndex).toString
+          cards(cardIndex).toString
         else
           " " * (if easy then 3 else 4)
         result.append("│" + cardStr)
