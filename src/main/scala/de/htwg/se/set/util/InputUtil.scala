@@ -32,10 +32,9 @@ object InputUtil:
       case coordinatesPattern(_*) =>
         val coordinates = input.split(" +").toSet
         if coordinates.size == 3 then
-          coordinates.toList
+          return coordinates.toList
         else
           println(PrintUtil.red("Only different coordinates possible. Try again:"))
-          coordinatesInput
       case _ =>
         println(PrintUtil.red("Invalid input. Try again:"))
-        coordinatesInput
+    coordinatesInput
