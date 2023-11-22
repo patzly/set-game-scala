@@ -37,6 +37,14 @@ case class Controller(var settings: Settings, var game: Game) extends Observable
     game = game.copy(players = players)
     notifyObservers(Event.PLAYERS_CHANGED)
 
+  def updateAndUnselectPlayer(player: Player): Unit =
+    game = game.copy(players = game.players.updated(player.index, player), selectedPlayer = None)
+    notifyObservers(Event.PLAYERS_CHANGED)
+
+  def selectPlayer(number: Int): Unit =
+    val player = if settings.singlePlayer then game.players.head else game.players(number - 1)
+    game = game.copy(selectedPlayer = Some(player))
+
   def settingsToString: String = settings.toString
 
   def gameToString: String = game.toString

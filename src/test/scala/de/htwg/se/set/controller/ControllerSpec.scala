@@ -17,7 +17,7 @@ class ControllerSpec extends AnyWordSpec with Matchers with BeforeAndAfter:
     val columns = 3
     val deck = Deck(false)
     val cards = deck.tableCards(columns, List(), List())
-    game = Game(columns, deck, cards, List(), List())
+    game = Game(columns, deck, cards, List(), List(), None)
     controller = Controller(settings, game)
 
   "A Controller" when:
@@ -140,4 +140,23 @@ class ControllerSpec extends AnyWordSpec with Matchers with BeforeAndAfter:
         )
         controller.setPlayers(newPlayers)
         controller.game.players should be(newPlayers)
+        notified should be(true)
+
+      "update and unselect player and notify observers" in:
+        var notified = false
+        val oldPlayer1 = Player(1, false, true, List())
+        val triplet = Triplet(
+          Card(1, Color.RED, Symbol.OVAL), Card(2, Color.RED, Symbol.OVAL), Card(3, Color.RED, Symbol.OVAL)
+        )
+        val newPlayer1 = Player(1, false, true, List(triplet))
+        val oldPlayers = List(oldPlayer1, Player(2, false, true, List()))
+        val newPlayers = List(newPlayer1, Player(2, false, true, List()))
+        controller.game = game.copy(players = oldPlayers, selectedPlayer = Some(oldPlayer1))
+        controller.add((event: Event) =>
+          event should be(Event.PLAYERS_CHANGED)
+          notified = true
+        )
+        controller.updateAndUnselectPlayer(newPlayer1)
+        controller.game.players should be(newPlayers)
+        controller.game.selectedPlayer should be(None)
         notified should be(true)

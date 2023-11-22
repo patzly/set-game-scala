@@ -14,7 +14,7 @@ def main(): Unit =
   val deck = Deck(false)
   val cards = deck.tableCardsSinglePlayer(4)
   val players = List[Player](Player(1, true, false, List[Triplet]()))
-  val game = Game(4, deck, cards, List[Card](), players)
+  val game = Game(4, deck, cards, List[Card](), players, None)
 
   val controller = Controller(settings, game)
   Tui(controller).run()
