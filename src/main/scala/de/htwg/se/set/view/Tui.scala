@@ -12,6 +12,8 @@ case class Tui(controller: Controller) extends Observer:
 
   private var state: TuiState = SettingsState(this)
 
+  def changeState(newState: TuiState): Unit = state = newState
+
   def run(): Unit =
     println(controller.settingsToString)
     stateLoop()
@@ -26,5 +28,3 @@ case class Tui(controller: Controller) extends Observer:
       case Event.SETTINGS_CHANGED => println(controller.settingsToString)
       case Event.CARDS_CHANGED => println(controller.gameToString)
       case _ =>
-
-  def changeState(newState: TuiState): Unit = state = newState
