@@ -1,7 +1,7 @@
 package de.htwg.se.set.model
 
 import de.htwg.se.set.controller.Controller
-import de.htwg.se.set.util.PrintUtil
+import de.htwg.se.set.util.{InputUtil, PrintUtil}
 import de.htwg.se.set.view.Tui
 
 sealed trait TuiState(tui: Tui):
@@ -16,7 +16,7 @@ case class SettingsState(tui: Tui) extends TuiState(tui):
     println(PrintUtil.bold("1") + " Start game")
     println(PrintUtil.bold("2") + " Change number of players")
     println(PrintUtil.bold("3") + " Switch to " + (if controller.settings.easy then "normal" else "easy") + " mode")
-    tui.intInput(1, 3) match
+    InputUtil.intInput(1, 3) match
       case 1 =>
         StartGameCommand(controller).execute()
         tui.changeState(SelectPlayerState(tui))
@@ -29,7 +29,7 @@ case class ChangePlayerCountState(tui: Tui) extends TuiState(tui):
 
   override def run(): Unit =
     println("Enter number of players:")
-    val playerCount = tui.intInput(1, 10)
+    val playerCount = InputUtil.intInput(1, 10)
     ChangePlayerCountCommand(controller, playerCount).execute()
     tui.changeState(SettingsState(tui))
 
@@ -38,7 +38,7 @@ case class SelectPlayerState(tui: Tui) extends TuiState(tui):
   override def run(): Unit =
     if !controller.settings.singlePlayer then
       println(s"Input player who found a SET (e.g. 1) or 0 if no SET can be found:")
-    val input = if controller.settings.singlePlayer then 1 else tui.intInput(0, controller.settings.playerCount)
+    val input = if controller.settings.singlePlayer then 1 else InputUtil.intInput(0, controller.settings.playerCount)
     if input != 0 then
       controller.selectPlayer(input)
     else
@@ -66,7 +66,7 @@ case class GameState(tui: Tui) extends TuiState(tui):
         tui.changeState(SelectPlayerState(tui))
         return;
     println(s"Select 3 cards for a SET (e.g. A1 B2 C3):")
-    val coordinates = tui.coordinatesInput
+    val coordinates = InputUtil.coordinatesInput
     val deck = controller.game.deck
     val cards = deck.tableCards(controller.game.columns, controller.game.tableCards, controller.game.playersCards)
     val card1 = deck.cardAtCoordinate(cards, coordinates.head, controller.game.columns)
