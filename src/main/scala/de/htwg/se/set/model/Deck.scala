@@ -4,15 +4,13 @@ import scala.util.Random
 
 case class Deck(easy: Boolean):
 
-  val allCards: List[Card] =
-    if easy then
-      val all = for
-        number <- 1 to 3
-        color <- Color.values
-        symbol <- Symbol.values
-      yield Card(number, color, symbol)
-      Random.shuffle(all.toList)
-    else
+  private trait DeckCreationStrategy:
+
+    def createDeck: List[Card]
+
+  private class NormalDeckCreationStrategy() extends DeckCreationStrategy:
+
+    override def createDeck: List[Card] =
       val all = for
         number <- 1 to 3
         color <- Color.values
@@ -20,6 +18,18 @@ case class Deck(easy: Boolean):
         shading <- Shading.values
       yield Card(number, color, symbol, shading)
       Random.shuffle(all.toList)
+
+  private class EasyDeckCreationStrategy() extends DeckCreationStrategy:
+
+    override def createDeck: List[Card] =
+      val all = for
+        number <- 1 to 3
+        color <- Color.values
+        symbol <- Symbol.values
+      yield Card(number, color, symbol)
+      Random.shuffle(all.toList)
+
+  val allCards: List[Card] = (if easy then new EasyDeckCreationStrategy else new NormalDeckCreationStrategy).createDeck
 
   def findSets(cards: List[Card]): List[Triplet] =
     val sets = for {
