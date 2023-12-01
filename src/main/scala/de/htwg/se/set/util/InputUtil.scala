@@ -6,35 +6,71 @@ import scala.util.{Success, Try}
 
 object InputUtil:
 
-  final def stringInput: String = StdIn.readLine().trim
+  sealed trait UserInput
+
+  private case class TextInput(input: String) extends UserInput
+
+  case class NumberInput(input: Int) extends UserInput
+
+  case class CoordinatesInput(coordinates: List[String]) extends UserInput
+
+  case object UndoInput extends UserInput
+
+  case object RedoInput extends UserInput
 
   @tailrec
-  final def intInput: Int = Try(stringInput.toInt) match
-    case Success(value) => value
-    case _ =>
-      println(PrintUtil.red("Invalid input. Try again:"))
-      intInput
+  final def stringInput(undo: Boolean, redo: Boolean): UserInput =
+    val input = StdIn.readLine().trim
+    input.toLowerCase match
+      case "u" if undo => UndoInput
+      case "u" =>
+        println(PrintUtil.red("Undo not allowed. Try again:"))
+        stringInput(undo, redo)
+      case "r" if redo => RedoInput
+      case "r" =>
+        println(PrintUtil.red("Redo not allowed. Try again:"))
+        stringInput(undo, redo)
+      case _ => TextInput(input)
 
   @tailrec
-  final def intInput(min: Int, max: Int): Int =
-    val user = intInput
-    if min <= user && user <= max then
-      user
-    else
-      println(PrintUtil.red(s"Only whole numbers from $min to $max allowed. Try again:"))
-      intInput(min, max)
+  final def intInput(undo: Boolean, redo: Boolean): UserInput =
+    stringInput(undo, redo) match
+      case TextInput(input) => Try(input.toInt) match
+        case Success(value) => NumberInput(value)
+        case _ =>
+          println(PrintUtil.red("Invalid input. Try again:"))
+          intInput(undo, redo)
+      case UndoInput => UndoInput
+      case RedoInput => RedoInput
+      case _ => throw IllegalStateException("Unexpected UserInput type")
 
   @tailrec
-  final def coordinatesInput: List[String] =
-    val input = stringInput
-    val coordinatesPattern = "^([A-Za-z][1-3] +){2}[A-Za-z][1-3]$".r
-    input match
-      case coordinatesPattern(_*) =>
-        val coordinates = input.split(" +").toSet
-        if coordinates.size == 3 then
-          return coordinates.toList
-        else
-          println(PrintUtil.red("Only different coordinates possible. Try again:"))
-      case _ =>
-        println(PrintUtil.red("Invalid input. Try again:"))
-    coordinatesInput
+  final def intInput(min: Int, max: Int, undo: Boolean, redo: Boolean): UserInput =
+    intInput(undo, redo) match
+      case NumberInput(value) if min <= value && value <= max => NumberInput(value)
+      case NumberInput(_) =>
+        println(PrintUtil.red(s"Only whole numbers from $min to $max allowed. Try again:"))
+        intInput(min, max, undo, redo)
+      case UndoInput => UndoInput
+      case RedoInput => RedoInput
+      case _ => throw IllegalStateException("Unexpected UserInput type")
+
+  @tailrec
+  final def coordinatesInput(undo: Boolean, redo: Boolean): UserInput =
+    stringInput(undo, redo) match
+      case TextInput(input) =>
+        val coordinatesPattern = "^([A-Za-z][1-3] +){2}[A-Za-z][1-3]$".r
+        input match
+          case coordinatesPattern(_*) =>
+            val coordinates = input.split(" +").toSet
+            if coordinates.size == 3 then
+              CoordinatesInput(coordinates.toList)
+            else
+              println(PrintUtil.red("Only different coordinates possible. Try again:"))
+              coordinatesInput(undo, redo)
+          case _ =>
+            println(PrintUtil.red("Invalid input. Try again:"))
+            coordinatesInput(undo, redo)
+      case UndoInput => UndoInput
+      case RedoInput => RedoInput
+      case _ => throw IllegalStateException("Unexpected UserInput type")

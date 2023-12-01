@@ -1,13 +1,26 @@
 package de.htwg.se.set.model
 
 import de.htwg.se.set.controller.Controller
+import de.htwg.se.set.manager.Snapshot
 import de.htwg.se.set.util.PrintUtil
 
 sealed trait Command:
 
+  var snapshot: Option[Snapshot] = None
+  
+  def controller: Controller
+
+  def saveSnapshot(tuiState: TuiState): Unit = snapshot = Some(controller.snapshot(tuiState))
+  
+  def undo(): TuiState = snapshot match
+    case Some(snapshot) => controller.restoreSnapshot(snapshot)
+    case None => throw IllegalStateException("No snapshot to restore")
+
   def execute: Command
 
-case class StartGameCommand(controller: Controller) extends Command:
+case class StartGameCommand(c: Controller) extends Command:
+  
+  override def controller: Controller = c
   
   override def execute: StartGameCommand =
     controller.setColumns(if controller.settings.easy then 3 else 4)
@@ -20,25 +33,33 @@ case class StartGameCommand(controller: Controller) extends Command:
       .map(i => Player(i, controller.settings.singlePlayer, controller.settings.easy, List[Triplet]())).toList)
     this
 
-case class ChangePlayerCountCommand(controller: Controller, playerCount: Int) extends Command:
+case class ChangePlayerCountCommand(c: Controller, playerCount: Int) extends Command:
+
+  override def controller: Controller = c
 
   override def execute: ChangePlayerCountCommand =
     controller.setPlayerCount(playerCount)
     this
 
-case class SwitchEasyCommand(controller: Controller) extends Command:
+case class SwitchEasyCommand(c: Controller) extends Command:
+
+  override def controller: Controller = c
 
   override def execute: SwitchEasyCommand =
     controller.setEasy(!controller.settings.easy)
     this
 
-case class SelectPlayerCommand(controller: Controller, input: Int) extends Command:
+case class SelectPlayerCommand(c: Controller, input: Int) extends Command:
+
+  override def controller: Controller = c
 
   override def execute: SelectPlayerCommand =
     controller.selectPlayer(input)
     this
 
-case class AddColumnCommand(controller: Controller, endGame: Boolean = false) extends Command:
+case class AddColumnCommand(c: Controller, endGame: Boolean = false) extends Command:
+
+  override def controller: Controller = c
 
   override def execute: AddColumnCommand =
     controller.addColumn()
@@ -55,8 +76,10 @@ case class AddColumnCommand(controller: Controller, endGame: Boolean = false) ex
       this
     else copy(endGame = true)
 
-case class SelectCardsCommand(controller: Controller, coordinates: List[String], endGame: Boolean = false)
+case class SelectCardsCommand(c: Controller, coordinates: List[String], endGame: Boolean = false)
   extends Command:
+
+  override def controller: Controller = c
 
   override def execute: SelectCardsCommand =
     val deck = controller.game.deck

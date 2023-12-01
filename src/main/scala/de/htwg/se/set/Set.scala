@@ -1,6 +1,7 @@
 package de.htwg.se.set
 
 import de.htwg.se.set.controller.Controller
+import de.htwg.se.set.manager.UndoManager
 import de.htwg.se.set.view.Tui
 import util.PrintUtil
 import model.{Card, Deck, Game, Player, Settings, Triplet}
@@ -16,5 +17,6 @@ def main(): Unit =
   val players = List[Player](Player(1, true, false, List[Triplet]()))
   val game = Game(4, deck, cards, List[Card](), players, None)
 
-  val controller = Controller(settings, game)
+  val undoManager = UndoManager()
+  val controller = Controller(settings, game, undoManager)
   Tui(controller).run()

@@ -9,10 +9,10 @@ import scala.annotation.tailrec
 case class Tui(controller: Controller) extends Observer:
 
   controller.add(this)
-
+  
   private var state: TuiState = SettingsState(this)
 
-  def changeState(newState: TuiState): Unit = state = newState
+  def changeState(s: TuiState): Unit = state = s
 
   def run(): Unit =
     println(controller.settingsToString)

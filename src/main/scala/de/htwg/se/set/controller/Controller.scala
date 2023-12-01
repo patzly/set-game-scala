@@ -1,9 +1,21 @@
 package de.htwg.se.set.controller
 
-import de.htwg.se.set.model.{Card, Deck, Game, Player, Settings}
+import de.htwg.se.set.manager.{Snapshot, UndoManager}
+import de.htwg.se.set.model.{Card, Command, Deck, Game, Player, Settings, TuiState}
 import de.htwg.se.set.util.{Event, Observable}
 
-case class Controller(var settings: Settings, var game: Game) extends Observable:
+case class Controller(var settings: Settings, var game: Game, undoManager: UndoManager) extends Observable:
+
+  def snapshot(tuiState: TuiState): Snapshot = Snapshot(settings, game, tuiState)
+
+  def restoreSnapshot(snapshot: Snapshot): TuiState =
+    val settingsChanged = settings != snapshot.settings
+    val gameChanged = game != snapshot.game
+    settings = snapshot.settings
+    game = snapshot.game
+    if settingsChanged then notifyObservers(Event.SETTINGS_CHANGED)
+    if gameChanged then notifyObservers(Event.CARDS_CHANGED)
+    snapshot.tuiState
 
   def setPlayerCount(count: Int): Unit =
     settings = settings.copy(playerCount = count)
