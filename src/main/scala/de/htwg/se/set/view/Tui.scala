@@ -1,7 +1,6 @@
 package de.htwg.se.set.view
 
 import de.htwg.se.set.controller.Controller
-import de.htwg.se.set.model.{SettingsState, TuiState}
 import de.htwg.se.set.util.{Event, Observer}
 
 import scala.annotation.tailrec
@@ -9,19 +8,15 @@ import scala.annotation.tailrec
 case class Tui(controller: Controller) extends Observer:
 
   controller.add(this)
-  
-  private var state: TuiState = SettingsState(this)
-
-  def changeState(s: TuiState): Unit = state = s
 
   def run(): Unit =
     println(controller.settingsToString)
-    stateLoop()
+    loop()
 
   @tailrec
-  private def stateLoop(): Unit =
-    state.run()
-    stateLoop()
+  private def loop(): Unit =
+    controller.runState()
+    loop()
 
   override def update(event: Event): Unit =
     event match

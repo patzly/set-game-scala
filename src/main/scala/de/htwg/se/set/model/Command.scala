@@ -10,9 +10,9 @@ sealed trait Command:
   
   def controller: Controller
 
-  def saveSnapshot(tuiState: TuiState): Unit = snapshot = Some(controller.snapshot(tuiState))
+  def saveSnapshot(): Unit = snapshot = Some(controller.snapshot)
   
-  def undo(): TuiState = snapshot match
+  def undo(): State = snapshot match
     case Some(snapshot) => controller.restoreSnapshot(snapshot)
     case None => throw IllegalStateException("No snapshot to restore")
 

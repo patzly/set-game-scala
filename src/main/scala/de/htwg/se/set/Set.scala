@@ -17,6 +17,5 @@ def main(): Unit =
   val players = List[Player](Player(1, true, false, List[Triplet]()))
   val game = Game(4, deck, cards, List[Card](), players, None)
 
-  val undoManager = UndoManager()
-  val controller = Controller(settings, game, undoManager)
+  val controller = Controller(settings, game)
   Tui(controller).run()
