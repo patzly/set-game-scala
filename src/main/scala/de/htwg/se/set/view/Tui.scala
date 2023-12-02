@@ -22,4 +22,5 @@ case class Tui(controller: Controller) extends Observer:
     event match
       case Event.SETTINGS_CHANGED => println(controller.settingsToString)
       case Event.CARDS_CHANGED => println(controller.gameToString)
+      case Event.SETTINGS_OR_GAME_CHANGED => println(controller)
       case _ =>

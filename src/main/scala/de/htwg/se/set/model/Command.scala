@@ -12,17 +12,18 @@ sealed trait Command:
 
   def saveSnapshot(): Unit = snapshot = Some(controller.snapshot)
   
-  def undo(): State = snapshot match
+  def undo(): Unit = snapshot match
     case Some(snapshot) => controller.restoreSnapshot(snapshot)
     case None => throw IllegalStateException("No snapshot to restore")
 
-  def execute: Command
+  def execute(): Unit
 
 case class StartGameCommand(c: Controller) extends Command:
   
   override def controller: Controller = c
   
-  override def execute: StartGameCommand =
+  override def execute(): Unit =
+    controller.setInGame(true)
     controller.setColumns(if controller.settings.easy then 3 else 4)
     controller.setDeck(Deck(controller.settings.easy))
     val deck = controller.game.deck
@@ -31,37 +32,41 @@ case class StartGameCommand(c: Controller) extends Command:
     controller.setTableCards(if controller.settings.singlePlayer then cardsSinglePlayer else cardsMultiPlayer)
     controller.setPlayers((1 to controller.settings.playerCount)
       .map(i => Player(i, controller.settings.singlePlayer, controller.settings.easy, List[Triplet]())).toList)
-    this
+    controller.changeState(SelectPlayerState(controller))
+
+case class GoToPlayerCountCommand(c: Controller) extends Command:
+
+  override def controller: Controller = c
+
+  override def execute(): Unit = controller.changeState(ChangePlayerCountState(controller))
 
 case class ChangePlayerCountCommand(c: Controller, playerCount: Int) extends Command:
 
   override def controller: Controller = c
 
-  override def execute: ChangePlayerCountCommand =
+  override def execute(): Unit =
     controller.setPlayerCount(playerCount)
-    this
+    controller.changeState(SettingsState(controller))
 
 case class SwitchEasyCommand(c: Controller) extends Command:
 
   override def controller: Controller = c
 
-  override def execute: SwitchEasyCommand =
-    controller.setEasy(!controller.settings.easy)
-    this
+  override def execute(): Unit = controller.setEasy(!controller.settings.easy)
 
 case class SelectPlayerCommand(c: Controller, input: Int) extends Command:
 
   override def controller: Controller = c
 
-  override def execute: SelectPlayerCommand =
+  override def execute(): Unit =
     controller.selectPlayer(input)
-    this
+    controller.changeState(GameState(controller))
 
 case class AddColumnCommand(c: Controller, endGame: Boolean = false) extends Command:
 
   override def controller: Controller = c
 
-  override def execute: AddColumnCommand =
+  override def execute(): Unit =
     controller.addColumn()
     val cardsAdded = controller.game.deck.tableCards(
       controller.game.columns, controller.game.tableCards, controller.game.playersCards
@@ -69,19 +74,20 @@ case class AddColumnCommand(c: Controller, endGame: Boolean = false) extends Com
     if cardsAdded.length > controller.game.tableCards.length then
       println("One column of cards added to the table.")
       controller.setTableCards(cardsAdded)
-      this
+      controller.changeState(GameState(controller))
     else if controller.game.deck.findSets(controller.game.tableCards).nonEmpty then
       println(PrintUtil.red("No more cards left, but there still is at least one SET to be found!\n"))
       controller.removeColumn()
-      this
-    else copy(endGame = true)
+      controller.changeState(GameState(controller))
+    else
+      controller.changeState(GameEndState(controller))
 
 case class SelectCardsCommand(c: Controller, coordinates: List[String], endGame: Boolean = false)
   extends Command:
 
   override def controller: Controller = c
 
-  override def execute: SelectCardsCommand =
+  override def execute(): Unit =
     val deck = controller.game.deck
     val cards = deck.tableCards(controller.game.columns, controller.game.tableCards, controller.game.playersCards)
     val card1 = deck.cardAtCoordinate(cards, coordinates.head, controller.game.columns)
@@ -108,7 +114,8 @@ case class SelectCardsCommand(c: Controller, coordinates: List[String], endGame:
     if removeColumn then
       controller.removeColumn()
     else if replaceOrRemoveSet && controller.game.columns == 1 then
-      return copy(endGame = true)
+      controller.changeState(GameEndState(controller))
+      return;
     controller.setTableCards(
       if replaceOrRemoveSet then
         controller.game.deck.tableCards(
@@ -122,5 +129,16 @@ case class SelectCardsCommand(c: Controller, coordinates: List[String], endGame:
       if playerUpdated.sets.nonEmpty then
         println(playerUpdated)
       val finished = if deck.easy then playerUpdated.sets.length == 3 else playerUpdated.sets.length == 6
-      if finished then return copy(endGame = true)
-    this
+      if finished then
+        controller.changeState(GameEndState(controller))
+        return;
+    controller.changeState(SelectPlayerState(controller))
+
+case class GoToSettingsCommand(c: Controller) extends Command:
+
+  override def controller: Controller = c
+
+  override def execute(): Unit =
+    controller.setInGame(false)
+    println(controller.settingsToString)
+    controller.changeState(SettingsState(controller))

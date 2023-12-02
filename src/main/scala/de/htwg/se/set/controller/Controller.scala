@@ -15,14 +15,11 @@ case class Controller(var settings: Settings, var game: Game) extends Observable
 
   def snapshot: Snapshot = Snapshot(settings, game, state)
 
-  def restoreSnapshot(snapshot: Snapshot): State =
-    val settingsChanged = settings != snapshot.settings
-    val gameChanged = game != snapshot.game
+  def restoreSnapshot(snapshot: Snapshot): Unit =
     settings = snapshot.settings
     game = snapshot.game
-    if settingsChanged then notifyObservers(Event.SETTINGS_CHANGED)
-    if gameChanged then notifyObservers(Event.CARDS_CHANGED)
-    snapshot.state
+    state = snapshot.state
+    notifyObservers(Event.SETTINGS_OR_GAME_CHANGED)
 
   def setPlayerCount(count: Int): Unit =
     settings = settings.copy(playerCount = count)
@@ -31,6 +28,9 @@ case class Controller(var settings: Settings, var game: Game) extends Observable
   def setEasy(easy: Boolean): Unit =
     settings = settings.copy(easy = easy)
     notifyObservers(Event.SETTINGS_CHANGED)
+
+  def setInGame(inGame: Boolean): Unit =
+    settings = settings.copy(inGame = inGame)
     
   def setColumns(columns: Int): Unit =
     game = game.copy(columns = columns)
@@ -63,7 +63,10 @@ case class Controller(var settings: Settings, var game: Game) extends Observable
   def selectPlayer(number: Int): Unit =
     val player = if settings.singlePlayer then game.players.head else game.players(number - 1)
     game = game.copy(selectedPlayer = Some(player))
+    notifyObservers(Event.PLAYERS_CHANGED)
 
   def settingsToString: String = settings.toString
 
   def gameToString: String = game.toString
+
+  override def toString: String = if settings.inGame then gameToString else settingsToString

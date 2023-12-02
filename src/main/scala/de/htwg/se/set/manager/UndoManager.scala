@@ -8,37 +8,29 @@ case class UndoManager():
 
   private var undoStack: List[Command] = List()
   private var redoStack: List[Command] = List()
-  private var stateStack: List[State] = List()
 
-  def doStep(command: Command): Command =
+  def executeCommand(command: Command): Unit =
     undoStack = command :: undoStack
     redoStack = List()
     command.saveSnapshot()
-    command.execute
+    command.execute()
 
   def canUndo: Boolean = undoStack.nonEmpty
 
-  def undoStep(state: State): State =
-    stateStack = state :: stateStack
+  def undoCommand(): Unit =
     undoStack match
       case head :: stack =>
-        val state = head.undo()
+        head.undo()
         undoStack = stack
         redoStack = head :: redoStack
-        state
       case _ => throw IllegalStateException("Undo stack is empty")
 
   def canRedo: Boolean = redoStack.nonEmpty
 
-  def redoStep(): State =
+  def redoCommand(): Unit =
     redoStack match
       case head :: stack =>
-        head.execute
+        head.execute()
         redoStack = stack
         undoStack = head :: undoStack
-        stateStack match
-          case state :: rest =>
-            stateStack = rest
-            state
-          case _ => throw IllegalStateException("State stack is empty")
       case _ => throw IllegalStateException("Redo stack is empty")
