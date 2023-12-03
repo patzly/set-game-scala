@@ -1,17 +1,33 @@
 package de.htwg.se.set.controller
 
 import de.htwg.se.set.manager.{Snapshot, UndoManager}
-import de.htwg.se.set.model.{Card, Deck, Game, Player, Settings, SettingsState, State}
+import de.htwg.se.set.model.*
 import de.htwg.se.set.util.{Event, Observable}
 
 case class Controller(var settings: Settings, var game: Game) extends Observable:
 
-  val undoManager: UndoManager = UndoManager()
+  private val undoManager: UndoManager = UndoManager()
   private var state: State = SettingsState(this)
 
   def changeState(s: State): Unit = state = s
   
   def runState(): Unit = state.run()
+
+  def actionFromInput: UserAction = state.actionFromInput
+
+  def handleAction(action: UserAction): Unit =
+    action match
+      case UndoAction => undoManager.undoCommand()
+      case RedoAction => undoManager.redoCommand()
+      case StartGameAction => undoManager.executeCommand(StartGameCommand(this))
+      case GoToPlayerCountAction => undoManager.executeCommand(GoToPlayerCountCommand(this))
+      case SwitchEasyAction => undoManager.executeCommand(SwitchEasyCommand(this))
+      case ChangePlayerCountAction(playerCount) => undoManager.executeCommand(ChangePlayerCountCommand(this, playerCount))
+      case SelectPlayerAction(number) => undoManager.executeCommand(SelectPlayerCommand(this, number))
+      case AddColumnAction => undoManager.executeCommand(AddColumnCommand(this))
+      case SelectCardsAction(coordinates) => undoManager.executeCommand(SelectCardsCommand(this, coordinates))
+      case FinishAction => undoManager.executeCommand(FinishCommand(this))
+      case NoAction =>
 
   def snapshot: Snapshot = Snapshot(settings, game, state)
 
@@ -20,6 +36,10 @@ case class Controller(var settings: Settings, var game: Game) extends Observable
     game = snapshot.game
     state = snapshot.state
     notifyObservers(Event.SETTINGS_OR_GAME_CHANGED)
+    
+  def canUndo: Boolean = undoManager.canUndo
+
+  def canRedo: Boolean = undoManager.canUndo
 
   def setPlayerCount(count: Int): Unit =
     settings = settings.copy(playerCount = count)

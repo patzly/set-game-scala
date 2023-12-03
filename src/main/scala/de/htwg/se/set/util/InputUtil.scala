@@ -18,54 +18,49 @@ object InputUtil:
 
   case object RedoInput extends UserInput
 
-  case object QuitInput extends UserInput
+  case object FinishInput extends UserInput
 
   @tailrec
-  final def stringInput(undo: Boolean, redo: Boolean, quit: Boolean): UserInput =
+  final def stringInput(undo: Boolean, redo: Boolean, finish: Boolean): UserInput =
     val input = StdIn.readLine().trim
     input.toLowerCase match
       case "u" if undo => UndoInput
       case "u" =>
         println(PrintUtil.red("Undo not allowed. Try again:"))
-        stringInput(undo, redo, quit)
+        stringInput(undo, redo, finish)
       case "r" if redo => RedoInput
       case "r" =>
         println(PrintUtil.red("Redo not allowed. Try again:"))
-        stringInput(undo, redo, quit)
-      case "q" if quit => QuitInput
-      case "q" =>
-        println(PrintUtil.red("Quit not allowed. Try again:"))
-        stringInput(undo, redo, quit)
+        stringInput(undo, redo, finish)
+      case "f" if finish => FinishInput
       case _ => TextInput(input)
 
   @tailrec
-  final def intInput(undo: Boolean, redo: Boolean, quit: Boolean): UserInput =
-    stringInput(undo, redo, quit) match
+  final def intInput(undo: Boolean, redo: Boolean): UserInput =
+    stringInput(undo, redo, false) match
       case TextInput(input) => Try(input.toInt) match
         case Success(value) => NumberInput(value)
         case _ =>
           println(PrintUtil.red("Invalid input. Try again:"))
-          intInput(undo, redo, quit)
+          intInput(undo, redo)
       case UndoInput => UndoInput
       case RedoInput => RedoInput
-      case QuitInput => QuitInput
       case _ => throw IllegalStateException("Unexpected UserInput type")
 
   @tailrec
-  final def intInput(min: Int, max: Int, undo: Boolean, redo: Boolean, quit: Boolean): UserInput =
-    intInput(undo, redo, quit) match
+  final def intInput(min: Int, max: Int, undo: Boolean, redo: Boolean): UserInput =
+    intInput(undo, redo) match
       case NumberInput(value) if min <= value && value <= max => NumberInput(value)
       case NumberInput(_) =>
         println(PrintUtil.red(s"Only whole numbers from $min to $max allowed. Try again:"))
-        intInput(min, max, undo, redo, quit)
+        intInput(min, max, undo, redo)
       case UndoInput => UndoInput
       case RedoInput => RedoInput
-      case QuitInput => QuitInput
       case _ => throw IllegalStateException("Unexpected UserInput type")
 
   @tailrec
   final def coordinatesInput(undo: Boolean, redo: Boolean): UserInput =
-    stringInput(undo, redo, true) match
+    stringInput(undo, redo, false) match
       case TextInput(input) =>
         val coordinatesPattern = "^([A-Za-z][1-3] +){2}[A-Za-z][1-3]$".r
         input match
@@ -81,5 +76,14 @@ object InputUtil:
             coordinatesInput(undo, redo)
       case UndoInput => UndoInput
       case RedoInput => RedoInput
-      case QuitInput => QuitInput
       case _ => throw IllegalStateException("Unexpected UserInput type")
+
+  @tailrec
+  final def finishInput(undo: Boolean, redo: Boolean): UserInput =
+    stringInput(undo, redo, true) match
+      case FinishInput => FinishInput
+      case UndoInput => UndoInput
+      case RedoInput => RedoInput
+      case _ =>
+        println(PrintUtil.red("Invalid input. Try again:"))
+        finishInput(undo, redo)

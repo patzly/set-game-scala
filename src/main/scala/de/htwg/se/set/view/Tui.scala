@@ -16,6 +16,7 @@ case class Tui(controller: Controller) extends Observer:
   @tailrec
   private def loop(): Unit =
     controller.runState()
+    controller.handleAction(controller.actionFromInput)
     loop()
 
   override def update(event: Event): Unit =

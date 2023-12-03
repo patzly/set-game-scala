@@ -4,11 +4,9 @@ import de.htwg.se.set.controller.Controller
 import de.htwg.se.set.manager.Snapshot
 import de.htwg.se.set.util.PrintUtil
 
-sealed trait Command:
+sealed trait Command(controller: Controller):
 
   var snapshot: Option[Snapshot] = None
-  
-  def controller: Controller
 
   def saveSnapshot(): Unit = snapshot = Some(controller.snapshot)
   
@@ -18,9 +16,7 @@ sealed trait Command:
 
   def execute(): Unit
 
-case class StartGameCommand(c: Controller) extends Command:
-  
-  override def controller: Controller = c
+case class StartGameCommand(controller: Controller) extends Command(controller):
   
   override def execute(): Unit =
     controller.setInGame(true)
@@ -34,37 +30,27 @@ case class StartGameCommand(c: Controller) extends Command:
       .map(i => Player(i, controller.settings.singlePlayer, controller.settings.easy, List[Triplet]())).toList)
     controller.changeState(SelectPlayerState(controller))
 
-case class GoToPlayerCountCommand(c: Controller) extends Command:
-
-  override def controller: Controller = c
+case class GoToPlayerCountCommand(controller: Controller) extends Command(controller):
 
   override def execute(): Unit = controller.changeState(ChangePlayerCountState(controller))
 
-case class ChangePlayerCountCommand(c: Controller, playerCount: Int) extends Command:
-
-  override def controller: Controller = c
+case class ChangePlayerCountCommand(controller: Controller, playerCount: Int) extends Command(controller):
 
   override def execute(): Unit =
     controller.setPlayerCount(playerCount)
     controller.changeState(SettingsState(controller))
 
-case class SwitchEasyCommand(c: Controller) extends Command:
-
-  override def controller: Controller = c
+case class SwitchEasyCommand(controller: Controller) extends Command(controller):
 
   override def execute(): Unit = controller.setEasy(!controller.settings.easy)
 
-case class SelectPlayerCommand(c: Controller, input: Int) extends Command:
-
-  override def controller: Controller = c
+case class SelectPlayerCommand(controller: Controller, number: Int) extends Command(controller):
 
   override def execute(): Unit =
-    controller.selectPlayer(input)
+    controller.selectPlayer(number)
     controller.changeState(GameState(controller))
 
-case class AddColumnCommand(c: Controller, endGame: Boolean = false) extends Command:
-
-  override def controller: Controller = c
+case class AddColumnCommand(controller: Controller) extends Command(controller):
 
   override def execute(): Unit =
     controller.addColumn()
@@ -74,18 +60,15 @@ case class AddColumnCommand(c: Controller, endGame: Boolean = false) extends Com
     if cardsAdded.length > controller.game.tableCards.length then
       println("One column of cards added to the table.")
       controller.setTableCards(cardsAdded)
-      controller.changeState(GameState(controller))
+      controller.changeState(SelectPlayerState(controller))
     else if controller.game.deck.findSets(controller.game.tableCards).nonEmpty then
       println(PrintUtil.red("No more cards left, but there still is at least one SET to be found!\n"))
       controller.removeColumn()
-      controller.changeState(GameState(controller))
+      controller.changeState(SelectPlayerState(controller))
     else
       controller.changeState(GameEndState(controller))
 
-case class SelectCardsCommand(c: Controller, coordinates: List[String], endGame: Boolean = false)
-  extends Command:
-
-  override def controller: Controller = c
+case class SelectCardsCommand(controller: Controller, coordinates: List[String]) extends Command(controller):
 
   override def execute(): Unit =
     val deck = controller.game.deck
@@ -124,7 +107,6 @@ case class SelectCardsCommand(c: Controller, coordinates: List[String], endGame:
       else
         controller.game.deck.unselectCards(controller.game.tableCards)
     )
-
     if controller.settings.singlePlayer then
       if playerUpdated.sets.nonEmpty then
         println(playerUpdated)
@@ -134,9 +116,7 @@ case class SelectCardsCommand(c: Controller, coordinates: List[String], endGame:
         return;
     controller.changeState(SelectPlayerState(controller))
 
-case class GoToSettingsCommand(c: Controller) extends Command:
-
-  override def controller: Controller = c
+case class FinishCommand(controller: Controller) extends Command(controller):
 
   override def execute(): Unit =
     controller.setInGame(false)
