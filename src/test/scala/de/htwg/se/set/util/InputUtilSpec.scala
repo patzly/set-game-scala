@@ -1,60 +1,46 @@
 package de.htwg.se.set.util
 
-import de.htwg.se.set.controller.Controller
-import de.htwg.se.set.model.{Card, Deck, Game, Player, Settings, Triplet}
-import de.htwg.se.set.view.Tui
+import de.htwg.se.set.util.InputUtil.*
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
-import java.io.StringReader
-
 class InputUtilSpec extends AnyWordSpec with Matchers:
 
-  "The InputUtil" when:
-    val settings = Settings(1, false)
-    val deck = Deck(false)
-    val cards = deck.tableCardsSinglePlayer(12)
-    val players = List[Player](Player(1, true, false, List[Triplet]()))
-    val game = Game(4, deck, cards, List[Card](), players, None)
-    val controller = Controller(settings, game)
-    val tui = Tui(controller)
+  "InputUtil" when:
+    "processing string inputs" should:
+      "correctly handle undo, redo, finish, and text inputs" in:
+        InputUtil.stringInput("u", true, false, false) shouldBe UndoInput
+        InputUtil.stringInput("u", false, false, false) shouldBe a[InvalidInput]
+        InputUtil.stringInput("r", false, true, false) shouldBe RedoInput
+        InputUtil.stringInput("r", false, false, false) shouldBe a[InvalidInput]
+        InputUtil.stringInput("f", false, false, true) shouldBe FinishInput
+        InputUtil.stringInput("f", false, false, false) shouldBe TextInput("f")
+        InputUtil.stringInput("test", false, false, false) shouldBe TextInput("test")
 
-    "inputting a string" should:
-      "return the trimmed string" in:
-        val input = " test "
-        Console.withIn(new StringReader(input)):
-          InputUtil.stringInput should be("test")
+    "processing integer inputs" should:
+      "handle valid and invalid integer strings" in:
+        InputUtil.intInput("42", false, false) shouldBe NumberInput(42)
+        InputUtil.intInput("invalid", false, false) shouldBe a[InvalidInput]
+        InputUtil.intInput("u", true, false) shouldBe UndoInput
+        InputUtil.intInput("r", false, true) shouldBe RedoInput
+      "handle integer inputs within a specific range" in:
+        InputUtil.intInput("5", 1, 10, false, false) shouldBe NumberInput(5)
+        InputUtil.intInput("0", 1, 10, false, false) shouldBe a[InvalidInput]
+        InputUtil.intInput("u", 1, 10, true, false) shouldBe UndoInput
+        InputUtil.intInput("r", 1, 10, false, true) shouldBe RedoInput
 
-    "inputting an integer" should:
-      "return the integer" in:
-        val input = "42\n"
-        Console.withIn(new StringReader(input)):
-          InputUtil.intInput should be(42)
-      "ask again if the input is not an integer" in:
-        val input = "invalid\n42\n"
-        Console.withIn(new StringReader(input)):
-          InputUtil.intInput should be(42)
+    "processing coordinates input" should:
+      "handle valid and invalid coordinates" in:
+        val coordinates = List("A1", "B2", "C3")
+        InputUtil.coordinatesInput("A1 B2 C3", false, false) shouldBe CoordinatesInput(coordinates)
+        InputUtil.coordinatesInput("invalid", false, false) shouldBe a[InvalidInput]
+        InputUtil.coordinatesInput("A1 A1 A1", false, false) shouldBe a[InvalidInput]
+        InputUtil.coordinatesInput("u", true, false) shouldBe UndoInput
+        InputUtil.coordinatesInput("r", false, true) shouldBe RedoInput
 
-    "inputting an integer with min and max" should:
-      "return the integer within bounds" in:
-        val input = "42\n"
-        Console.withIn(new StringReader(input)):
-          InputUtil.intInput(1, 100) should be(42)
-      "ask again if the integer is out of bounds" in:
-        val input = "0\n42\n"
-        Console.withIn(new StringReader(input)):
-          InputUtil.intInput(1, 100) should be(42)
-
-    "inputting coordinates" should:
-      "return a list of coordinates when valid" in:
-        val input = " A1  B2 C3 \n"
-        Console.withIn(new StringReader(input)):
-          InputUtil.coordinatesInput should contain theSameElementsAs List("A1", "B2", "C3")
-      "ask again if not all coordinates are different" in:
-        val input = "A1 A1 B2\nA1 B2 C3\n"
-        Console.withIn(new StringReader(input)):
-          InputUtil.coordinatesInput should contain theSameElementsAs List("A1", "B2", "C3")
-      "ask again if the input is invalid" in:
-        val input = "invalid\nA1 B2 C3\n"
-        Console.withIn(new StringReader(input)):
-          InputUtil.coordinatesInput should contain theSameElementsAs List("A1", "B2", "C3")
+    "processing finish input" should:
+      "handle finish and invalid inputs" in:
+        InputUtil.finishInput("f", false, false) shouldBe FinishInput
+        InputUtil.finishInput("invalid", false, false) shouldBe a[InvalidInput]
+        InputUtil.finishInput("u", true, false) shouldBe UndoInput
+        InputUtil.finishInput("r", false, true) shouldBe RedoInput

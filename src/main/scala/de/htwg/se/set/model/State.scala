@@ -1,7 +1,7 @@
 package de.htwg.se.set.model
 
 import de.htwg.se.set.controller.Controller
-import de.htwg.se.set.util.InputUtil.{CoordinatesInput, FinishInput, NumberInput, RedoInput, UndoInput, UserInput}
+import de.htwg.se.set.util.InputUtil.*
 import de.htwg.se.set.util.{InputUtil, PrintUtil}
 
 sealed trait State(controller: Controller):
@@ -14,6 +14,7 @@ sealed trait State(controller: Controller):
     input match
       case UndoInput => UndoAction
       case RedoInput => RedoAction
+      case InvalidInput(msg) => InvalidAction(msg)
       case _ => NoAction
 
 case class SettingsState(controller: Controller) extends State(controller):

@@ -8,7 +8,7 @@ import org.scalatest.BeforeAndAfter
 
 class ControllerSpec extends AnyWordSpec with Matchers with BeforeAndAfter:
 
-  var settings: Settings = Settings(1, false)
+  var settings: Settings = _
   var game: Game = _
   var controller: Controller = _
 

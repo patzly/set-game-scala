@@ -27,7 +27,7 @@ case class Controller(var settings: Settings, var game: Game) extends Observable
       case FinishAction => undoManager.executeCommand(FinishCommand(this))
       case UndoAction => undoManager.undoCommand()
       case RedoAction => undoManager.redoCommand()
-      case NoAction =>
+      case _ =>
 
   def snapshot: Snapshot = Snapshot(settings, game, state)
 

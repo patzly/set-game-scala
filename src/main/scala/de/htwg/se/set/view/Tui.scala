@@ -1,7 +1,8 @@
 package de.htwg.se.set.view
 
 import de.htwg.se.set.controller.Controller
-import de.htwg.se.set.util.{Event, Observer}
+import de.htwg.se.set.model.{InvalidAction, UserAction}
+import de.htwg.se.set.util.{Event, Observer, PrintUtil}
 
 import scala.annotation.tailrec
 import scala.io.StdIn
@@ -17,8 +18,16 @@ case class Tui(controller: Controller) extends Observer:
   @tailrec
   private def loop(): Unit =
     controller.runState()
-    controller.handleAction(controller.actionFromInput(StdIn.readLine))
+    controller.handleAction(actionFromInput)
     loop()
+
+  @tailrec
+  private def actionFromInput: UserAction =
+    controller.actionFromInput(StdIn.readLine) match
+      case InvalidAction(msg) =>
+        println(PrintUtil.red(msg + " Try again:"))
+        actionFromInput
+      case action => action
 
   override def update(event: Event): Unit =
     event match
