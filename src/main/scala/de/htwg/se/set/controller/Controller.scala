@@ -39,7 +39,7 @@ case class Controller(var settings: Settings, var game: Game) extends Observable
     
   def canUndo: Boolean = undoManager.canUndo
 
-  def canRedo: Boolean = undoManager.canUndo
+  def canRedo: Boolean = undoManager.canRedo
 
   def setPlayerCount(count: Int): Unit =
     settings = settings.copy(playerCount = count)

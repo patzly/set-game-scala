@@ -34,6 +34,7 @@ object InputUtil:
         case _ => InvalidInput()
       case UndoInput => UndoInput
       case RedoInput => RedoInput
+      case InvalidInput(msg) => InvalidInput(msg)
       case _ => throw IllegalStateException("Unexpected UserInput type")
 
   final def intInput(input: String, min: Int, max: Int, undo: Boolean, redo: Boolean): UserInput =
@@ -42,6 +43,7 @@ object InputUtil:
       case NumberInput(_) => InvalidInput(s"Only numbers from $min to $max allowed.")
       case UndoInput => UndoInput
       case RedoInput => RedoInput
+      case InvalidInput(msg) => InvalidInput(msg)
       case _ => throw IllegalStateException("Unexpected UserInput type")
 
   final def coordinatesInput(input: String, undo: Boolean, redo: Boolean): UserInput =
@@ -58,6 +60,7 @@ object InputUtil:
           case _ => InvalidInput()
       case UndoInput => UndoInput
       case RedoInput => RedoInput
+      case InvalidInput(msg) => InvalidInput(msg)
       case _ => throw IllegalStateException("Unexpected UserInput type")
 
   final def finishInput(input: String, undo: Boolean, redo: Boolean): UserInput =
