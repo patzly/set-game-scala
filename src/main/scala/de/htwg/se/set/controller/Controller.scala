@@ -13,12 +13,10 @@ case class Controller(var settings: Settings, var game: Game) extends Observable
   
   def runState(): Unit = state.run()
 
-  def actionFromInput: UserAction = state.actionFromInput
+  def actionFromInput(input: String): UserAction = state.actionFromInput(input)
 
   def handleAction(action: UserAction): Unit =
     action match
-      case UndoAction => undoManager.undoCommand()
-      case RedoAction => undoManager.redoCommand()
       case StartGameAction => undoManager.executeCommand(StartGameCommand(this))
       case GoToPlayerCountAction => undoManager.executeCommand(GoToPlayerCountCommand(this))
       case SwitchEasyAction => undoManager.executeCommand(SwitchEasyCommand(this))
@@ -27,6 +25,8 @@ case class Controller(var settings: Settings, var game: Game) extends Observable
       case AddColumnAction => undoManager.executeCommand(AddColumnCommand(this))
       case SelectCardsAction(coordinates) => undoManager.executeCommand(SelectCardsCommand(this, coordinates))
       case FinishAction => undoManager.executeCommand(FinishCommand(this))
+      case UndoAction => undoManager.undoCommand()
+      case RedoAction => undoManager.redoCommand()
       case NoAction =>
 
   def snapshot: Snapshot = Snapshot(settings, game, state)

@@ -11,7 +11,7 @@ def main(): Unit =
   val controller = Controller(settings, game)
   Tui(controller).run()
 
-def settings: Settings = Settings(1, false, false)
+def settings: Settings = Settings(1, false)
 
 def game: Game =
   val deck = Deck(false)

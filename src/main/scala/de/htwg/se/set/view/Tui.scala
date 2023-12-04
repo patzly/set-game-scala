@@ -4,6 +4,7 @@ import de.htwg.se.set.controller.Controller
 import de.htwg.se.set.util.{Event, Observer}
 
 import scala.annotation.tailrec
+import scala.io.StdIn
 
 case class Tui(controller: Controller) extends Observer:
 
@@ -16,7 +17,7 @@ case class Tui(controller: Controller) extends Observer:
   @tailrec
   private def loop(): Unit =
     controller.runState()
-    controller.handleAction(controller.actionFromInput)
+    controller.handleAction(controller.actionFromInput(StdIn.readLine))
     loop()
 
   override def update(event: Event): Unit =
