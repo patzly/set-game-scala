@@ -19,7 +19,6 @@ sealed trait Command(controller: Controller):
 case class StartGameCommand(controller: Controller) extends Command(controller):
   
   override def execute(): Unit =
-    controller.setInGame(true)
     controller.setColumns(if controller.settings.easy then 3 else 4)
     controller.setDeck(Deck(controller.settings.easy))
     val deck = controller.game.deck
@@ -30,6 +29,7 @@ case class StartGameCommand(controller: Controller) extends Command(controller):
     controller.setPlayers((1 to controller.settings.playerCount)
       .map(i => Player(i, singlePlayer, controller.settings.easy, List[Triplet]())).toList)
     if singlePlayer then controller.selectPlayer(1)
+    controller.setInGame(true)
     controller.changeState(if singlePlayer then GameState(controller) else SelectPlayerState(controller))
 
 case class GoToPlayerCountCommand(controller: Controller) extends Command(controller):
@@ -44,7 +44,9 @@ case class ChangePlayerCountCommand(controller: Controller, playerCount: Int) ex
 
 case class SwitchEasyCommand(controller: Controller) extends Command(controller):
 
-  override def execute(): Unit = controller.setEasy(!controller.settings.easy)
+  override def execute(): Unit =
+    controller.setEasy(!controller.settings.easy)
+    controller.changeState(SettingsState(controller))
 
 case class SelectPlayerCommand(controller: Controller, number: Int) extends Command(controller):
 

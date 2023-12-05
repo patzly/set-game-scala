@@ -9,7 +9,9 @@ case class Controller(var settings: Settings, var game: Game) extends Observable
   private val undoManager: UndoManager = UndoManager()
   private var state: State = SettingsState(this)
 
-  def changeState(s: State): Unit = state = s
+  def changeState(s: State): Unit =
+    state = s
+    notifyObservers(Event.STATE_CHANGED)
   
   def runState(): Unit = state.run()
 
@@ -36,6 +38,8 @@ case class Controller(var settings: Settings, var game: Game) extends Observable
     game = snapshot.game
     state = snapshot.state
     notifyObservers(Event.SETTINGS_OR_GAME_CHANGED)
+    notifyObservers(Event.STATE_CHANGED)
+    notifyObservers(Event.IN_GAME_CHANGED)
     
   def canUndo: Boolean = undoManager.canUndo
 
@@ -51,6 +55,7 @@ case class Controller(var settings: Settings, var game: Game) extends Observable
 
   def setInGame(inGame: Boolean): Unit =
     settings = settings.copy(inGame = inGame)
+    notifyObservers(Event.IN_GAME_CHANGED)
     
   def setColumns(columns: Int): Unit =
     game = game.copy(columns = columns)

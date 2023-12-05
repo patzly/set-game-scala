@@ -10,13 +10,14 @@ import scala.io.StdIn
 case class Tui(controller: Controller) extends Observer:
 
   controller.add(this)
+
   println(PrintUtil.bold("Welcome to the SET Game!"))
   println(controller.settingsToString)
+  controller.runState()
   loop()
 
   @tailrec
   private def loop(): Unit =
-    controller.runState()
     controller.handleAction(actionFromInput)
     loop()
 
@@ -33,4 +34,5 @@ case class Tui(controller: Controller) extends Observer:
       case Event.SETTINGS_CHANGED => println(controller.settingsToString)
       case Event.CARDS_CHANGED => println(controller.gameToString)
       case Event.SETTINGS_OR_GAME_CHANGED => println(controller)
+      case Event.STATE_CHANGED => controller.runState()
       case _ =>
