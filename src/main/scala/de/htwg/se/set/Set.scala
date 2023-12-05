@@ -1,20 +1,13 @@
 package de.htwg.se.set
 
 import de.htwg.se.set.controller.Controller
-import de.htwg.se.set.view.Tui
-import util.PrintUtil
-import model.{Card, Deck, Game, Player, Settings, Triplet}
+import de.htwg.se.set.model.{Deck, Game, Settings}
+import de.htwg.se.set.view.{Gui, Tui}
 
 @main
 def main(): Unit =
-  println(PrintUtil.bold("Welcome to the SET Game!"))
+  val settings = Settings(1, false)
+  val game = Game(4, Deck(false), List(), List(), List(), None)
   val controller = Controller(settings, game)
-  Tui(controller).run()
-
-def settings: Settings = Settings(1, false)
-
-def game: Game =
-  val deck = Deck(false)
-  val cards = deck.tableCardsSinglePlayer(4)
-  val players = List[Player](Player(1, true, false, List[Triplet]()))
-  Game(4, deck, cards, List[Card](), players, None)
+  Gui(controller)
+  Tui(controller)

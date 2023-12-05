@@ -1,7 +1,7 @@
 package de.htwg.se.set.view
 
 import de.htwg.se.set.controller.Controller
-import de.htwg.se.set.model.{InvalidAction, UserAction}
+import de.htwg.se.set.model.{InvalidAction, Action}
 import de.htwg.se.set.util.{Event, Observer, PrintUtil}
 
 import scala.annotation.tailrec
@@ -10,10 +10,9 @@ import scala.io.StdIn
 case class Tui(controller: Controller) extends Observer:
 
   controller.add(this)
-
-  def run(): Unit =
-    println(controller.settingsToString)
-    loop()
+  println(PrintUtil.bold("Welcome to the SET Game!"))
+  println(controller.settingsToString)
+  loop()
 
   @tailrec
   private def loop(): Unit =
@@ -22,7 +21,7 @@ case class Tui(controller: Controller) extends Observer:
     loop()
 
   @tailrec
-  private def actionFromInput: UserAction =
+  private def actionFromInput: Action =
     controller.actionFromInput(StdIn.readLine) match
       case InvalidAction(msg) =>
         println(PrintUtil.red(msg + " Try again:"))

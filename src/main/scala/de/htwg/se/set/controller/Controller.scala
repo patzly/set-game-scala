@@ -13,9 +13,9 @@ case class Controller(var settings: Settings, var game: Game) extends Observable
   
   def runState(): Unit = state.run()
 
-  def actionFromInput(input: String): UserAction = state.actionFromInput(input)
+  def actionFromInput(input: String): Action = state.actionFromInput(input)
 
-  def handleAction(action: UserAction): Unit =
+  def handleAction(action: Action): Unit =
     action match
       case StartGameAction => undoManager.executeCommand(StartGameCommand(this))
       case GoToPlayerCountAction => undoManager.executeCommand(GoToPlayerCountCommand(this))

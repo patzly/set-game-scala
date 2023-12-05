@@ -8,9 +8,9 @@ sealed trait State(controller: Controller):
 
   def run(): Unit
 
-  def actionFromInput(input: String): UserAction
+  def actionFromInput(input: String): Action
 
-  def handleInput(input: UserInput): UserAction =
+  def handleInput(input: UserInput): Action =
     input match
       case UndoInput => UndoAction
       case RedoInput => RedoAction
@@ -24,7 +24,7 @@ case class SettingsState(controller: Controller) extends State(controller):
     println(PrintUtil.bold("2") + " Change number of players")
     println(PrintUtil.bold("3") + " Switch to " + (if controller.settings.easy then "normal" else "easy") + " mode")
 
-  override def actionFromInput(input: String): UserAction =
+  override def actionFromInput(input: String): Action =
     InputUtil.intInput(input, 1, 3, controller.canUndo, controller.canRedo) match
       case NumberInput(1) => StartGameAction
       case NumberInput(2) => GoToPlayerCountAction
@@ -35,7 +35,7 @@ case class ChangePlayerCountState(controller: Controller) extends State(controll
 
   override def run(): Unit = println("Enter number of players:")
 
-  override def actionFromInput(input: String): UserAction =
+  override def actionFromInput(input: String): Action =
     InputUtil.intInput(input, 1, 10, controller.canUndo, controller.canRedo) match
       case NumberInput(number) => ChangePlayerCountAction(number)
       case other => super.handleInput(other)
@@ -46,7 +46,7 @@ case class SelectPlayerState(controller: Controller) extends State(controller):
     if !controller.settings.singlePlayer then
       println("Input player who found a SET (e.g. 1) or 0 if no SET can be found:")
 
-  override def actionFromInput(input: String): UserAction =
+  override def actionFromInput(input: String): Action =
     val userInput = if controller.settings.singlePlayer then
       NumberInput(1)
     else
@@ -68,7 +68,7 @@ case class GameState(controller: Controller) extends State(controller):
     else
       println("Player " + player.number + ", select 3 cards for a SET (e.g. A1 B2 C3):")
 
-  override def actionFromInput(input: String): UserAction =
+  override def actionFromInput(input: String): Action =
     InputUtil.coordinatesInput(input, controller.canUndo, controller.canRedo) match
       case CoordinatesInput(coordinates) => SelectCardsAction(coordinates)
       case other => super.handleInput(other)
@@ -81,7 +81,7 @@ case class GameEndState(controller: Controller) extends State(controller):
       controller.game.players.sortBy(player => (-player.sets.length, player.number)).foreach(player => println(player))
     println("\nType f to finish:")
 
-  override def actionFromInput(input: String): UserAction =
+  override def actionFromInput(input: String): Action =
     InputUtil.finishInput(input, controller.canUndo, controller.canRedo) match
       case FinishInput => FinishAction
       case other => super.handleInput(other)

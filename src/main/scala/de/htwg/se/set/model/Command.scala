@@ -25,10 +25,12 @@ case class StartGameCommand(controller: Controller) extends Command(controller):
     val deck = controller.game.deck
     val cardsMultiPlayer = deck.tableCards(controller.game.columns, List[Card](), List[Card]())
     val cardsSinglePlayer = deck.tableCardsSinglePlayer(controller.game.columns)
-    controller.setTableCards(if controller.settings.singlePlayer then cardsSinglePlayer else cardsMultiPlayer)
+    val singlePlayer = controller.settings.singlePlayer
+    controller.setTableCards(if singlePlayer then cardsSinglePlayer else cardsMultiPlayer)
     controller.setPlayers((1 to controller.settings.playerCount)
-      .map(i => Player(i, controller.settings.singlePlayer, controller.settings.easy, List[Triplet]())).toList)
-    controller.changeState(SelectPlayerState(controller))
+      .map(i => Player(i, singlePlayer, controller.settings.easy, List[Triplet]())).toList)
+    if singlePlayer then controller.selectPlayer(1)
+    controller.changeState(if singlePlayer then GameState(controller) else SelectPlayerState(controller))
 
 case class GoToPlayerCountCommand(controller: Controller) extends Command(controller):
 
