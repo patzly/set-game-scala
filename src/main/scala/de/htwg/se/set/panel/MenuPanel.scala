@@ -1,12 +1,13 @@
 package de.htwg.se.set.panel
 
 import de.htwg.se.set.controller.Controller
-import de.htwg.se.set.model.{RedoAction, UndoAction}
+import de.htwg.se.set.model.{AddColumnAction, RedoAction, UndoAction}
 import de.htwg.se.set.util.ResUtil
 
 import java.awt.Color
-import scala.swing.{Button, FlowPanel}
+import javax.swing.border.MatteBorder
 import scala.swing.event.ButtonClicked
+import scala.swing.{Button, FlowPanel}
 
 case class MenuPanel(controller: Controller) extends FlowPanel(FlowPanel.Alignment.Center)():
 
@@ -19,7 +20,7 @@ case class MenuPanel(controller: Controller) extends FlowPanel(FlowPanel.Alignme
         update()
     }
     font = menuFont
-    foreground = ResUtil.COLOR_LIGHT
+    foreground = Color.BLACK
     borderPainted = false
     focusPainted = false
     
@@ -30,14 +31,28 @@ case class MenuPanel(controller: Controller) extends FlowPanel(FlowPanel.Alignme
         update()
     }
     font = menuFont
-    foreground = ResUtil.COLOR_LIGHT
+    foreground = Color.BLACK
     borderPainted = false
     focusPainted = false
 
-  background = Color.BLACK
+  private val addButton = new Button("ADD CARDS"):
+    reactions += {
+      case ButtonClicked(_) =>
+        controller.handleAction(AddColumnAction)
+        update()
+    }
+    font = menuFont
+    foreground = Color.BLACK
+    borderPainted = false
+    focusPainted = false
+
+  background = ResUtil.COLOR_BG
+  border = new MatteBorder(0, 0, 2, 0, Color.BLACK)
   contents += undoButton
   contents += redoButton
+  contents += addButton
   
   def update(): Unit =
     undoButton.enabled = controller.canUndo
     redoButton.enabled = controller.canRedo
+    addButton.visible = controller.settings.inGame

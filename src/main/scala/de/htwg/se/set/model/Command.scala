@@ -85,7 +85,7 @@ case class SelectCardsCommand(controller: Controller, coordinates: List[String])
     val triplet = Triplet(card1.select, card2.select, card3.select)
     val player = controller.game.selectedPlayer match
       case Some(p) => p
-      case None => throw new IllegalStateException("No player selected")
+      case None => throw IllegalStateException("No player selected")
     val playerUpdated = player.foundSet(triplet)
     controller.updateAndUnselectPlayer(playerUpdated)
     val replaceOrRemoveSet = !controller.settings.singlePlayer && triplet.isSet
@@ -117,8 +117,11 @@ case class SelectCardsCommand(controller: Controller, coordinates: List[String])
       val finished = if deck.easy then playerUpdated.sets.length == 3 else playerUpdated.sets.length == 6
       if finished then
         controller.changeState(GameEndState(controller))
-        return;
-    controller.changeState(SelectPlayerState(controller))
+      else
+        controller.selectPlayer(1)
+        controller.changeState(GameState(controller))
+    else
+      controller.changeState(SelectPlayerState(controller))
 
 case class FinishCommand(controller: Controller) extends Command(controller):
 
