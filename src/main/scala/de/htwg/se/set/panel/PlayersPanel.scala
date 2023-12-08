@@ -12,6 +12,7 @@ import scala.swing.{Button, FlowPanel, Graphics2D}
 class PlayersPanel(controller: Controller) extends FlowPanel(FlowPanel.Alignment.Center)():
 
   private val margin = 30
+  private val playerFont = ResUtil.customFont("jost_medium", 26)
 
   background = ResUtil.COLOR_LIGHT
   border = new EmptyBorder(margin, 0, margin, 0)
@@ -39,10 +40,10 @@ class PlayersPanel(controller: Controller) extends FlowPanel(FlowPanel.Alignment
     private val paddingVertical = 10
 
     text = if player.singlePlayer then
-      player.sets.length + " of " + (if player.easy then 3 else 6) + " SETs found"
+      player.sets.length + " OF " + (if player.easy then 3 else 6) + " SETS FOUND"
     else
-      "Player " + player.number + ": " + player.sets.length
-    font = ResUtil.customFont("jost_medium", 26)
+      "PLAYER " + player.number + ": " + player.sets.length
+    font = playerFont
     foreground = Color.BLACK
     borderPainted = false
     focusPainted = false

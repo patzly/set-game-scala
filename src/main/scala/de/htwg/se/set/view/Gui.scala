@@ -1,7 +1,8 @@
 package de.htwg.se.set.view
 
 import de.htwg.se.set.controller.Controller
-import de.htwg.se.set.panel.{GamePanel, MenuPanel, SettingsPanel}
+import de.htwg.se.set.model.GameMode.{GAME_END, IN_GAME, SETTINGS}
+import de.htwg.se.set.panel.{ScorePanel, GamePanel, MenuPanel, SettingsPanel}
 import de.htwg.se.set.util.{Event, Observer}
 
 import javax.swing.UIManager
@@ -21,10 +22,12 @@ case class Gui(controller: Controller) extends Frame with Observer:
   private val menuPanel = MenuPanel(controller)
   private val settingsPanel = SettingsPanel(controller)
   private val gamePanel = GamePanel(controller)
+  private val scorePanel = ScorePanel(controller)
 
   menuPanel.update()
   settingsPanel.update()
   gamePanel.update()
+  scorePanel.update()
   contents = frame
 
   centerOnScreen()
@@ -38,10 +41,16 @@ case class Gui(controller: Controller) extends Frame with Observer:
         settingsPanel.update()
         gamePanel.update()
       case Event.PLAYERS_CHANGED => gamePanel.update()
-      case Event.IN_GAME_CHANGED => contents = frame
+      case Event.GAME_MODE_CHANGED =>
+        scorePanel.update()
+        contents = frame
       case _ =>
     menuPanel.update()
 
   private def frame = new BorderPanel:
     layout(menuPanel) = BorderPanel.Position.North
-    layout(if controller.settings.inGame then gamePanel else settingsPanel) = BorderPanel.Position.Center
+    private val panel = controller.settings.mode match
+      case SETTINGS => settingsPanel
+      case IN_GAME => gamePanel
+      case GAME_END => scorePanel
+    layout(panel) = BorderPanel.Position.Center

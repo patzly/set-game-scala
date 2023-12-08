@@ -2,6 +2,7 @@ package de.htwg.se.set.model
 
 import de.htwg.se.set.controller.Controller
 import de.htwg.se.set.manager.Snapshot
+import de.htwg.se.set.model.GameMode.{GAME_END, IN_GAME, SETTINGS}
 import de.htwg.se.set.util.PrintUtil
 
 sealed trait Command(controller: Controller):
@@ -26,10 +27,11 @@ case class StartGameCommand(controller: Controller) extends Command(controller):
     val cardsSinglePlayer = deck.tableCardsSinglePlayer(controller.game.columns)
     val singlePlayer = controller.settings.singlePlayer
     controller.setTableCards(if singlePlayer then cardsSinglePlayer else cardsMultiPlayer)
+    controller.setPlayersCards(List())
     controller.setPlayers((1 to controller.settings.playerCount)
       .map(i => Player(i, singlePlayer, controller.settings.easy, List[Triplet]())).toList)
     if singlePlayer then controller.selectPlayer(1)
-    controller.setInGame(true)
+    controller.setGameMode(IN_GAME)
     controller.changeState(if singlePlayer then GameState(controller) else SelectPlayerState(controller))
 
 case class GoToPlayerCountCommand(controller: Controller) extends Command(controller):
@@ -70,6 +72,7 @@ case class AddColumnCommand(controller: Controller) extends Command(controller):
       controller.removeColumn()
       controller.changeState(SelectPlayerState(controller))
     else
+      controller.setGameMode(GAME_END)
       controller.changeState(GameEndState(controller))
 
 case class SelectCardsCommand(controller: Controller, coordinates: List[String]) extends Command(controller):
@@ -101,6 +104,7 @@ case class SelectCardsCommand(controller: Controller, coordinates: List[String])
     if removeColumn then
       controller.removeColumn()
     else if replaceOrRemoveSet && controller.game.columns == 1 then
+      controller.setGameMode(GAME_END)
       controller.changeState(GameEndState(controller))
       return;
     controller.setTableCards(
@@ -116,6 +120,7 @@ case class SelectCardsCommand(controller: Controller, coordinates: List[String])
         println(playerUpdated)
       val finished = if deck.easy then playerUpdated.sets.length == 3 else playerUpdated.sets.length == 6
       if finished then
+        controller.setGameMode(GAME_END)
         controller.changeState(GameEndState(controller))
       else
         controller.selectPlayer(1)
@@ -126,6 +131,6 @@ case class SelectCardsCommand(controller: Controller, coordinates: List[String])
 case class FinishCommand(controller: Controller) extends Command(controller):
 
   override def execute(): Unit =
-    controller.setInGame(false)
+    controller.setGameMode(SETTINGS)
     println(controller.settingsToString)
     controller.changeState(SettingsState(controller))

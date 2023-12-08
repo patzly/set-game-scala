@@ -39,7 +39,7 @@ case class Controller(var settings: Settings, var game: Game) extends Observable
     state = snapshot.state
     notifyObservers(Event.SETTINGS_OR_GAME_CHANGED)
     notifyObservers(Event.STATE_CHANGED)
-    notifyObservers(Event.IN_GAME_CHANGED)
+    notifyObservers(Event.GAME_MODE_CHANGED)
     
   def canUndo: Boolean = undoManager.canUndo
 
@@ -53,9 +53,9 @@ case class Controller(var settings: Settings, var game: Game) extends Observable
     settings = settings.copy(easy = easy)
     notifyObservers(Event.SETTINGS_CHANGED)
 
-  def setInGame(inGame: Boolean): Unit =
-    settings = settings.copy(inGame = inGame)
-    notifyObservers(Event.IN_GAME_CHANGED)
+  def setGameMode(mode: GameMode): Unit =
+    settings = settings.copy(mode = mode)
+    notifyObservers(Event.GAME_MODE_CHANGED)
     
   def setColumns(columns: Int): Unit =
     game = game.copy(columns = columns)
@@ -94,4 +94,4 @@ case class Controller(var settings: Settings, var game: Game) extends Observable
 
   def gameToString: String = game.toString
 
-  override def toString: String = if settings.inGame then gameToString else settingsToString
+  override def toString: String = if settings.mode == GameMode.SETTINGS then settingsToString else gameToString

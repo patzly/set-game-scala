@@ -1,7 +1,7 @@
 package de.htwg.se.set.panel
 
 import de.htwg.se.set.controller.Controller
-import de.htwg.se.set.model.{AddColumnAction, RedoAction, UndoAction}
+import de.htwg.se.set.model.{AddColumnAction, GameMode, RedoAction, UndoAction}
 import de.htwg.se.set.util.ResUtil
 
 import java.awt.Color
@@ -55,4 +55,4 @@ case class MenuPanel(controller: Controller) extends FlowPanel(FlowPanel.Alignme
   def update(): Unit =
     undoButton.enabled = controller.canUndo
     redoButton.enabled = controller.canRedo
-    addButton.visible = controller.settings.inGame
+    addButton.visible = controller.settings.mode == GameMode.IN_GAME
