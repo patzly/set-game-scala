@@ -17,7 +17,7 @@ class PlayersPanel(controller: Controller) extends FlowPanel(FlowPanel.Alignment
   private val playerFont = ResUtil.customFont("jost_medium", 26)
 
   background = ResUtil.COLOR_LIGHT
-  border = new EmptyBorder(margin, 0, margin, 0)
+  border = EmptyBorder(margin, 0, margin, 0)
   update()
 
   def update(): Unit =

@@ -6,6 +6,7 @@ import de.htwg.se.set.util.ResUtil
 import java.awt.Color
 import javax.swing.border.MatteBorder
 import scala.swing.*
+import scala.swing.BorderPanel.Position
 import scala.swing.GridBagPanel.{Anchor, Fill}
 
 case class GamePanel(controller: Controller) extends BoxPanel(Orientation.Vertical):
@@ -18,16 +19,21 @@ case class GamePanel(controller: Controller) extends BoxPanel(Orientation.Vertic
   def update(): Unit =
     val tableCards = controller.game.tableCards
     val columns = tableCards.length / rows
-    contents.clear()
-    contents += new GridBagPanel:
+    val cardsPanel: GridBagPanel = new GridBagPanel:
       background = ResUtil.COLOR_BG
-      border = new MatteBorder(0, 0, 2, 0, Color.BLACK)
+      border = MatteBorder(0, 0, 2, 0, Color.BLACK)
       val c = new Constraints
       c.fill = Fill.None
       c.weightx = 1
       c.weighty = 1
       c.anchor = Anchor.Center
-      layout(new CardsPanel(controller, rows, columns)) = c
-    contents += new PlayersPanel(controller)
+      layout(CardsPanel(controller, rows, columns)) = c
+    contents.clear()
+    contents += new BorderPanel:
+      background = ResUtil.COLOR_BG
+      layout(cardsPanel) = Position.Center
+      layout(PlayersPanel(controller)) = Position.South
+      if controller.settings.singlePlayer then
+        layout(SetsPanel(controller)) = Position.East
     repaint()
     revalidate()

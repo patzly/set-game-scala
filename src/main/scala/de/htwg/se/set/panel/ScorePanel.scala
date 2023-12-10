@@ -43,7 +43,7 @@ case class ScorePanel(controller: Controller) extends BoxPanel(Orientation.Verti
         )
     contents += new FlowPanel(FlowPanel.Alignment.Center)():
       background = ResUtil.COLOR_BG
-      border = new EmptyBorder(30, 0, 0, 0)
+      border = EmptyBorder(30, 0, 0, 0)
       contents += new CompatButton("FINISH"):
         reactions += {
           case ButtonClicked(_) => controller.handleAction(FinishAction)
@@ -54,7 +54,7 @@ case class ScorePanel(controller: Controller) extends BoxPanel(Orientation.Verti
         borderPainted = true
         val paddingHorizontal = 20
         val paddingVertical = 10
-        border = new EmptyBorder(paddingVertical, paddingHorizontal, paddingVertical, paddingHorizontal)
+        border = EmptyBorder(paddingVertical, paddingHorizontal, paddingVertical, paddingHorizontal)
 
   def update(): Unit =
     contents.clear()

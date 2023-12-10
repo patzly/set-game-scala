@@ -39,7 +39,7 @@ case class MenuPanel(controller: Controller) extends FlowPanel(FlowPanel.Alignme
     }
 
   background = ResUtil.COLOR_BG
-  border = new MatteBorder(0, 0, 2, 0, Color.BLACK)
+  border = MatteBorder(0, 0, 2, 0, Color.BLACK)
   contents += undoButton
   contents += redoButton
   contents += addButton

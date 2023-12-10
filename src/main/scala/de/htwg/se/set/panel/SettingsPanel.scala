@@ -17,7 +17,7 @@ case class SettingsPanel(controller: Controller) extends BoxPanel(Orientation.Ve
   private val settingsFont = ResUtil.customFont("jost_medium", 26)
   private val padding = 20
 
-  private val playerCountLessButton = new Button():
+  private val playerCountLessButton = new Button:
     reactions += {
       case ButtonClicked(_) => controller.handleAction(ChangePlayerCountAction(controller.settings.playerCount - 1))
     }
@@ -26,7 +26,7 @@ case class SettingsPanel(controller: Controller) extends BoxPanel(Orientation.Ve
 
     override def paintComponent(g: Graphics2D): Unit = drawArrow(g, size, true, enabled)
 
-  private val playerCountMoreButton = new Button():
+  private val playerCountMoreButton = new Button:
     reactions += {
       case ButtonClicked(_) => controller.handleAction(ChangePlayerCountAction(controller.settings.playerCount + 1))
     }
@@ -41,7 +41,7 @@ case class SettingsPanel(controller: Controller) extends BoxPanel(Orientation.Ve
 
   private val playerCountInputContainer = new GridPanel(1, 3):
     background = ResUtil.COLOR_BG
-    border = new EmptyBorder(0, padding, 0, 0)
+    border = EmptyBorder(0, padding, 0, 0)
     contents += playerCountLessButton
     contents += playerCountInputLabel
     contents += playerCountMoreButton
@@ -71,7 +71,7 @@ case class SettingsPanel(controller: Controller) extends BoxPanel(Orientation.Ve
 
   private def easyToggleContainer = new GridPanel(1, 1):
     background = ResUtil.COLOR_BG
-    border = new EmptyBorder(0, padding, 0, 0)
+    border = EmptyBorder(0, padding, 0, 0)
     contents += easyToggle
 
   private def easyPanel = new GridPanel(1, 2):
@@ -90,7 +90,7 @@ case class SettingsPanel(controller: Controller) extends BoxPanel(Orientation.Ve
       contents += easyPanel
     contents += new FlowPanel(FlowPanel.Alignment.Center)():
       background = ResUtil.COLOR_BG
-      border = new EmptyBorder(30, 0, 0, 0)
+      border = EmptyBorder(30, 0, 0, 0)
       contents += new CompatButton("START GAME"):
         reactions += {
           case ButtonClicked(_) => controller.handleAction(StartGameAction)
@@ -128,7 +128,7 @@ case class SettingsPanel(controller: Controller) extends BoxPanel(Orientation.Ve
     val x = size.width / 2
     val y = size.height / 2
     g.setColor(if enabled then Color.BLACK else PanelUtil.blendColors(ResUtil.COLOR_BG, Color.BLACK, 0.32))
-    g.setStroke(new BasicStroke(3))
+    g.setStroke(BasicStroke(3))
     if pointingLeft then
       g.drawLine(x - w / 2, y, x + w / 2, y - h / 2)
       g.drawLine(x - w / 2, y, x + w / 2, y + h / 2)
