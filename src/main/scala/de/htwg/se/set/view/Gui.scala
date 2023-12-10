@@ -2,10 +2,11 @@ package de.htwg.se.set.view
 
 import de.htwg.se.set.controller.Controller
 import de.htwg.se.set.model.GameMode.{GAME_END, IN_GAME, SETTINGS}
-import de.htwg.se.set.panel.{ScorePanel, GamePanel, MenuPanel, SettingsPanel}
+import de.htwg.se.set.panel.{GamePanel, MenuPanel, ScorePanel, SettingsPanel}
 import de.htwg.se.set.util.{Event, Observer}
 
 import javax.swing.UIManager
+import javax.swing.plaf.nimbus.NimbusLookAndFeel
 import scala.swing.{BorderPanel, Dimension, Frame}
 
 case class Gui(controller: Controller) extends Frame with Observer:
@@ -13,9 +14,9 @@ case class Gui(controller: Controller) extends Frame with Observer:
   controller.add(this)
 
   title = "SET Game"
-  preferredSize = new Dimension(900, 600)
+  preferredSize = new Dimension(1000, 600)
   resizable = false
-  UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName)
+  UIManager.setLookAndFeel(new NimbusLookAndFeel)
   System.setProperty("awt.useSystemAAFontSettings", "on")
   System.setProperty("swing.aatext", "true")
 
@@ -24,11 +25,7 @@ case class Gui(controller: Controller) extends Frame with Observer:
   private val gamePanel = GamePanel(controller)
   private val scorePanel = ScorePanel(controller)
 
-  menuPanel.update()
-  settingsPanel.update()
-  gamePanel.update()
-  scorePanel.update()
-  contents = frame
+  contents = content
 
   centerOnScreen()
   open()
@@ -43,11 +40,11 @@ case class Gui(controller: Controller) extends Frame with Observer:
       case Event.PLAYERS_CHANGED => gamePanel.update()
       case Event.GAME_MODE_CHANGED =>
         scorePanel.update()
-        contents = frame
+        contents = content
       case _ =>
     menuPanel.update()
 
-  private def frame = new BorderPanel:
+  private def content = new BorderPanel:
     layout(menuPanel) = BorderPanel.Position.North
     private val panel = controller.settings.mode match
       case SETTINGS => settingsPanel
