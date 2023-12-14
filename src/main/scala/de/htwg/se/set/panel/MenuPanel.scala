@@ -1,7 +1,7 @@
 package de.htwg.se.set.panel
 
 import de.htwg.se.set.controller.Controller
-import de.htwg.se.set.model.{AddColumnAction, GameMode, RedoAction, UndoAction}
+import de.htwg.se.set.model.{AddColumnAction, ExitAction, GameMode, RedoAction, UndoAction}
 import de.htwg.se.set.util.PanelUtil.CompatButton
 import de.htwg.se.set.util.{PanelUtil, ResUtil}
 
@@ -38,11 +38,20 @@ case class MenuPanel(controller: Controller) extends FlowPanel(FlowPanel.Alignme
         update()
     }
 
+  private val exitButton = new CompatButton("EXIT"):
+    font = menuFont
+    reactions += {
+      case ButtonClicked(_) =>
+        controller.handleAction(ExitAction)
+        update()
+    }
+
   background = ResUtil.COLOR_BG
   border = MatteBorder(0, 0, 2, 0, Color.BLACK)
   contents += undoButton
   contents += redoButton
   contents += addButton
+  contents += exitButton
   update()
   
   def update(): Unit =
@@ -50,3 +59,4 @@ case class MenuPanel(controller: Controller) extends FlowPanel(FlowPanel.Alignme
     redoButton.enabled = controller.canRedo
     addButton.enabled = controller.game.selectedPlayer.isEmpty
     addButton.visible = controller.settings.mode == GameMode.IN_GAME && !controller.settings.singlePlayer
+    exitButton.visible = controller.settings.mode == GameMode.IN_GAME

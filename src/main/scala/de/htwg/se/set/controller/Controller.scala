@@ -26,7 +26,7 @@ case class Controller(var settings: Settings, var game: Game) extends Observable
       case SelectPlayerAction(number) => undoManager.executeCommand(SelectPlayerCommand(this, number))
       case AddColumnAction => undoManager.executeCommand(AddColumnCommand(this))
       case SelectCardsAction(coordinates) => undoManager.executeCommand(SelectCardsCommand(this, coordinates))
-      case FinishAction => undoManager.executeCommand(FinishCommand(this))
+      case ExitAction => undoManager.executeCommand(ExitCommand(this))
       case UndoAction => undoManager.undoCommand()
       case RedoAction => undoManager.redoCommand()
       case _ =>

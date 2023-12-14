@@ -155,7 +155,7 @@ case class SelectCardsCommand(controller: Controller, coordinates: List[String])
     else
       controller.changeState(SelectPlayerState(controller))
 
-case class FinishCommand(controller: Controller) extends Command(controller):
+case class ExitCommand(controller: Controller) extends Command(controller):
 
   override def execute(): Unit =
     controller.setGameMode(SETTINGS)

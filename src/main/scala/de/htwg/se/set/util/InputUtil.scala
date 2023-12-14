@@ -18,36 +18,41 @@ object InputUtil:
 
   case object FinishInput extends UserInput
 
+  case object ExitInput extends UserInput
+
   case class InvalidInput(msg: String = "Invalid input.") extends UserInput
 
-  final def stringInput(input: String, undo: Boolean, redo: Boolean, finish: Boolean): UserInput =
+  final def stringInput(input: String, undo: Boolean, redo: Boolean, finish: Boolean, exit: Boolean): UserInput =
     input.trim.toLowerCase match
       case "u" => if undo then UndoInput else InvalidInput("Undo not allowed.")
       case "r" => if redo then RedoInput else InvalidInput("Redo not allowed.")
       case "f" if finish => FinishInput
+      case "e" if exit => ExitInput
       case _ => TextInput(input.trim)
 
-  final def intInput(input: String, undo: Boolean, redo: Boolean): UserInput =
-    stringInput(input, undo, redo, false) match
+  final def intInput(input: String, undo: Boolean, redo: Boolean, exit: Boolean): UserInput =
+    stringInput(input, undo, redo, false, exit) match
       case TextInput(text) => Try(text.toInt) match
         case Success(value) => NumberInput(value)
         case _ => InvalidInput()
       case UndoInput => UndoInput
       case RedoInput => RedoInput
+      case ExitInput => ExitInput
       case InvalidInput(msg) => InvalidInput(msg)
       case _ => throw IllegalStateException("Unexpected UserInput type")
 
-  final def intInput(input: String, min: Int, max: Int, undo: Boolean, redo: Boolean): UserInput =
-    intInput(input, undo, redo) match
+  final def intInput(input: String, min: Int, max: Int, undo: Boolean, redo: Boolean, exit: Boolean): UserInput =
+    intInput(input, undo, redo, exit) match
       case NumberInput(number) if min <= number && number <= max => NumberInput(number)
       case NumberInput(_) => InvalidInput(s"Only numbers from $min to $max allowed.")
       case UndoInput => UndoInput
       case RedoInput => RedoInput
+      case ExitInput => ExitInput
       case InvalidInput(msg) => InvalidInput(msg)
       case _ => throw IllegalStateException("Unexpected UserInput type")
 
   final def coordinatesInput(input: String, undo: Boolean, redo: Boolean): UserInput =
-    stringInput(input, undo, redo, false) match
+    stringInput(input, undo, redo, false, true) match
       case TextInput(text) =>
         val coordinatesPattern = "^([A-Za-z][1-3] +){2}[A-Za-z][1-3]$".r
         text match
@@ -57,14 +62,15 @@ object InputUtil:
               CoordinatesInput(coordinates.toList)
             else
               InvalidInput("Only different coordinates possible.")
-          case _ => InvalidInput()
+          case _ => InvalidInput() 
       case UndoInput => UndoInput
       case RedoInput => RedoInput
+      case ExitInput => ExitInput
       case InvalidInput(msg) => InvalidInput(msg)
       case _ => throw IllegalStateException("Unexpected UserInput type")
 
   final def finishInput(input: String, undo: Boolean, redo: Boolean): UserInput =
-    stringInput(input, undo, redo, true) match
+    stringInput(input, undo, redo, true, false) match
       case FinishInput => FinishInput
       case UndoInput => UndoInput
       case RedoInput => RedoInput

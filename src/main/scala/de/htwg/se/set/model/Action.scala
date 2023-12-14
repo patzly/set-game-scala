@@ -16,7 +16,7 @@ case object AddColumnAction extends Action
 
 case class SelectCardsAction(coordinates: List[String]) extends Action
 
-case object FinishAction extends Action
+case object ExitAction extends Action
 
 case object UndoAction extends Action
 
