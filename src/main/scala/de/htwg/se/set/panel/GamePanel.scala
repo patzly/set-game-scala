@@ -4,7 +4,7 @@ import de.htwg.se.set.controller.Controller
 import de.htwg.se.set.util.ResUtil
 
 import java.awt.Color
-import javax.swing.border.MatteBorder
+import javax.swing.border.{EmptyBorder, MatteBorder}
 import scala.swing.*
 import scala.swing.BorderPanel.Position
 import scala.swing.GridBagPanel.{Anchor, Fill}
@@ -15,6 +15,12 @@ case class GamePanel(controller: Controller) extends BoxPanel(Orientation.Vertic
 
   background = ResUtil.COLOR_BG
   update()
+  
+  private def messagePanel = new FlowPanel(FlowPanel.Alignment.Center)():
+    background = ResUtil.COLOR_LIGHT
+    border = EmptyBorder(0, 0, 20, 0)
+    contents += new Label(controller.game.message):
+      font = ResUtil.customFont("jost_medium", 16)
 
   def update(): Unit =
     val tableCards = controller.game.tableCards
@@ -32,7 +38,10 @@ case class GamePanel(controller: Controller) extends BoxPanel(Orientation.Vertic
     contents += new BorderPanel:
       background = ResUtil.COLOR_BG
       layout(cardsPanel) = Position.Center
-      layout(PlayersPanel(controller)) = Position.South
+      private val bottomPanel = new BoxPanel(Orientation.Vertical):
+        contents += PlayersPanel(controller)
+        contents += messagePanel
+      layout(bottomPanel) = Position.South
       if controller.settings.singlePlayer then
         layout(SetsPanel(controller)) = Position.East
     repaint()

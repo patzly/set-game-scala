@@ -13,7 +13,7 @@ case class Tui(controller: Controller) extends Observer:
 
   println(PrintUtil.bold("Welcome to the SET Game!"))
   println(controller.settingsToString)
-  controller.runState()
+  controller.printState()
   loop()
 
   @tailrec
@@ -34,5 +34,5 @@ case class Tui(controller: Controller) extends Observer:
       case Event.SETTINGS_CHANGED => println(controller.settingsToString)
       case Event.CARDS_CHANGED => println(controller.gameToString)
       case Event.SETTINGS_OR_GAME_CHANGED => println(controller)
-      case Event.STATE_CHANGED => controller.runState()
+      case Event.STATE_CHANGED => controller.printState()
       case _ =>

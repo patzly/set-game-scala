@@ -6,7 +6,9 @@ import de.htwg.se.set.util.{InputUtil, PrintUtil}
 
 sealed trait State(controller: Controller):
 
-  def run(): Unit
+  def print(): Unit
+
+  def message: String = ""
 
   def actionFromInput(input: String): Action
 
@@ -19,7 +21,7 @@ sealed trait State(controller: Controller):
 
 case class SettingsState(controller: Controller) extends State(controller):
 
-  override def run(): Unit =
+  override def print(): Unit =
     println(PrintUtil.bold("1") + " Start game")
     println(PrintUtil.bold("2") + " Change number of players")
     println(PrintUtil.bold("3") + " Switch to " + (if controller.settings.easy then "normal" else "easy") + " mode")
@@ -33,7 +35,7 @@ case class SettingsState(controller: Controller) extends State(controller):
 
 case class ChangePlayerCountState(controller: Controller) extends State(controller):
 
-  override def run(): Unit = println("Enter number of players:")
+  override def print(): Unit = println("Enter number of players:")
 
   override def actionFromInput(input: String): Action =
     InputUtil.intInput(input, 1, 10, controller.canUndo, controller.canRedo) match
@@ -42,9 +44,11 @@ case class ChangePlayerCountState(controller: Controller) extends State(controll
 
 case class SelectPlayerState(controller: Controller) extends State(controller):
 
-  override def run(): Unit =
+  override def print(): Unit =
     if !controller.settings.singlePlayer then
       println("Input player who found a SET (e.g. 1) or 0 if no SET can be found:")
+
+  override def message: String = "Select player who found a SET or press ADD CARDS if no SET can be found."
 
   override def actionFromInput(input: String): Action =
     val userInput = if controller.settings.singlePlayer then
@@ -57,16 +61,23 @@ case class SelectPlayerState(controller: Controller) extends State(controller):
       case other => super.handleInput(other)
 
 case class GameState(controller: Controller) extends State(controller):
-
-  override def run(): Unit =
-    val selectedPlayer = controller.game.selectedPlayer
-    val player = selectedPlayer match
+  
+  private def player =
+    controller.game.selectedPlayer match 
       case Some(p) => p
       case None => throw IllegalStateException("No player selected")
+
+  override def print(): Unit =
     if controller.settings.singlePlayer then
       println("Select 3 cards for a SET (e.g. A1 B2 C3):")
     else
       println("Player " + player.number + ", select 3 cards for a SET (e.g. A1 B2 C3):")
+
+  override def message: String =
+    if controller.settings.singlePlayer then
+      "Select 3 cards for a SET."
+    else 
+      "Player " + player.number + ", select 3 cards for a SET."
 
   override def actionFromInput(input: String): Action =
     InputUtil.coordinatesInput(input, controller.canUndo, controller.canRedo) match
@@ -75,7 +86,7 @@ case class GameState(controller: Controller) extends State(controller):
 
 case class GameEndState(controller: Controller) extends State(controller):
 
-  override def run(): Unit =
+  override def print(): Unit =
     println("\n" + PrintUtil.yellow(PrintUtil.bold("All SETs found!")))
     if !controller.settings.singlePlayer then
       controller.game.players.sortBy(player => (-player.sets.length, player.number)).foreach(player => println(player))

@@ -13,7 +13,7 @@ case class Controller(var settings: Settings, var game: Game) extends Observable
     state = s
     notifyObservers(Event.STATE_CHANGED)
   
-  def runState(): Unit = state.run()
+  def printState(): Unit = state.print()
 
   def actionFromInput(input: String): Action = state.actionFromInput(input)
 
@@ -89,6 +89,10 @@ case class Controller(var settings: Settings, var game: Game) extends Observable
     val player = if settings.singlePlayer then game.players.head else game.players(number - 1)
     game = game.copy(selectedPlayer = Some(player))
     notifyObservers(Event.PLAYERS_CHANGED)
+    
+  def setMessage(msg: String): Unit =
+    game = game.copy(message = msg)
+    notifyObservers(Event.MESSAGE_CHANGED)
 
   def settingsToString: String = settings.toString
 

@@ -36,6 +36,8 @@ class CardsPanel(controller: Controller, rows: Int, columns: Int) extends GridPa
         val select = controller.game.selectedPlayer match
           case Some(p) => true
           case None => false
+        if !select then
+          controller.setMessage("Selection of player required.")
         cardButton.selected = select && !cardButton.selected
         repaint()
         revalidate()

@@ -11,13 +11,12 @@ import scala.swing.event.ButtonClicked
 
 class PlayersPanel(controller: Controller) extends FlowPanel(FlowPanel.Alignment.Center)():
 
-  private val margin = 30
   private val paddingHorizontal = 20
   private val paddingVertical = 10
   private val playerFont = ResUtil.customFont("jost_medium", 26)
 
   background = ResUtil.COLOR_LIGHT
-  border = EmptyBorder(margin, 0, margin, 0)
+  border = EmptyBorder(10, 0, 0, 0)
   update()
 
   def update(): Unit =

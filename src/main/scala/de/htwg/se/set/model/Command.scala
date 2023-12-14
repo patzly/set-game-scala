@@ -32,7 +32,9 @@ case class StartGameCommand(controller: Controller) extends Command(controller):
       .map(i => Player(i, singlePlayer, controller.settings.easy, List[Triplet]())).toList)
     if singlePlayer then controller.selectPlayer(1)
     controller.setGameMode(IN_GAME)
-    controller.changeState(if singlePlayer then GameState(controller) else SelectPlayerState(controller))
+    val state = if singlePlayer then GameState(controller) else SelectPlayerState(controller)
+    controller.setMessage(state.message)
+    controller.changeState(state)
 
 case class GoToPlayerCountCommand(controller: Controller) extends Command(controller):
 
@@ -54,7 +56,9 @@ case class SelectPlayerCommand(controller: Controller, number: Int) extends Comm
 
   override def execute(): Unit =
     controller.selectPlayer(number)
-    controller.changeState(GameState(controller))
+    val state = GameState(controller)
+    controller.setMessage(state.message)
+    controller.changeState(state)
 
 case class AddColumnCommand(controller: Controller) extends Command(controller):
 
@@ -64,11 +68,15 @@ case class AddColumnCommand(controller: Controller) extends Command(controller):
       controller.game.columns, controller.game.tableCards, controller.game.playersCards
     )
     if cardsAdded.length > controller.game.tableCards.length then
-      println("One column of cards added to the table.")
+      val msg = "One column of cards added to the table."
+      println(msg)
+      controller.setMessage(msg)
       controller.setTableCards(cardsAdded)
       controller.changeState(SelectPlayerState(controller))
     else if controller.game.deck.findSets(controller.game.tableCards).nonEmpty then
-      println(PrintUtil.red("No more cards left, but there still is at least one SET to be found!\n"))
+      val msg = "No more cards left, but there still is at least one SET to be found!"
+      println(PrintUtil.red(msg + "\n"))
+      controller.setMessage(msg)
       controller.removeColumn()
       controller.changeState(SelectPlayerState(controller))
     else
@@ -89,7 +97,26 @@ case class SelectCardsCommand(controller: Controller, coordinates: List[String])
     val player = controller.game.selectedPlayer match
       case Some(p) => p
       case None => throw IllegalStateException("No player selected")
-    val playerUpdated = player.foundSet(triplet)
+    val playerUpdated = if player.sets.contains(triplet) then
+      val msg = "SET already found."
+      println(PrintUtil.red(msg))
+      controller.setMessage(msg)
+      player
+    else if triplet.isSet then
+      val msg = "That's a SET!"
+      println(PrintUtil.green(msg))
+      controller.setMessage(msg)
+      player.copy(sets = player.sets.appended(triplet))
+    else if player.sets.isEmpty || controller.settings.singlePlayer then
+      val msg = "That's not a SET!"
+      println(PrintUtil.red(msg))
+      controller.setMessage(msg)
+      player
+    else
+      val msg = "That's not a SET! One SET removed."
+      println(PrintUtil.red(msg))
+      controller.setMessage(msg)
+      player.copy(sets = player.sets.dropRight(1))
     controller.updateAndUnselectPlayer(playerUpdated)
     val replaceOrRemoveSet = !controller.settings.singlePlayer && triplet.isSet
     controller.setPlayersCards(

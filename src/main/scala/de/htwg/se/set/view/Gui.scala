@@ -37,6 +37,10 @@ case class Gui(controller: Controller) extends Frame with Observer:
       case Event.SETTINGS_OR_GAME_CHANGED =>
         settingsPanel.update()
         gamePanel.update()
+      case Event.STATE_CHANGED =>
+        gamePanel.update()
+      case Event.MESSAGE_CHANGED =>
+        gamePanel.update()
       case Event.PLAYERS_CHANGED => gamePanel.update()
       case Event.GAME_MODE_CHANGED =>
         scorePanel.update()
