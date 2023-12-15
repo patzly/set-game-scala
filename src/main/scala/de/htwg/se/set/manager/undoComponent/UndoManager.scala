@@ -1,6 +1,7 @@
-package de.htwg.se.set.manager
+package de.htwg.se.set.manager.undoComponent
 
-import de.htwg.se.set.model.{Command, Game, Settings, State}
+import de.htwg.se.set.modelComponent.gameComponent.Game
+import de.htwg.se.set.modelComponent.{Command, Settings, State}
 
 case class Snapshot(settings: Settings, game: Game, state: State)
 

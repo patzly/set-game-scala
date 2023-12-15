@@ -1,7 +1,8 @@
-package de.htwg.se.set.controller
+package de.htwg.se.set.controller.controllerComponent
 
-import de.htwg.se.set.manager.{Snapshot, UndoManager}
-import de.htwg.se.set.model.*
+import de.htwg.se.set.manager.undoComponent.{Snapshot, UndoManager}
+import de.htwg.se.set.modelComponent.*
+import de.htwg.se.set.modelComponent.gameComponent.{Deck, Game, Player}
 import de.htwg.se.set.util.{Event, Observable}
 
 case class Controller(var settings: Settings, var game: Game) extends Observable:

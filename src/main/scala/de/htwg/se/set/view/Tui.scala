@@ -1,7 +1,7 @@
 package de.htwg.se.set.view
 
-import de.htwg.se.set.controller.Controller
-import de.htwg.se.set.model.{InvalidAction, Action}
+import de.htwg.se.set.controller.controllerComponent.Controller
+import de.htwg.se.set.modelComponent.{Action, InvalidAction}
 import de.htwg.se.set.util.{Event, Observer, PrintUtil}
 
 import scala.annotation.tailrec

@@ -1,8 +1,9 @@
-package de.htwg.se.set.model
+package de.htwg.se.set.modelComponent
 
-import de.htwg.se.set.controller.Controller
-import de.htwg.se.set.manager.Snapshot
-import de.htwg.se.set.model.GameMode.{GAME_END, IN_GAME, SETTINGS}
+import de.htwg.se.set.controller.controllerComponent.Controller
+import de.htwg.se.set.manager.undoComponent.Snapshot
+import de.htwg.se.set.modelComponent.GameMode.{GAME_END, IN_GAME, SETTINGS}
+import de.htwg.se.set.modelComponent.gameComponent.{Deck, Player, Triplet}
 import de.htwg.se.set.util.PrintUtil
 
 sealed trait Command(controller: Controller):
@@ -93,7 +94,7 @@ case class SelectCardsCommand(controller: Controller, coordinates: List[String])
     val card3 = deck.cardAtCoordinate(cards, coordinates(2), controller.game.columns)
     controller.setTableCards(controller.game.deck.selectCards(cards, card1, card2, card3))
 
-    val triplet = Triplet(card1.select, card2.select, card3.select)
+    val triplet = gameComponent.Triplet(card1.select, card2.select, card3.select)
     val player = controller.game.selectedPlayer match
       case Some(p) => p
       case None => throw IllegalStateException("No player selected")

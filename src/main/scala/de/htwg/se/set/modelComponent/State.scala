@@ -1,6 +1,6 @@
-package de.htwg.se.set.model
+package de.htwg.se.set.modelComponent
 
-import de.htwg.se.set.controller.Controller
+import de.htwg.se.set.controller.controllerComponent.Controller
 import de.htwg.se.set.util.InputUtil.*
 import de.htwg.se.set.util.{InputUtil, PrintUtil}
 

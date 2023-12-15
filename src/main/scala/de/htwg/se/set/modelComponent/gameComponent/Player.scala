@@ -1,4 +1,4 @@
-package de.htwg.se.set.model
+package de.htwg.se.set.modelComponent.gameComponent
 
 import de.htwg.se.set.util.PrintUtil
 

@@ -1,5 +1,7 @@
-package de.htwg.se.set.model
+package de.htwg.se.set.modelComponent
 
+import de.htwg.se.set.modelComponent
+import de.htwg.se.set.modelComponent.gameComponent.{Deck, Triplet}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -23,11 +25,11 @@ class DeckSpec extends AnyWordSpec with Matchers:
 
     "finding all SETs in specific cards" should:
       val card1 = Card(1, Color.RED, Symbol.OVAL, Shading.SOLID)
-      val card2 = Card(2, Color.RED, Symbol.OVAL, Shading.SOLID)
-      val card3 = Card(3, Color.RED, Symbol.OVAL, Shading.SOLID)
-      val card4 = Card(1, Color.GREEN, Symbol.OVAL, Shading.SOLID)
-      val card5 = Card(2, Color.GREEN, Symbol.DIAMOND, Shading.SOLID)
-      val card6 = Card(3, Color.GREEN, Symbol.DIAMOND, Shading.SOLID)
+      val card2 = Card(2, Color.RED, modelComponent.Symbol.OVAL, Shading.SOLID)
+      val card3 = Card(3, Color.RED, modelComponent.Symbol.OVAL, Shading.SOLID)
+      val card4 = Card(1, Color.GREEN, modelComponent.Symbol.OVAL, Shading.SOLID)
+      val card5 = Card(2, Color.GREEN, modelComponent.Symbol.DIAMOND, Shading.SOLID)
+      val card6 = Card(3, Color.GREEN, modelComponent.Symbol.DIAMOND, Shading.SOLID)
       val cards = List(card1, card2, card3, card4, card5, card6)
       val set = Triplet(card1, card2, card3)
       "find the SET" in:
@@ -72,7 +74,7 @@ class DeckSpec extends AnyWordSpec with Matchers:
     "adding cards to players cards" should:
       "add a set of cards to the player's collection" in:
         val initialPlayersCards = List.empty[Card]
-        val set = Triplet(deck.allCards.head, deck.allCards(1), deck.allCards(2))
+        val set = gameComponent.Triplet(deck.allCards.head, deck.allCards(1), deck.allCards(2))
         val updatedPlayersCards = deck.playersCardsAdd(initialPlayersCards, set)
         updatedPlayersCards should contain allOf (set.card1, set.card2, set.card3)
 

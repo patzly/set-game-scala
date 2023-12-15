@@ -1,4 +1,6 @@
-package de.htwg.se.set.model
+package de.htwg.se.set.modelComponent.gameComponent
+
+import de.htwg.se.set.modelComponent.Card
 
 case class Grid(columns: Int, cards: List[Card], easy: Boolean):
 

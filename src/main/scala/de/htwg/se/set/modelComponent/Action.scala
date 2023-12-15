@@ -1,4 +1,4 @@
-package de.htwg.se.set.model
+package de.htwg.se.set.modelComponent
 
 sealed trait Action
 

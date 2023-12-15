@@ -1,7 +1,7 @@
 package de.htwg.se.set.panel
 
-import de.htwg.se.set.controller.Controller
-import de.htwg.se.set.model.{Card, Color, SelectCardsAction, Shading, Symbol}
+import de.htwg.se.set.controller.controllerComponent.Controller
+import de.htwg.se.set.modelComponent.{Card, Color, SelectCardsAction, Shading, Symbol}
 import de.htwg.se.set.util.{PanelUtil, ResUtil}
 
 import java.awt.{BasicStroke, Polygon, RenderingHints, TexturePaint}

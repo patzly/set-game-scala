@@ -1,4 +1,6 @@
-package de.htwg.se.set.model
+package de.htwg.se.set.modelComponent.gameComponent
+
+import de.htwg.se.set.modelComponent.Card
 
 case class Triplet(card1: Card, card2: Card, card3: Card):
   

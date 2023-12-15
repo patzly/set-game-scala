@@ -1,5 +1,7 @@
-package de.htwg.se.set.model
+package de.htwg.se.set.modelComponent
 
+import de.htwg.se.set.modelComponent
+import de.htwg.se.set.modelComponent.gameComponent.{Player, Triplet}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -7,8 +9,8 @@ class PlayerSpec extends AnyWordSpec with Matchers:
 
   "A Player" when:
     val card1 = Card(1, Color.RED, Symbol.OVAL, Shading.SOLID)
-    val card2 = Card(2, Color.RED, Symbol.OVAL, Shading.SOLID)
-    val card3 = Card(3, Color.RED, Symbol.OVAL, Shading.SOLID)
+    val card2 = Card(2, Color.RED, modelComponent.Symbol.OVAL, Shading.SOLID)
+    val card3 = Card(3, Color.RED, modelComponent.Symbol.OVAL, Shading.SOLID)
     val set = Triplet(card1, card2, card3)
 
     "new" should:

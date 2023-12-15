@@ -1,4 +1,6 @@
-package de.htwg.se.set.model
+package de.htwg.se.set.modelComponent.gameComponent
+
+import de.htwg.se.set.modelComponent.{Card, Color, Shading, Symbol, gameComponent}
 
 import scala.util.Random
 
@@ -36,7 +38,7 @@ case class Deck(easy: Boolean):
       card1 <- cards
       card2 <- cards if card2 != card1
       card3 <- cards if card3 != card1 && card3 != card2
-      triplet = Triplet(card1, card2, card3) if triplet.isSet
+      triplet = gameComponent.Triplet(card1, card2, card3) if triplet.isSet
     } yield triplet
     sets.toSet.toList
 

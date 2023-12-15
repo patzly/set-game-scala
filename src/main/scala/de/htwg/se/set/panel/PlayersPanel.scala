@@ -1,7 +1,8 @@
 package de.htwg.se.set.panel
 
-import de.htwg.se.set.controller.Controller
-import de.htwg.se.set.model.{Player, SelectPlayerAction}
+import de.htwg.se.set.controller.controllerComponent.Controller
+import de.htwg.se.set.modelComponent.SelectPlayerAction
+import de.htwg.se.set.modelComponent.gameComponent.Player
 import de.htwg.se.set.util.PanelUtil.CompatButton
 import de.htwg.se.set.util.ResUtil
 
