@@ -1,7 +1,8 @@
-package de.htwg.se.set.panel
+package de.htwg.se.set.view.panel
 
-import de.htwg.se.set.controller.controllerComponent.Controller
-import de.htwg.se.set.modelComponent.{Card, Color, SelectCardsAction, Shading, Symbol}
+import de.htwg.se.set.controller.IController
+import de.htwg.se.set.controller.controller.baseImpl.SelectCardsAction
+import de.htwg.se.set.model.{Color, ICard, Shading, Symbol}
 import de.htwg.se.set.util.{PanelUtil, ResUtil}
 
 import java.awt.{BasicStroke, Polygon, RenderingHints, TexturePaint}
@@ -11,7 +12,7 @@ import javax.swing.border.EmptyBorder
 import scala.swing.{Button, Dimension, Graphics2D, GridPanel}
 import scala.swing.event.ButtonClicked
 
-class CardsPanel(controller: Controller, rows: Int, columns: Int) extends GridPanel(rows, columns):
+class CardsPanel(controller: IController, rows: Int, columns: Int) extends GridPanel(rows, columns):
 
   private val margin = 5
   private val tableCards = controller.game.tableCards
@@ -61,7 +62,7 @@ class CardsPanel(controller: Controller, rows: Int, columns: Int) extends GridPa
       if cardButton.isInstanceOf[CardButton] && cardButton.asInstanceOf[CardButton].selected
     } yield index
 
-class CardButton(card: Option[Card], small: Boolean = false) extends Button:
+class CardButton(card: Option[ICard], small: Boolean = false) extends Button:
 
   private val outerMargin = if small then 6 else 8
   private val cardRadius = if small then 20 else 30
@@ -83,7 +84,7 @@ class CardButton(card: Option[Card], small: Boolean = false) extends Button:
     g.setColor(PanelUtil.blendColors(ResUtil.COLOR_BG, java.awt.Color.BLACK, 0.08))
     g.fill(RoundRectangle2D.Double(x, y, width, height, cardRadius, cardRadius))
 
-  private def drawCard(g: Graphics2D, card: Card, x: Int, y: Int, width: Int, height: Int): Unit =
+  private def drawCard(g: Graphics2D, card: ICard, x: Int, y: Int, width: Int, height: Int): Unit =
     g.setColor(java.awt.Color.WHITE)
     g.fill(RoundRectangle2D.Double(x, y, width, height, cardRadius, cardRadius))
     g.setColor(if selected then ResUtil.COLOR_ORANGE else java.awt.Color.BLACK)

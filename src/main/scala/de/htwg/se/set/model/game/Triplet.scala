@@ -1,13 +1,13 @@
-package de.htwg.se.set.modelComponent.gameComponent
+package de.htwg.se.set.model.game
 
-import de.htwg.se.set.modelComponent.Card
+import de.htwg.se.set.model.{ICard, ITriplet}
 
-case class Triplet(card1: Card, card2: Card, card3: Card):
+case class Triplet(card1: ICard, card2: ICard, card3: ICard) extends ITriplet:
   
   if card1 == card2 || card1 == card3 || card2 == card3 then
     throw new IllegalArgumentException("Cards must be different")
 
-  def isSet: Boolean =
+  override def isSet: Boolean =
     val numberEqual = card1.number == card2.number && card2.number == card3.number
     val numberDifferent = card1.number != card2.number && card2.number != card3.number && card1.number != card3.number
     val numberSet = numberEqual || numberDifferent
@@ -24,10 +24,8 @@ case class Triplet(card1: Card, card2: Card, card3: Card):
 
   override def toString: String = card1.toString + "+" + card2.toString + "+" + card3.toString
 
-  private def cardsSet: Set[Card] = Set(card1, card2, card3)
-
   override def equals(obj: Any): Boolean = obj match
-    case other: Triplet => cardsSet == other.cardsSet
+    case other: ITriplet => Set(card1, card2, card3) == Set(other.card1, other.card2, other.card3)
     case _ => false
 
-  override def hashCode: Int = cardsSet.hashCode
+  override def hashCode: Int = Set(card1, card2, card3).hashCode

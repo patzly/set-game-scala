@@ -1,10 +1,13 @@
-package de.htwg.se.set.modelComponent.gameComponent
+package de.htwg.se.set.model.game
 
+import de.htwg.se.set.model.{IPlayer, ITriplet}
 import de.htwg.se.set.util.PrintUtil
 
-case class Player(number: Int, singlePlayer: Boolean, easy: Boolean, sets: List[Triplet]):
+case class Player(number: Int, singlePlayer: Boolean, easy: Boolean, sets: List[ITriplet]) extends IPlayer:
 
-  def index: Int = number - 1
+  override def index: Int = number - 1
+
+  override def setSets(sets: List[ITriplet]): IPlayer = copy(sets = sets)
 
   override def toString: String =
     if singlePlayer then

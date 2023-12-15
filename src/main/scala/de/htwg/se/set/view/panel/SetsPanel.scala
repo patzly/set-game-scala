@@ -1,6 +1,6 @@
-package de.htwg.se.set.panel
+package de.htwg.se.set.view.panel
 
-import de.htwg.se.set.controller.controllerComponent.Controller
+import de.htwg.se.set.controller.controller.baseImpl.Controller
 import de.htwg.se.set.util.ResUtil
 
 import java.awt.Color

@@ -1,5 +1,6 @@
 package de.htwg.se.set.modelComponent
 
+import de.htwg.se.set.model.settings.{GameMode, Settings}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 

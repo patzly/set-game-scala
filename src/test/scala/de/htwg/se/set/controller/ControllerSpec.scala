@@ -1,9 +1,11 @@
 package de.htwg.se.set.controller
 
-import de.htwg.se.set.controller.controllerComponent.Controller
-import de.htwg.se.set.modelComponent
+import de.htwg.se.set.controller.controller.baseImpl.Controller
+import de.htwg.se.set.model.game.{Card, Color, Deck, Game, Player, Triplet}
+import de.htwg.se.set.model.settings.Settings
+import de.htwg.se.set.model.{Card, Color, Symbol, game}
+import de.htwg.se.set.{model, modelComponent}
 import de.htwg.se.set.modelComponent.*
-import de.htwg.se.set.modelComponent.gameComponent.{Deck, Game, Player, Triplet}
 import de.htwg.se.set.util.*
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers
@@ -20,7 +22,7 @@ class ControllerSpec extends AnyWordSpec with Matchers with BeforeAndAfter:
     val columns = 3
     val deck = Deck(false)
     val cards = deck.tableCards(columns, List(), List())
-    game = gameComponent.Game(columns, deck, cards, List(), List(), None)
+    game = Game(columns, deck, cards, List(), List(), None)
     controller = Controller(settings, game)
 
   "A Controller" when:
@@ -149,7 +151,7 @@ class ControllerSpec extends AnyWordSpec with Matchers with BeforeAndAfter:
         var notified = false
         val oldPlayer1 = Player(1, false, true, List())
         val triplet = Triplet(
-          Card(1, Color.RED, modelComponent.Symbol.OVAL), Card(2, Color.RED, modelComponent.Symbol.OVAL), Card(3, Color.RED, modelComponent.Symbol.OVAL)
+          Card(1, Color.RED, game.Symbol.OVAL), Card(2, Color.RED, game.Symbol.OVAL), Card(3, Color.RED, game.Symbol.OVAL)
         )
         val newPlayer1 = Player(1, false, true, List(triplet))
         val oldPlayers = List(oldPlayer1, Player(2, false, true, List()))

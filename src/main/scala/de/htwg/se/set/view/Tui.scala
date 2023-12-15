@@ -1,13 +1,13 @@
 package de.htwg.se.set.view
 
-import de.htwg.se.set.controller.controllerComponent.Controller
-import de.htwg.se.set.modelComponent.{Action, InvalidAction}
-import de.htwg.se.set.util.{Event, Observer, PrintUtil}
+import de.htwg.se.set.controller.{Event, IAction, IController}
+import de.htwg.se.set.controller.controller.baseImpl.InvalidAction
+import de.htwg.se.set.util.{Observer, PrintUtil}
 
 import scala.annotation.tailrec
 import scala.io.StdIn
 
-case class Tui(controller: Controller) extends Observer:
+case class Tui(controller: IController) extends Observer:
 
   controller.add(this)
 
@@ -22,7 +22,7 @@ case class Tui(controller: Controller) extends Observer:
     loop()
 
   @tailrec
-  private def actionFromInput: Action =
+  private def actionFromInput: IAction =
     controller.actionFromInput(StdIn.readLine) match
       case InvalidAction(msg) =>
         println(PrintUtil.red(msg + " Try again:"))

@@ -1,7 +1,8 @@
 package de.htwg.se.set.modelComponent
 
-import de.htwg.se.set.modelComponent
-import de.htwg.se.set.modelComponent.gameComponent.Triplet
+import de.htwg.se.set.model.game.{Card, Color, Shading, Symbol, Triplet}
+import de.htwg.se.set.model.game
+import de.htwg.se.set.{model, modelComponent}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -9,13 +10,13 @@ class TripletSpec extends AnyWordSpec with Matchers:
 
   "A Triplet" when:
     val card1 = Card(1, Color.RED, Symbol.OVAL, Shading.SOLID)
-    val card2 = Card(2, Color.GREEN, modelComponent.Symbol.SQUIGGLE, Shading.OUTLINED)
-    val card3 = Card(3, Color.BLUE, modelComponent.Symbol.DIAMOND, Shading.STRIPED)
+    val card2 = Card(2, Color.GREEN, game.Symbol.SQUIGGLE, Shading.OUTLINED)
+    val card3 = Card(3, Color.BLUE, game.Symbol.DIAMOND, Shading.STRIPED)
     val tripletSet = Triplet(card1, card2, card3)
-    val card4 = Card(1, Color.RED, modelComponent.Symbol.OVAL, Shading.SOLID)
-    val card5 = Card(2, Color.RED, modelComponent.Symbol.OVAL, Shading.SOLID)
-    val card6 = Card(2, Color.GREEN, modelComponent.Symbol.OVAL, Shading.SOLID)
-    val tripletNoSet = gameComponent.Triplet(card4, card5, card6)
+    val card4 = Card(1, Color.RED, game.Symbol.OVAL, Shading.SOLID)
+    val card5 = Card(2, Color.RED, game.Symbol.OVAL, Shading.SOLID)
+    val card6 = Card(2, Color.GREEN, game.Symbol.OVAL, Shading.SOLID)
+    val tripletNoSet = game.Triplet(card4, card5, card6)
 
     "created with distinct cards" should:
       "be initialized correctly" in:
@@ -24,9 +25,9 @@ class TripletSpec extends AnyWordSpec with Matchers:
         tripletSet.card3 shouldBe card3
     "created with identical cards" should:
       "throw an IllegalArgumentException" in:
-        val card = Card(1, Color.RED, modelComponent.Symbol.OVAL, Shading.SOLID)
+        val card = Card(1, Color.RED, game.Symbol.OVAL, Shading.SOLID)
         val exception = intercept[IllegalArgumentException] {
-          gameComponent.Triplet(card, card, card)
+          game.Triplet(card, card, card)
         }
         exception.getMessage shouldBe "Cards must be different"
 
@@ -41,7 +42,7 @@ class TripletSpec extends AnyWordSpec with Matchers:
         tripletSet.toString shouldBe card1.toString + "+" + card2.toString + "+" + card3.toString
 
     "be equal to another triplet with the same cards" in:
-      tripletSet shouldEqual gameComponent.Triplet(card3, card2, card1)
+      tripletSet shouldEqual game.Triplet(card3, card2, card1)
     "not be equal to another triplet with different cards" in:
       tripletSet should not equal tripletNoSet
     "not be equal to an instance of another class" in:

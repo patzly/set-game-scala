@@ -1,7 +1,7 @@
-package de.htwg.se.set.panel
+package de.htwg.se.set.view.panel
 
-import de.htwg.se.set.controller.controllerComponent.Controller
-import de.htwg.se.set.modelComponent.{AddColumnAction, ExitAction, GameMode, RedoAction, UndoAction}
+import de.htwg.se.set.controller.controller.baseImpl.{AddColumnAction, Controller, ExitAction, RedoAction, UndoAction}
+import de.htwg.se.set.model.GameMode.{GAME_END, IN_GAME, SETTINGS}
 import de.htwg.se.set.util.PanelUtil.CompatButton
 import de.htwg.se.set.util.{PanelUtil, ResUtil}
 
@@ -58,5 +58,5 @@ case class MenuPanel(controller: Controller) extends FlowPanel(FlowPanel.Alignme
     undoButton.enabled = controller.canUndo
     redoButton.enabled = controller.canRedo
     addButton.enabled = controller.game.selectedPlayer.isEmpty
-    addButton.visible = controller.settings.mode == GameMode.IN_GAME && !controller.settings.singlePlayer
-    exitButton.visible = controller.settings.mode == GameMode.IN_GAME
+    addButton.visible = controller.settings.mode == IN_GAME && !controller.settings.singlePlayer
+    exitButton.visible = controller.settings.mode == IN_GAME

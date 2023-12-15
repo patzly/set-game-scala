@@ -1,8 +1,8 @@
-package de.htwg.se.set.modelComponent.gameComponent
+package de.htwg.se.set.model.game
 
-import de.htwg.se.set.modelComponent.Card
+import de.htwg.se.set.model.{ICard, IGrid}
 
-case class Grid(columns: Int, cards: List[Card], easy: Boolean):
+case class Grid(columns: Int, cards: List[ICard], easy: Boolean) extends IGrid:
 
   if columns * 3 != cards.length then
     throw new IllegalArgumentException("Amount of cards has to be equal to the grid size")

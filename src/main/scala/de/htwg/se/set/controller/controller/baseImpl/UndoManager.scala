@@ -1,11 +1,6 @@
-package de.htwg.se.set.manager.undoComponent
+package de.htwg.se.set.controller.controller.baseImpl
 
-import de.htwg.se.set.modelComponent.gameComponent.Game
-import de.htwg.se.set.modelComponent.{Command, Settings, State}
-
-case class Snapshot(settings: Settings, game: Game, state: State)
-
-case class UndoManager():
+private class UndoManager:
 
   private var undoStack: List[Command] = List()
   private var redoStack: List[Command] = List()

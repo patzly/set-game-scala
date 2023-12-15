@@ -1,7 +1,8 @@
 package de.htwg.se.set.modelComponent
 
-import de.htwg.se.set.modelComponent
-import de.htwg.se.set.modelComponent.gameComponent.Grid
+import de.htwg.se.set.model.game.{Card, Color, Grid, Shading, Symbol}
+import de.htwg.se.set.model.{Card, Color, Shading, game}
+import de.htwg.se.set.{model, modelComponent}
 import de.htwg.se.set.util.PrintUtil
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
@@ -12,7 +13,7 @@ class GridSpec extends AnyWordSpec with Matchers:
     "constructed in normal mode" should:
       "have a correct String representation" in:
         val card1 = Card(1, Color.RED, Symbol.OVAL, Shading.SOLID)
-        val card2 = Card(2, Color.GREEN, modelComponent.Symbol.SQUIGGLE, Shading.OUTLINED)
+        val card2 = Card(2, Color.GREEN, game.Symbol.SQUIGGLE, Shading.OUTLINED)
         val cards = List(card1, card2, card1, card2, card1, card2)
         val grid = Grid(2, cards, false)
         grid.toString should include(PrintUtil.yellow("1ROF"))
@@ -23,9 +24,9 @@ class GridSpec extends AnyWordSpec with Matchers:
         grid.toString should include("B")
     "constructed with a grid size unequal to the amount of cards" should:
       "throw an IllegalArgumentException" in:
-        val card1 = Card(1, Color.RED, modelComponent.Symbol.OVAL, Shading.SOLID)
-        val card2 = Card(2, Color.GREEN, modelComponent.Symbol.SQUIGGLE, Shading.OUTLINED)
-        val card3 = Card(3, Color.BLUE, modelComponent.Symbol.DIAMOND, Shading.STRIPED)
+        val card1 = Card(1, Color.RED, game.Symbol.OVAL, Shading.SOLID)
+        val card2 = Card(2, Color.GREEN, game.Symbol.SQUIGGLE, Shading.OUTLINED)
+        val card3 = Card(3, Color.BLUE, game.Symbol.DIAMOND, Shading.STRIPED)
         val cards = List(card1, card2, card3, card1, card2, card3)
         val exception = intercept[IllegalArgumentException] {
           Grid(3, cards, true)
@@ -34,7 +35,7 @@ class GridSpec extends AnyWordSpec with Matchers:
     "constructed with different numbers of columns" should:
       "have a correct String representation for various grid sizes" in:
         for (columns <- 1 to 4)
-          val cards = List.fill(columns * 3)(Card(1, Color.RED, modelComponent.Symbol.OVAL, Shading.SOLID))
+          val cards = List.fill(columns * 3)(Card(1, Color.RED, game.Symbol.OVAL, Shading.SOLID))
           val grid = Grid(columns, cards, false)
           (65 until 65 + columns).foreach: charCode =>
             grid.toString should include(charCode.toChar.toString)

@@ -1,59 +1,59 @@
-package de.htwg.se.set.modelComponent
+package de.htwg.se.set.controller.controller.baseImpl
 
-import de.htwg.se.set.controller.controllerComponent.Controller
-import de.htwg.se.set.manager.undoComponent.Snapshot
-import de.htwg.se.set.modelComponent.GameMode.{GAME_END, IN_GAME, SETTINGS}
-import de.htwg.se.set.modelComponent.gameComponent.{Deck, Player, Triplet}
+import de.htwg.se.set.controller.{ICommand, IController}
+import de.htwg.se.set.model.GameMode.{GAME_END, IN_GAME, SETTINGS}
+import de.htwg.se.set.model.game.{Deck, Player, Triplet}
+import de.htwg.se.set.model.{ICard, ITriplet}
 import de.htwg.se.set.util.PrintUtil
 
-sealed trait Command(controller: Controller):
+private class Command(controller: IController) extends ICommand(controller):
 
-  var snapshot: Option[Snapshot] = None
+  private var snapshot: Option[Snapshot] = None
 
   def saveSnapshot(): Unit = snapshot = Some(controller.snapshot)
-  
+
   def undo(): Unit = snapshot match
     case Some(snapshot) => controller.restoreSnapshot(snapshot)
     case None => throw IllegalStateException("No snapshot to restore")
 
-  def execute(): Unit
+  override def execute(): Unit = ()
 
-case class StartGameCommand(controller: Controller) extends Command(controller):
+case class StartGameCommand(controller: IController) extends Command(controller):
   
   override def execute(): Unit =
     controller.setColumns(if controller.settings.easy then 3 else 4)
     controller.setDeck(Deck(controller.settings.easy))
     val deck = controller.game.deck
-    val cardsMultiPlayer = deck.tableCards(controller.game.columns, List[Card](), List[Card]())
+    val cardsMultiPlayer = deck.tableCards(controller.game.columns, List[ICard](), List[ICard]())
     val cardsSinglePlayer = deck.tableCardsSinglePlayer(controller.game.columns)
     val singlePlayer = controller.settings.singlePlayer
     controller.setTableCards(if singlePlayer then cardsSinglePlayer else cardsMultiPlayer)
     controller.setPlayersCards(List())
     controller.setPlayers((1 to controller.settings.playerCount)
-      .map(i => Player(i, singlePlayer, controller.settings.easy, List[Triplet]())).toList)
+      .map(i => Player(i, singlePlayer, controller.settings.easy, List[ITriplet]())).toList)
     if singlePlayer then controller.selectPlayer(1)
     controller.setGameMode(IN_GAME)
     val state = if singlePlayer then GameState(controller) else SelectPlayerState(controller)
     controller.setMessage(state.message)
     controller.changeState(state)
 
-case class GoToPlayerCountCommand(controller: Controller) extends Command(controller):
+case class GoToPlayerCountCommand(controller: IController) extends Command(controller):
 
   override def execute(): Unit = controller.changeState(ChangePlayerCountState(controller))
 
-case class ChangePlayerCountCommand(controller: Controller, playerCount: Int) extends Command(controller):
+case class ChangePlayerCountCommand(controller: IController, playerCount: Int) extends Command(controller):
 
   override def execute(): Unit =
     controller.setPlayerCount(playerCount)
     controller.changeState(SettingsState(controller))
 
-case class SwitchEasyCommand(controller: Controller) extends Command(controller):
+case class SwitchEasyCommand(controller: IController) extends Command(controller):
 
   override def execute(): Unit =
     controller.setEasy(!controller.settings.easy)
     controller.changeState(SettingsState(controller))
 
-case class SelectPlayerCommand(controller: Controller, number: Int) extends Command(controller):
+case class SelectPlayerCommand(controller: IController, number: Int) extends Command(controller):
 
   override def execute(): Unit =
     controller.selectPlayer(number)
@@ -61,7 +61,7 @@ case class SelectPlayerCommand(controller: Controller, number: Int) extends Comm
     controller.setMessage(state.message)
     controller.changeState(state)
 
-case class AddColumnCommand(controller: Controller) extends Command(controller):
+case class AddColumnCommand(controller: IController) extends Command(controller):
 
   override def execute(): Unit =
     controller.addColumn()
@@ -84,7 +84,7 @@ case class AddColumnCommand(controller: Controller) extends Command(controller):
       controller.setGameMode(GAME_END)
       controller.changeState(GameEndState(controller))
 
-case class SelectCardsCommand(controller: Controller, coordinates: List[String]) extends Command(controller):
+case class SelectCardsCommand(controller: IController, coordinates: List[String]) extends Command(controller):
 
   override def execute(): Unit =
     val deck = controller.game.deck
@@ -94,7 +94,7 @@ case class SelectCardsCommand(controller: Controller, coordinates: List[String])
     val card3 = deck.cardAtCoordinate(cards, coordinates(2), controller.game.columns)
     controller.setTableCards(controller.game.deck.selectCards(cards, card1, card2, card3))
 
-    val triplet = gameComponent.Triplet(card1.select, card2.select, card3.select)
+    val triplet = Triplet(card1.select, card2.select, card3.select)
     val player = controller.game.selectedPlayer match
       case Some(p) => p
       case None => throw IllegalStateException("No player selected")
@@ -107,7 +107,7 @@ case class SelectCardsCommand(controller: Controller, coordinates: List[String])
       val msg = "That's a SET!"
       println(PrintUtil.green(msg))
       controller.setMessage(msg)
-      player.copy(sets = player.sets.appended(triplet))
+      player.setSets(player.sets.appended(triplet))
     else if player.sets.isEmpty || controller.settings.singlePlayer then
       val msg = "That's not a SET!"
       println(PrintUtil.red(msg))
@@ -117,7 +117,7 @@ case class SelectCardsCommand(controller: Controller, coordinates: List[String])
       val msg = "That's not a SET! One SET removed."
       println(PrintUtil.red(msg))
       controller.setMessage(msg)
-      player.copy(sets = player.sets.dropRight(1))
+      player.setSets(player.sets.dropRight(1))
     controller.updateAndUnselectPlayer(playerUpdated)
     val replaceOrRemoveSet = !controller.settings.singlePlayer && triplet.isSet
     controller.setPlayersCards(
@@ -156,7 +156,7 @@ case class SelectCardsCommand(controller: Controller, coordinates: List[String])
     else
       controller.changeState(SelectPlayerState(controller))
 
-case class ExitCommand(controller: Controller) extends Command(controller):
+case class ExitCommand(controller: IController) extends Command(controller):
 
   override def execute(): Unit =
     controller.setGameMode(SETTINGS)

@@ -1,12 +1,19 @@
-package de.htwg.se.set.modelComponent
+package de.htwg.se.set.model.settings
 
+import de.htwg.se.set.model.{GameMode, ISettings}
 import de.htwg.se.set.util.PrintUtil
 
-case class Settings(playerCount: Int, easy: Boolean, mode: GameMode = GameMode.SETTINGS):
+case class Settings(playerCount: Int, easy: Boolean, mode: GameMode = GameMode.SETTINGS) extends ISettings:
 
   if playerCount < 1 then throw new IllegalArgumentException("Game must have at least one player")
 
-  def singlePlayer: Boolean = playerCount == 1
+  override def singlePlayer: Boolean = playerCount == 1
+
+  override def setPlayerCount(playerCount: Int): ISettings = copy(playerCount = playerCount)
+
+  override def setEasy(easy: Boolean): ISettings = copy(easy = easy)
+
+  override def setGameMode(mode: GameMode): ISettings = copy(mode = mode)
 
   override def equals(obj: Any): Boolean = obj match
     case other: Settings => playerCount == other.playerCount && easy == other.easy
@@ -23,8 +30,3 @@ case class Settings(playerCount: Int, easy: Boolean, mode: GameMode = GameMode.S
     val playersString = if playerCount == 1 then "1 player" else s"$playerCount players"
     val easyString = if easy then "easy mode" else "normal mode"
     PrintUtil.blue(PrintUtil.bold("\nSettings: ") + PrintUtil.yellow(playersString + ", " + easyString))
-
-enum GameMode:
-  case SETTINGS
-  case IN_GAME
-  case GAME_END

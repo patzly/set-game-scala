@@ -1,15 +1,17 @@
-package de.htwg.se.set.modelComponent
+package de.htwg.se.set.model.game
 
+import de.htwg.se.set.model.{Color, ICard, Shading, Symbol}
 import de.htwg.se.set.util.PrintUtil
 
-sealed trait Card(val number: Int, val color: Color, val symbol: Symbol, val shading: Shading, val selected: Boolean):
+sealed trait Card(val number: Int, val color: Color, val symbol: Symbol, val shading: Shading, val selected: Boolean)
+  extends ICard:
 
-  def select: Card
+  override def select: ICard
 
-  def unselect: Card
+  override def unselect: ICard
 
   override def equals(obj: Any): Boolean = obj match
-    case other: Card =>
+    case other: ICard =>
       number == other.number && color == other.color && symbol == other.symbol && shading == other.shading
     case _ => false
 
@@ -51,27 +53,3 @@ object Card:
 
   def apply(number: Int, color: Color, symbol: Symbol): Card =
     EasyCard(number, color, symbol, false)
-
-enum Color:
-  case RED, GREEN, BLUE
-  override def toString: String =
-    this match
-      case RED => "R"
-      case GREEN => "G"
-      case BLUE => "B"
-
-enum Symbol:
-  case OVAL, SQUIGGLE, DIAMOND
-  override def toString: String =
-    this match
-      case OVAL => "O"
-      case SQUIGGLE => "S"
-      case DIAMOND => "D"
-
-enum Shading:
-  case SOLID, OUTLINED, STRIPED
-  override def toString: String =
-    this match
-      case SOLID => "F" // filled
-      case OUTLINED => "L" // line
-      case STRIPED => "C" // checkered
