@@ -1,5 +1,6 @@
 package de.htwg.se.set.util
 
+import de.htwg.se.set.controller.Event
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers
 

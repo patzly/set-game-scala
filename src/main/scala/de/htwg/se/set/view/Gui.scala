@@ -1,7 +1,7 @@
 package de.htwg.se.set.view
 
 import de.htwg.se.set.controller.Event
-import de.htwg.se.set.controller.controller.baseImpl.Controller
+import de.htwg.se.set.controller.controller.Controller
 import de.htwg.se.set.model.GameMode.{GAME_END, IN_GAME, SETTINGS}
 import de.htwg.se.set.util.Observer
 import de.htwg.se.set.view.panel.{GamePanel, MenuPanel, ScorePanel, SettingsPanel}

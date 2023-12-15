@@ -1,6 +1,6 @@
 package de.htwg.se.set.controller
 
-import de.htwg.se.set.controller.controller.baseImpl.Snapshot
+import de.htwg.se.set.controller.controller.Snapshot
 import de.htwg.se.set.model.{GameMode, ICard, IDeck, IGame, IPlayer, ISettings}
 import de.htwg.se.set.util.Observable
 

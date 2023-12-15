@@ -6,7 +6,7 @@ import scala.util.Random
 
 case class Deck(easy: Boolean) extends IDeck:
 
-  private val allCards: List[ICard] = (if easy then new EasyCreationStrategy else new NormalCreationStrategy).create
+  val allCards: List[ICard] = (if easy then new EasyCreationStrategy else new NormalCreationStrategy).create
 
   override def findSets(cards: List[ICard]): List[ITriplet] =
     val sets = for {

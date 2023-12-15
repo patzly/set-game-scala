@@ -1,7 +1,7 @@
 package de.htwg.se.set.view.panel
 
 import de.htwg.se.set.controller.IController
-import de.htwg.se.set.controller.controller.baseImpl.SelectCardsAction
+import de.htwg.se.set.controller.controller.SelectCardsAction
 import de.htwg.se.set.model.{Color, ICard, Shading, Symbol}
 import de.htwg.se.set.util.{PanelUtil, ResUtil}
 

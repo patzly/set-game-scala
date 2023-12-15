@@ -1,6 +1,6 @@
 package de.htwg.se.set.view.panel
 
-import de.htwg.se.set.controller.controller.baseImpl.{AddColumnAction, Controller, ExitAction, RedoAction, UndoAction}
+import de.htwg.se.set.controller.controller.{AddColumnAction, Controller, ExitAction, RedoAction, UndoAction}
 import de.htwg.se.set.model.GameMode.{GAME_END, IN_GAME, SETTINGS}
 import de.htwg.se.set.util.PanelUtil.CompatButton
 import de.htwg.se.set.util.{PanelUtil, ResUtil}

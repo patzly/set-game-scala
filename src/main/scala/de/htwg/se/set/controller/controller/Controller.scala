@@ -1,6 +1,6 @@
-package de.htwg.se.set.controller.controller.baseImpl
+package de.htwg.se.set.controller.controller
 
-import de.htwg.se.set.controller.{Event, IAction, IController, IState}
+import de.htwg.se.set.controller.*
 import de.htwg.se.set.model.*
 
 case class Controller(var settings: ISettings, var game: IGame) extends IController:

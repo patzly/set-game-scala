@@ -1,6 +1,6 @@
 package de.htwg.se.set.view.panel
 
-import de.htwg.se.set.controller.controller.baseImpl.{Controller, SelectPlayerAction}
+import de.htwg.se.set.controller.controller.{Controller, SelectPlayerAction}
 import de.htwg.se.set.model.game.Player
 import de.htwg.se.set.util.PanelUtil.CompatButton
 import de.htwg.se.set.util.ResUtil

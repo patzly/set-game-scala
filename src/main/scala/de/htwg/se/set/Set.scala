@@ -1,6 +1,6 @@
 package de.htwg.se.set
 
-import de.htwg.se.set.controller.controller.baseImpl.Controller
+import de.htwg.se.set.controller.controller.Controller
 import de.htwg.se.set.model.{ICard, IPlayer}
 import de.htwg.se.set.model.game.{Deck, Game}
 import de.htwg.se.set.model.settings.Settings

@@ -1,6 +1,6 @@
-package de.htwg.se.set.controller.controller.baseImpl
+package de.htwg.se.set.controller.controller
 
-import de.htwg.se.set.controller.{ICommand, IController}
+import de.htwg.se.set.controller.*
 import de.htwg.se.set.model.GameMode.{GAME_END, IN_GAME, SETTINGS}
 import de.htwg.se.set.model.game.{Deck, Player, Triplet}
 import de.htwg.se.set.model.{ICard, ITriplet}

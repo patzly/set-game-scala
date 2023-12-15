@@ -1,4 +1,4 @@
-package de.htwg.se.set.controller.controller.baseImpl
+package de.htwg.se.set.controller.controller
 
 import de.htwg.se.set.controller.IAction
 
