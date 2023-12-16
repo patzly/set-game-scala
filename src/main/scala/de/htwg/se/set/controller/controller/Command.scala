@@ -31,7 +31,7 @@ case class StartGameCommand(controller: IController) extends Command(controller)
     controller.setPlayersCards(List())
     controller.setPlayers((1 to controller.settings.playerCount)
       .map(i => Player(i, singlePlayer, controller.settings.easy, List[ITriplet]())).toList)
-    if singlePlayer then controller.selectPlayer(1)
+    if singlePlayer then controller.selectPlayer(1) else controller.unselectPlayer()
     controller.setGameMode(IN_GAME)
     val state = if singlePlayer then GameState(controller) else SelectPlayerState(controller)
     controller.setMessage(state.message)
@@ -118,7 +118,8 @@ case class SelectCardsCommand(controller: IController, coordinates: List[String]
       println(PrintUtil.red(msg))
       controller.setMessage(msg)
       player.setSets(player.sets.dropRight(1))
-    controller.updateAndUnselectPlayer(playerUpdated)
+    controller.updatePlayer(playerUpdated)
+    controller.unselectPlayer()
     val replaceOrRemoveSet = !controller.settings.singlePlayer && triplet.isSet
     controller.setPlayersCards(
       if replaceOrRemoveSet then

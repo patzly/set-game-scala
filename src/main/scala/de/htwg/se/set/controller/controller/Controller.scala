@@ -80,14 +80,17 @@ case class Controller(var settings: ISettings, var game: IGame) extends IControl
     game = game.setPlayers(players)
     notifyObservers(Event.PLAYERS_CHANGED)
 
-  override def updateAndUnselectPlayer(player: IPlayer): Unit =
+  override def updatePlayer(player: IPlayer): Unit =
     game = game.setPlayers(game.players.updated(player.index, player))
-    game = game.setSelectedPlayer(None)
     notifyObservers(Event.PLAYERS_CHANGED)
 
   override def selectPlayer(number: Int): Unit =
     val player = if settings.singlePlayer then game.players.head else game.players(number - 1)
     game = game.setSelectedPlayer(Some(player))
+    notifyObservers(Event.PLAYERS_CHANGED)
+
+  override def unselectPlayer(): Unit =
+    game = game.setSelectedPlayer(None)
     notifyObservers(Event.PLAYERS_CHANGED)
 
   override def setMessage(msg: String): Unit =

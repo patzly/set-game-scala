@@ -160,7 +160,8 @@ class ControllerSpec extends AnyWordSpec with Matchers with BeforeAndAfter:
           event should be(Event.PLAYERS_CHANGED)
           notified = true
         )
-        controller.updateAndUnselectPlayer(newPlayer1)
+        controller.updatePlayer(newPlayer1)
+        controller.unselectPlayer()
         controller.game.players should be(newPlayers)
         controller.game.selectedPlayer should be(None)
         notified should be(true)

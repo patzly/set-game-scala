@@ -1,16 +1,16 @@
 package de.htwg.se.set.view.panel
 
-import de.htwg.se.set.controller.controller.{AddColumnAction, Controller, ExitAction, RedoAction, UndoAction}
-import de.htwg.se.set.model.GameMode.{GAME_END, IN_GAME, SETTINGS}
+import de.htwg.se.set.controller.controller.*
+import de.htwg.se.set.model.GameMode.IN_GAME
 import de.htwg.se.set.util.PanelUtil.CompatButton
 import de.htwg.se.set.util.{PanelUtil, ResUtil}
 
 import java.awt.Color
 import javax.swing.border.MatteBorder
-import scala.swing.FlowPanel
 import scala.swing.event.ButtonClicked
+import scala.swing.{BoxPanel, Orientation}
 
-case class MenuPanel(controller: Controller) extends FlowPanel(FlowPanel.Alignment.Center)():
+case class MenuPanel(controller: Controller) extends BoxPanel(Orientation.Horizontal):
 
   private val menuFont = ResUtil.customFont("jost_medium", 16)
   

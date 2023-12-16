@@ -27,8 +27,9 @@ trait IController extends Observable:
   def setTableCards(cards: List[ICard]): Unit
   def setPlayersCards(cards: List[ICard]): Unit
   def setPlayers(players: List[IPlayer]): Unit
-  def updateAndUnselectPlayer(player: IPlayer): Unit
+  def updatePlayer(player: IPlayer): Unit
   def selectPlayer(number: Int): Unit
+  def unselectPlayer(): Unit
   def setMessage(msg: String): Unit
   def settingsToString: String
   def gameToString: String
