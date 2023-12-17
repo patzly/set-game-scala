@@ -1,6 +1,7 @@
 package de.htwg.se.set.view.panel
 
-import de.htwg.se.set.controller.controller.{Controller, SelectPlayerAction}
+import de.htwg.se.set.controller.IController
+import de.htwg.se.set.controller.controller.SelectPlayerAction
 import de.htwg.se.set.model.game.Player
 import de.htwg.se.set.util.PanelUtil.CompatButton
 import de.htwg.se.set.util.ResUtil
@@ -9,7 +10,7 @@ import javax.swing.border.EmptyBorder
 import scala.swing.FlowPanel
 import scala.swing.event.ButtonClicked
 
-class PlayersPanel(controller: Controller) extends FlowPanel(FlowPanel.Alignment.Center)():
+class PlayersPanel(controller: IController) extends FlowPanel(FlowPanel.Alignment.Center)():
 
   private val paddingHorizontal = 20
   private val paddingVertical = 10

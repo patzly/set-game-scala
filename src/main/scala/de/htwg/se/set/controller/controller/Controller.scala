@@ -1,12 +1,16 @@
 package de.htwg.se.set.controller.controller
 
-import de.htwg.se.set.controller.*
-import de.htwg.se.set.model.*
+import com.google.inject.{Guice, Inject, Injector}
+import de.htwg.se.set.controller.{Event, IAction, IController, IState}
+import de.htwg.se.set.model.{GameMode, ICard, IDeck, IGame, IPlayer, ISettings}
+import de.htwg.se.set.module.SetModule
 
-case class Controller(var settings: ISettings, var game: IGame) extends IController:
+case class Controller @Inject() (var settings: ISettings, var game: IGame) extends IController:
 
   private val undoManager = new UndoManager
   private var state: IState = SettingsState(this)
+  
+  val injector: Injector = Guice.createInjector(new SetModule)
 
   override def changeState(s: IState): Unit =
     state = s

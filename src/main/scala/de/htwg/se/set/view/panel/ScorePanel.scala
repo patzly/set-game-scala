@@ -1,16 +1,17 @@
 package de.htwg.se.set.view.panel
 
+import de.htwg.se.set.controller.IController
 import de.htwg.se.set.controller.controller.{Controller, ExitAction}
 import de.htwg.se.set.util.PanelUtil.CompatButton
 import de.htwg.se.set.util.ResUtil
 
 import javax.swing.border.EmptyBorder
-import scala.swing.*
 import scala.swing.BorderPanel.Position
+import scala.swing.{BorderPanel, BoxPanel, FlowPanel, GridBagPanel, GridPanel, Label, Orientation}
 import scala.swing.GridBagPanel.{Anchor, Fill}
 import scala.swing.event.ButtonClicked
 
-case class ScorePanel(controller: Controller) extends BoxPanel(Orientation.Vertical):
+case class ScorePanel(controller: IController) extends BoxPanel(Orientation.Vertical):
 
   private val scoreFont = ResUtil.customFont("jost_medium", 26)
 

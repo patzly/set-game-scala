@@ -1,7 +1,6 @@
 package de.htwg.se.set.view
 
-import de.htwg.se.set.controller.Event
-import de.htwg.se.set.controller.controller.Controller
+import de.htwg.se.set.controller.{Event, IController}
 import de.htwg.se.set.model.GameMode.{GAME_END, IN_GAME, SETTINGS}
 import de.htwg.se.set.util.Observer
 import de.htwg.se.set.view.panel.{GamePanel, MenuPanel, ScorePanel, SettingsPanel}
@@ -10,7 +9,7 @@ import javax.swing.UIManager
 import javax.swing.plaf.nimbus.NimbusLookAndFeel
 import scala.swing.{BorderPanel, Dimension, Frame}
 
-case class Gui(controller: Controller) extends Frame with Observer:
+case class Gui(controller: IController) extends Frame with Observer:
 
   controller.add(this)
 

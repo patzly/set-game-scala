@@ -1,14 +1,14 @@
 package de.htwg.se.set.view.panel
 
-import de.htwg.se.set.controller.controller.Controller
+import de.htwg.se.set.controller.IController
 import de.htwg.se.set.util.ResUtil
 
 import java.awt.Color
 import javax.swing.border.MatteBorder
-import scala.swing.*
 import scala.swing.GridBagPanel.{Anchor, Fill}
+import scala.swing.{BoxPanel, Dimension, GridBagPanel, GridPanel, Orientation}
 
-case class SetsPanel(controller: Controller) extends BoxPanel(Orientation.Vertical):
+case class SetsPanel(controller: IController) extends BoxPanel(Orientation.Vertical):
 
   private val rows = 3
 

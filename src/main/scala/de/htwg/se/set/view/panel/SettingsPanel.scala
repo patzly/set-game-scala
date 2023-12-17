@@ -1,17 +1,18 @@
 package de.htwg.se.set.view.panel
 
-import de.htwg.se.set.controller.controller.{ChangePlayerCountAction, Controller, StartGameAction, SwitchEasyAction}
+import de.htwg.se.set.controller.IController
+import de.htwg.se.set.controller.controller.{ChangePlayerCountAction, StartGameAction, SwitchEasyAction}
 import de.htwg.se.set.util.PanelUtil.CompatButton
 import de.htwg.se.set.util.{PanelUtil, ResUtil}
 
 import java.awt.{BasicStroke, Color, RenderingHints}
 import javax.swing.border.EmptyBorder
-import scala.swing.*
 import scala.swing.BorderPanel.Position
+import scala.swing.{BorderPanel, BoxPanel, Button, Dimension, FlowPanel, Graphics2D, GridBagPanel, GridPanel, Label, Orientation}
 import scala.swing.GridBagPanel.{Anchor, Fill}
 import scala.swing.event.ButtonClicked
 
-case class SettingsPanel(controller: Controller) extends BoxPanel(Orientation.Vertical):
+case class SettingsPanel(controller: IController) extends BoxPanel(Orientation.Vertical):
 
   private val settingsFont = ResUtil.customFont("jost_medium", 26)
   private val padding = 20
