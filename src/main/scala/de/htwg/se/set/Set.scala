@@ -7,6 +7,7 @@ import de.htwg.se.set.view.{Gui, Tui}
 
 @main
 def main(): Unit =
-  val controller = Guice.createInjector(new SetModule).getInstance(classOf[IController])
+  val injector = Guice.createInjector(new SetModule)
+  val controller = injector.getInstance(classOf[IController])
   Gui(controller)
   Tui(controller)
