@@ -1,8 +1,8 @@
-package de.htwg.se.set.modelComponent
+package de.htwg.se.set.model.game
 
-import de.htwg.se.set.model.{Color, Symbol, Shading}
-import de.htwg.se.set.model.game.{Card, Triplet}
-import de.htwg.se.set.{model, modelComponent}
+import de.htwg.se.set.model
+import de.htwg.se.set.model.game.base.{Card, Triplet}
+import de.htwg.se.set.model.{Color, Shading, Symbol}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 

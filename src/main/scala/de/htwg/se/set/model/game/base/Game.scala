@@ -1,4 +1,4 @@
-package de.htwg.se.set.model.game
+package de.htwg.se.set.model.game.base
 
 import com.google.inject.Inject
 import com.google.inject.name.Named

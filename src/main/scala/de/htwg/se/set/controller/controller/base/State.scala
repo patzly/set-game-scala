@@ -1,6 +1,6 @@
-package de.htwg.se.set.controller.controller
+package de.htwg.se.set.controller.controller.base
 
-import de.htwg.se.set.controller.*
+import de.htwg.se.set.controller.{IAction, IController, IState, IUserInput}
 import de.htwg.se.set.util.InputUtil.*
 import de.htwg.se.set.util.{InputUtil, PrintUtil}
 
@@ -10,14 +10,14 @@ private class State(controller: IController) extends IState(controller):
 
   def message: String = ""
 
-  def actionFromInput(input: String): IAction = NoAction
+  def actionFromInput(input: String): IAction = NoAction()
 
   def handleInput(input: IUserInput): IAction =
     input match
-      case UndoInput => UndoAction
-      case RedoInput => RedoAction
+      case UndoInput => UndoAction()
+      case RedoInput => RedoAction()
       case InvalidInput(msg) => InvalidAction(msg)
-      case _ => NoAction
+      case _ => NoAction()
 
 case class SettingsState(controller: IController) extends State(controller):
 
@@ -28,9 +28,9 @@ case class SettingsState(controller: IController) extends State(controller):
 
   override def actionFromInput(input: String): IAction =
     InputUtil.intInput(input, 1, 3, controller.canUndo, controller.canRedo, false) match
-      case NumberInput(1) => StartGameAction
-      case NumberInput(2) => GoToPlayerCountAction
-      case NumberInput(3) => SwitchEasyAction
+      case NumberInput(1) => StartGameAction()
+      case NumberInput(2) => GoToPlayerCountAction()
+      case NumberInput(3) => SwitchEasyAction()
       case other => super.handleInput(other)
 
 case class ChangePlayerCountState(controller: IController) extends State(controller):
@@ -56,9 +56,9 @@ case class SelectPlayerState(controller: IController) extends State(controller):
     else
       InputUtil.intInput(input, 0, controller.settings.playerCount, controller.canUndo, controller.canRedo, true)
     userInput match
-      case NumberInput(0) => AddColumnAction
+      case NumberInput(0) => AddColumnAction()
       case NumberInput(number) => SelectPlayerAction(number)
-      case ExitInput => ExitAction
+      case ExitInput => ExitAction()
       case other => super.handleInput(other)
 
 case class GameState(controller: IController) extends State(controller):
@@ -83,7 +83,7 @@ case class GameState(controller: IController) extends State(controller):
   override def actionFromInput(input: String): IAction =
     InputUtil.coordinatesInput(input, controller.canUndo, controller.canRedo) match
       case CoordinatesInput(coordinates) => SelectCardsAction(coordinates)
-      case ExitInput => ExitAction
+      case ExitInput => ExitAction()
       case other => super.handleInput(other)
 
 case class GameEndState(controller: IController) extends State(controller):
@@ -96,5 +96,5 @@ case class GameEndState(controller: IController) extends State(controller):
 
   override def actionFromInput(input: String): IAction =
     InputUtil.finishInput(input, controller.canUndo, controller.canRedo) match
-      case FinishInput => ExitAction
+      case FinishInput => ExitAction()
       case other => super.handleInput(other)

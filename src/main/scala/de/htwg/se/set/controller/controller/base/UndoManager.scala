@@ -1,6 +1,6 @@
-package de.htwg.se.set.controller.controller
+package de.htwg.se.set.controller.controller.base
 
-private class UndoManager:
+class UndoManager:
 
   private var undoStack: List[Command] = List()
   private var redoStack: List[Command] = List()

@@ -1,7 +1,7 @@
 package de.htwg.se.set.view.panel
 
 import de.htwg.se.set.controller.IController
-import de.htwg.se.set.controller.controller.{Controller, ExitAction}
+import de.htwg.se.set.controller.controller.base.{Controller, ExitAction}
 import de.htwg.se.set.util.PanelUtil.CompatButton
 import de.htwg.se.set.util.ResUtil
 
@@ -46,7 +46,7 @@ case class ScorePanel(controller: IController) extends BoxPanel(Orientation.Vert
       border = EmptyBorder(30, 0, 0, 0)
       contents += new CompatButton("FINISH"):
         reactions += {
-          case ButtonClicked(_) => controller.handleAction(ExitAction)
+          case ButtonClicked(_) => controller.handleAction(ExitAction())
         }
         font = scoreFont
         foreground = ResUtil.COLOR_BLUE

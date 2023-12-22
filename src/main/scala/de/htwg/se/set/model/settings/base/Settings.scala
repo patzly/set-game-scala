@@ -1,4 +1,4 @@
-package de.htwg.se.set.model.settings
+package de.htwg.se.set.model.settings.base
 
 import com.google.inject.Inject
 import com.google.inject.name.Named

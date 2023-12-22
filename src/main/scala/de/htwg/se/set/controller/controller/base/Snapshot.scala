@@ -1,4 +1,4 @@
-package de.htwg.se.set.controller.controller
+package de.htwg.se.set.controller.controller.base
 
 import de.htwg.se.set.controller.IState
 import de.htwg.se.set.model.{IGame, ISettings}

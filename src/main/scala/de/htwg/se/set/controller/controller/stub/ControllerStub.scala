@@ -1,11 +1,15 @@
-package de.htwg.se.set.controller.controller
+package de.htwg.se.set.controller.controller.stub
 
-import com.google.inject.{Guice, Inject, Injector}
+import de.htwg.se.set.controller.controller.base.*
 import de.htwg.se.set.controller.{Event, IAction, IController, IState}
-import de.htwg.se.set.model.{GameMode, ICard, IDeck, IGame, IPlayer, ISettings}
-import de.htwg.se.set.module.SetModule
+import de.htwg.se.set.model.*
+import de.htwg.se.set.model.game.stub.GameStub
+import de.htwg.se.set.model.settings.stub.SettingsStub
 
-case class Controller @Inject() (var settings: ISettings, var game: IGame) extends IController:
+case class ControllerStub() extends IController:
+
+  var settings: ISettings = SettingsStub()
+  var game: IGame = GameStub()
 
   private val undoManager = new UndoManager
   private var state: IState = SettingsState(this)
@@ -20,19 +24,19 @@ case class Controller @Inject() (var settings: ISettings, var game: IGame) exten
 
   override def handleAction(action: IAction): Unit =
     action match
-      case StartGameAction => undoManager.executeCommand(StartGameCommand(this))
-      case GoToPlayerCountAction => undoManager.executeCommand(GoToPlayerCountCommand(this))
-      case SwitchEasyAction => undoManager.executeCommand(SwitchEasyCommand(this))
+      case StartGameAction() => undoManager.executeCommand(StartGameCommand(this))
+      case GoToPlayerCountAction() => undoManager.executeCommand(GoToPlayerCountCommand(this))
+      case SwitchEasyAction() => undoManager.executeCommand(SwitchEasyCommand(this))
       case ChangePlayerCountAction(playerCount) => undoManager.executeCommand(ChangePlayerCountCommand(this, playerCount))
       case SelectPlayerAction(number) => undoManager.executeCommand(SelectPlayerCommand(this, number))
-      case AddColumnAction => undoManager.executeCommand(AddColumnCommand(this))
+      case AddColumnAction() => undoManager.executeCommand(AddColumnCommand(this))
       case SelectCardsAction(coordinates) => undoManager.executeCommand(SelectCardsCommand(this, coordinates))
-      case ExitAction => undoManager.executeCommand(ExitCommand(this))
-      case UndoAction => undoManager.undoCommand()
-      case RedoAction => undoManager.redoCommand()
+      case ExitAction() => undoManager.executeCommand(ExitCommand(this))
+      case UndoAction() => undoManager.undoCommand()
+      case RedoAction() => undoManager.redoCommand()
       case _ =>
 
-  override def snapshot: Snapshot = Snapshot(settings, game, state)
+  def snapshot: Snapshot = Snapshot(settings, game, state)
 
   override def restoreSnapshot(snapshot: Snapshot): Unit =
     settings = snapshot.settings

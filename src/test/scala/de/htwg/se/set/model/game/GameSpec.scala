@@ -1,6 +1,6 @@
-package de.htwg.se.set.modelComponent
+package de.htwg.se.set.model.game
 
-import de.htwg.se.set.model.game.{Card, Deck, Game, Grid, Player, Triplet}
+import de.htwg.se.set.model.game.base.*
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 

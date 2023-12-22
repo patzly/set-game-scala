@@ -1,4 +1,4 @@
-package de.htwg.se.set.model.game
+package de.htwg.se.set.model.game.base
 
 import de.htwg.se.set.model.{IPlayer, ITriplet}
 import de.htwg.se.set.util.PrintUtil

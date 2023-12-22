@@ -1,6 +1,6 @@
 package de.htwg.se.set.view
 
-import de.htwg.se.set.controller.controller.InvalidAction
+import de.htwg.se.set.controller.controller.base.InvalidAction
 import de.htwg.se.set.controller.{Event, IAction, IController}
 import de.htwg.se.set.util.{Observer, PrintUtil}
 

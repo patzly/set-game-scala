@@ -1,7 +1,7 @@
 package de.htwg.se.set.view.panel
 
 import de.htwg.se.set.controller.IController
-import de.htwg.se.set.controller.controller.{ChangePlayerCountAction, StartGameAction, SwitchEasyAction}
+import de.htwg.se.set.controller.controller.base.{ChangePlayerCountAction, StartGameAction, SwitchEasyAction}
 import de.htwg.se.set.util.PanelUtil.CompatButton
 import de.htwg.se.set.util.{PanelUtil, ResUtil}
 
@@ -65,7 +65,7 @@ case class SettingsPanel(controller: IController) extends BoxPanel(Orientation.V
     borderPainted = false
     reactions += {
       case ButtonClicked(_) =>
-        controller.handleAction(SwitchEasyAction)
+        controller.handleAction(SwitchEasyAction())
         update()
     }
 
@@ -93,7 +93,7 @@ case class SettingsPanel(controller: IController) extends BoxPanel(Orientation.V
       border = EmptyBorder(30, 0, 0, 0)
       contents += new CompatButton("START GAME"):
         reactions += {
-          case ButtonClicked(_) => controller.handleAction(StartGameAction)
+          case ButtonClicked(_) => controller.handleAction(StartGameAction())
         }
         font = settingsFont
         foreground = ResUtil.COLOR_BLUE

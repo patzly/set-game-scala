@@ -1,7 +1,7 @@
 package de.htwg.se.set.view.panel
 
 import de.htwg.se.set.controller.IController
-import de.htwg.se.set.controller.controller.{AddColumnAction, ExitAction, RedoAction, UndoAction}
+import de.htwg.se.set.controller.controller.base.{AddColumnAction, ExitAction, RedoAction, UndoAction}
 import de.htwg.se.set.model.GameMode.IN_GAME
 import de.htwg.se.set.util.PanelUtil.CompatButton
 import de.htwg.se.set.util.{PanelUtil, ResUtil}
@@ -19,7 +19,7 @@ case class MenuPanel(controller: IController) extends BoxPanel(Orientation.Horiz
     font = menuFont
     reactions += {
       case ButtonClicked(_) =>
-        controller.handleAction(UndoAction)
+        controller.handleAction(UndoAction())
         update()
     }
     
@@ -27,7 +27,7 @@ case class MenuPanel(controller: IController) extends BoxPanel(Orientation.Horiz
     font = menuFont
     reactions += {
       case ButtonClicked(_) =>
-        controller.handleAction(RedoAction)
+        controller.handleAction(RedoAction())
         update()
     }
     
@@ -35,7 +35,7 @@ case class MenuPanel(controller: IController) extends BoxPanel(Orientation.Horiz
     font = menuFont
     reactions += {
       case ButtonClicked(_) =>
-        controller.handleAction(AddColumnAction)
+        controller.handleAction(AddColumnAction())
         update()
     }
 
@@ -43,7 +43,7 @@ case class MenuPanel(controller: IController) extends BoxPanel(Orientation.Horiz
     font = menuFont
     reactions += {
       case ButtonClicked(_) =>
-        controller.handleAction(ExitAction)
+        controller.handleAction(ExitAction())
         update()
     }
 
