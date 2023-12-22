@@ -1,10 +1,12 @@
 package de.htwg.se.set.model.game
 
+import com.google.inject.Inject
+import com.google.inject.name.Named
 import de.htwg.se.set.model.{Color, ICard, IDeck, ITriplet, Shading, Symbol}
 
 import scala.util.Random
 
-case class Deck(easy: Boolean) extends IDeck:
+case class Deck @Inject() (@Named("easy") easy: Boolean) extends IDeck:
 
   val allCards: List[ICard] = (if easy then new EasyCreationStrategy else new NormalCreationStrategy).create
 

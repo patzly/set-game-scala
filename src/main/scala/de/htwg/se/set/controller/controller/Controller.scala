@@ -9,8 +9,6 @@ case class Controller @Inject() (var settings: ISettings, var game: IGame) exten
 
   private val undoManager = new UndoManager
   private var state: IState = SettingsState(this)
-  
-  val injector: Injector = Guice.createInjector(new SetModule)
 
   override def changeState(s: IState): Unit =
     state = s

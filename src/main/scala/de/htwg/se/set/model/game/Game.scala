@@ -1,8 +1,11 @@
 package de.htwg.se.set.model.game
 
+import com.google.inject.Inject
+import com.google.inject.name.Named
 import de.htwg.se.set.model.{ICard, IDeck, IGame, IPlayer}
 
-case class Game(columns: Int, deck: IDeck, tableCards: List[ICard], playersCards: List[ICard],
+case class Game @Inject() (@Named("columns") columns: Int,
+                           deck: IDeck, tableCards: List[ICard], playersCards: List[ICard],
                            players: List[IPlayer], selectedPlayer: Option[IPlayer], message: String = "") extends IGame:
 
   def setColumns(columns: Int): IGame = copy(columns = columns)

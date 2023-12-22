@@ -1,11 +1,15 @@
 package de.htwg.se.set.model.settings
 
+import com.google.inject.Inject
+import com.google.inject.name.Named
 import de.htwg.se.set.model.{GameMode, ISettings}
 import de.htwg.se.set.util.PrintUtil
 
-case class Settings(playerCount: Int, easy: Boolean, mode: GameMode = GameMode.SETTINGS) extends ISettings:
+case class Settings @Inject() (@Named("playerCount") playerCount: Int,
+                               @Named("easy") easy: Boolean,
+                               mode: GameMode = GameMode.SETTINGS) extends ISettings:
 
-  if playerCount < 1 then throw new IllegalArgumentException("Game must have at least one player")
+  if playerCount < 1 then throw IllegalArgumentException("Game must have at least one player")
 
   override def singlePlayer: Boolean = playerCount == 1
 
