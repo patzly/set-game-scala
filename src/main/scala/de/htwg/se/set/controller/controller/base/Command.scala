@@ -6,6 +6,8 @@ import de.htwg.se.set.model.game.base.{Deck, Player, Triplet}
 import de.htwg.se.set.model.{ICard, ITriplet}
 import de.htwg.se.set.util.PrintUtil
 
+import scala.xml.Node
+
 private class Command(controller: IController) extends ICommand(controller):
 
   private var snapshot: Option[Snapshot] = None
@@ -163,3 +165,7 @@ case class ExitCommand(controller: IController) extends Command(controller):
     controller.setGameMode(SETTINGS)
     println(controller.settingsToString)
     controller.changeState(SettingsState(controller))
+
+case class LoadXmlCommand(controller: IController, node: Node) extends Command(controller):
+
+  override def execute(): Unit = controller.restoreSnapshot(Snapshot.fromXml(node, controller))

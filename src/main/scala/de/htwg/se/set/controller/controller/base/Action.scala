@@ -2,6 +2,8 @@ package de.htwg.se.set.controller.controller.base
 
 import de.htwg.se.set.controller.IAction
 
+import scala.xml.Node
+
 case class StartGameAction() extends IAction
 
 case class GoToPlayerCountAction() extends IAction
@@ -17,6 +19,8 @@ case class AddColumnAction() extends IAction
 case class SelectCardsAction(coordinates: List[String]) extends IAction
 
 case class ExitAction() extends IAction
+
+case class LoadXmlAction(node: Node) extends IAction
 
 case class UndoAction() extends IAction
 

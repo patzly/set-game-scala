@@ -5,6 +5,7 @@ import com.google.inject.name.Named
 import de.htwg.se.set.model.{Color, ICard, IDeck, ITriplet, Shading, Symbol}
 
 import scala.util.Random
+import scala.xml.{Elem, Node}
 
 case class Deck @Inject() (@Named("easy") easy: Boolean) extends IDeck:
 
@@ -67,6 +68,11 @@ case class Deck @Inject() (@Named("easy") easy: Boolean) extends IDeck:
     val index = column * tableCards.length / columns + row
     tableCards(index)
 
+  override def toXml: Elem =
+    <deck>
+      <easy>{easy}</easy>
+    </deck>
+
   private trait CreationStrategy:
 
     def create: List[ICard]
@@ -91,3 +97,9 @@ case class Deck @Inject() (@Named("easy") easy: Boolean) extends IDeck:
         symbol <- Symbol.values
       yield Card(number, color, symbol)
       Random.shuffle(all.toList)
+      
+object Deck:
+
+  def fromXml(node: Node): IDeck =
+    val easy = (node \ "easy").text.toBoolean
+    Deck(easy)

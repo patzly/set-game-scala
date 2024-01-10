@@ -3,6 +3,8 @@ package de.htwg.se.set.model.settings.stub
 import de.htwg.se.set.model.GameMode.IN_GAME
 import de.htwg.se.set.model.{GameMode, ISettings}
 
+import scala.xml.Elem
+
 case class SettingsStub() extends ISettings:
 
   override def playerCount: Int = 2
@@ -18,3 +20,5 @@ case class SettingsStub() extends ISettings:
   override def setGameMode(mode: GameMode): ISettings = ???
 
   override def singlePlayer: Boolean = playerCount == 1
+
+  override def toXml: Elem = ???

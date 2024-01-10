@@ -5,6 +5,8 @@ import com.google.inject.name.Named
 import de.htwg.se.set.model.{GameMode, ISettings}
 import de.htwg.se.set.util.PrintUtil
 
+import scala.xml.{Elem, Node}
+
 case class Settings @Inject() (@Named("playerCount") playerCount: Int,
                                @Named("easy") easy: Boolean,
                                mode: GameMode = GameMode.SETTINGS) extends ISettings:
@@ -18,6 +20,13 @@ case class Settings @Inject() (@Named("playerCount") playerCount: Int,
   override def setEasy(easy: Boolean): ISettings = copy(easy = easy)
 
   override def setGameMode(mode: GameMode): ISettings = copy(mode = mode)
+  
+  override def toXml: Elem =
+    <settings>
+      <playerCount>{playerCount}</playerCount>
+      <easy>{easy}</easy>
+      <mode>{mode}</mode>
+    </settings>
 
   override def equals(obj: Any): Boolean = obj match
     case other: Settings => playerCount == other.playerCount && easy == other.easy
@@ -34,3 +43,11 @@ case class Settings @Inject() (@Named("playerCount") playerCount: Int,
     val playersString = if playerCount == 1 then "1 player" else s"$playerCount players"
     val easyString = if easy then "easy mode" else "normal mode"
     PrintUtil.blue(PrintUtil.bold("\nSettings: ") + PrintUtil.yellow(playersString + ", " + easyString))
+
+object Settings:
+  
+  def fromXml(node: Node): Settings =
+    val playerCount = (node \ "playerCount").text.toInt
+    val easy = (node \ "easy").text.toBoolean
+    val mode = GameMode.valueOf((node \ "mode").text)
+    Settings(playerCount, easy, mode)

@@ -46,6 +46,8 @@ case class ControllerStub() extends IController:
     notifyObservers(Event.STATE_CHANGED)
     notifyObservers(Event.GAME_MODE_CHANGED)
 
+  override def saveXml(): Unit = ???
+
   override def canUndo: Boolean = undoManager.canUndo
 
   override def canRedo: Boolean = undoManager.canRedo

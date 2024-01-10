@@ -2,6 +2,8 @@ package de.htwg.se.set.model.game.base
 
 import de.htwg.se.set.model.{ICard, ITriplet}
 
+import scala.xml.{Elem, Node}
+
 case class Triplet(card1: ICard, card2: ICard, card3: ICard) extends ITriplet:
   
   if card1 == card2 || card1 == card3 || card2 == card3 then
@@ -22,6 +24,13 @@ case class Triplet(card1: ICard, card2: ICard, card3: ICard) extends ITriplet:
     val shadingSet = shadingEqual || shadingDifferent
     numberSet && colorSet && symbolSet && shadingSet
 
+  override def toXml: Elem =
+    <triplet>
+      <card1>{card1.toXml}</card1>
+      <card2>{card2.toXml}</card2>
+      <card3>{card3.toXml}</card3>
+    </triplet>
+
   override def toString: String = card1.toString + "+" + card2.toString + "+" + card3.toString
 
   override def equals(obj: Any): Boolean = obj match
@@ -29,3 +38,11 @@ case class Triplet(card1: ICard, card2: ICard, card3: ICard) extends ITriplet:
     case _ => false
 
   override def hashCode: Int = Set(card1, card2, card3).hashCode
+
+object Triplet:
+  
+  def fromXml(node: Node): ITriplet =
+    val card1 = Card.fromXml((node \ "card1").head)
+    val card2 = Card.fromXml((node \ "card2").head)
+    val card3 = Card.fromXml((node \ "card3").head)
+    Triplet(card1, card2, card3)

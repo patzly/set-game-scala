@@ -1,8 +1,10 @@
 package de.htwg.se.set.controller
 
 import de.htwg.se.set.controller.controller.base.Snapshot
-import de.htwg.se.set.model.{GameMode, ICard, IDeck, IGame, IPlayer, ISettings}
+import de.htwg.se.set.model.*
 import de.htwg.se.set.util.Observable
+
+import scala.xml.Elem
 
 trait IController extends Observable:
   
@@ -15,6 +17,7 @@ trait IController extends Observable:
   def handleAction(action: IAction): Unit
   def snapshot: Snapshot
   def restoreSnapshot(snapshot: Snapshot): Unit
+  def saveXml(): Unit
   def canUndo: Boolean
   def canRedo: Boolean
   def setPlayerCount(count: Int): Unit
@@ -48,6 +51,7 @@ trait IState(controller: IController):
   def message: String
   def actionFromInput(input: String): IAction
   def handleInput(input: IUserInput): IAction
+  def toXml: Elem
 
 trait IUserInput
 

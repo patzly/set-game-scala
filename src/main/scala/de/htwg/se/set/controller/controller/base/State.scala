@@ -4,6 +4,8 @@ import de.htwg.se.set.controller.{IAction, IController, IState, IUserInput}
 import de.htwg.se.set.util.InputUtil.*
 import de.htwg.se.set.util.{InputUtil, PrintUtil}
 
+import scala.xml.Elem
+
 private class State(controller: IController) extends IState(controller):
 
   def print(): Unit = ()
@@ -18,6 +20,8 @@ private class State(controller: IController) extends IState(controller):
       case RedoInput => RedoAction()
       case InvalidInput(msg) => InvalidAction(msg)
       case _ => NoAction()
+
+  override def toXml: Elem = <state>{getClass.getSimpleName}</state>
 
 case class SettingsState(controller: IController) extends State(controller):
 

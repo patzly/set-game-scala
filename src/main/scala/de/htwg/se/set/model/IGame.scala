@@ -1,5 +1,7 @@
 package de.htwg.se.set.model
 
+import scala.xml.Elem
+
 trait IGame:
   
   def columns: Int
@@ -17,6 +19,7 @@ trait IGame:
   def setPlayers(players: List[IPlayer]): IGame
   def setSelectedPlayer(selectedPlayer: Option[IPlayer]): IGame
   def setMessage(message: String): IGame
+  def toXml: Elem
 
 trait ICard:
   
@@ -28,6 +31,7 @@ trait ICard:
   
   def select: ICard
   def unselect: ICard
+  def toXml: Elem
 
 trait IDeck:
 
@@ -41,12 +45,14 @@ trait IDeck:
   def selectCards(table: List[ICard], card1: ICard, card2: ICard, card3: ICard): List[ICard]
   def unselectCards(table: List[ICard]): List[ICard]
   def cardAtCoordinate(tableCards: List[ICard], coordinate: String, columns: Int): ICard
+  def toXml: Elem
 
 trait IGrid:
 
   def columns: Int
   def cards: List[ICard]
   def easy: Boolean
+  def toXml: Elem
 
 trait IPlayer:
   
@@ -55,9 +61,9 @@ trait IPlayer:
   def easy: Boolean
   def sets: List[ITriplet]
 
-  def setSets(sets: List[ITriplet]): IPlayer
-  
   def index: Int
+  def setSets(sets: List[ITriplet]): IPlayer
+  def toXml: Elem
 
 trait ITriplet:
 
@@ -66,29 +72,33 @@ trait ITriplet:
   def card3: ICard
 
   def isSet: Boolean
+  def toXml: Elem
 
 enum Color:
+  
   case RED, GREEN, BLUE
-
-  override def toString: String =
+  
+  def short: String =
     this match
       case RED => "R"
       case GREEN => "G"
       case BLUE => "B"
 
 enum Symbol:
+  
   case OVAL, SQUIGGLE, DIAMOND
 
-  override def toString: String =
+  def short: String =
     this match
       case OVAL => "O"
       case SQUIGGLE => "S"
       case DIAMOND => "D"
 
 enum Shading:
+  
   case SOLID, OUTLINED, STRIPED
 
-  override def toString: String =
+  def short: String =
     this match
       case SOLID => "F" // filled
       case OUTLINED => "L" // line
