@@ -1,5 +1,7 @@
 package de.htwg.se.set.model
 
+import play.api.libs.json.{JsError, JsResult, JsSuccess, JsValue, Json, Reads, Writes}
+
 import scala.xml.Elem
 
 trait ISettings:
@@ -13,6 +15,7 @@ trait ISettings:
   def setEasy(easy: Boolean): ISettings
   def setGameMode(mode: GameMode): ISettings
   def toXml: Elem
+  def toJson: JsValue
 
 enum GameMode:
   

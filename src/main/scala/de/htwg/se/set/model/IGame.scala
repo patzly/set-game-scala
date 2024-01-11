@@ -1,5 +1,7 @@
 package de.htwg.se.set.model
 
+import play.api.libs.json.JsValue
+
 import scala.xml.Elem
 
 trait IGame:
@@ -20,6 +22,7 @@ trait IGame:
   def setSelectedPlayer(selectedPlayer: Option[IPlayer]): IGame
   def setMessage(message: String): IGame
   def toXml: Elem
+  def toJson: JsValue
 
 trait ICard:
   
@@ -32,6 +35,7 @@ trait ICard:
   def select: ICard
   def unselect: ICard
   def toXml: Elem
+  def toJson: JsValue
 
 trait IDeck:
 
@@ -46,13 +50,13 @@ trait IDeck:
   def unselectCards(table: List[ICard]): List[ICard]
   def cardAtCoordinate(tableCards: List[ICard], coordinate: String, columns: Int): ICard
   def toXml: Elem
+  def toJson: JsValue
 
 trait IGrid:
 
   def columns: Int
   def cards: List[ICard]
   def easy: Boolean
-  def toXml: Elem
 
 trait IPlayer:
   
@@ -64,6 +68,7 @@ trait IPlayer:
   def index: Int
   def setSets(sets: List[ITriplet]): IPlayer
   def toXml: Elem
+  def toJson: JsValue
 
 trait ITriplet:
 
@@ -73,6 +78,7 @@ trait ITriplet:
 
   def isSet: Boolean
   def toXml: Elem
+  def toJson: JsValue
 
 enum Color:
   

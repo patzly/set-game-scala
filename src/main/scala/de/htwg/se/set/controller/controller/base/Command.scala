@@ -5,6 +5,7 @@ import de.htwg.se.set.model.GameMode.{GAME_END, IN_GAME, SETTINGS}
 import de.htwg.se.set.model.game.base.{Deck, Player, Triplet}
 import de.htwg.se.set.model.{ICard, ITriplet}
 import de.htwg.se.set.util.PrintUtil
+import play.api.libs.json.JsValue
 
 import scala.xml.Node
 
@@ -169,3 +170,7 @@ case class ExitCommand(controller: IController) extends Command(controller):
 case class LoadXmlCommand(controller: IController, node: Node) extends Command(controller):
 
   override def execute(): Unit = controller.restoreSnapshot(Snapshot.fromXml(node, controller))
+
+case class LoadJsonCommand(controller: IController, json: JsValue) extends Command(controller):
+
+  override def execute(): Unit = controller.restoreSnapshot(Snapshot.fromJson(json, controller))

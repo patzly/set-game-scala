@@ -1,6 +1,7 @@
 package de.htwg.se.set.model.game.base
 
 import de.htwg.se.set.model.{ICard, ITriplet}
+import play.api.libs.json.{JsValue, Json, Reads, Writes}
 
 import scala.xml.{Elem, Node}
 
@@ -31,6 +32,12 @@ case class Triplet(card1: ICard, card2: ICard, card3: ICard) extends ITriplet:
       <card3>{card3.toXml}</card3>
     </triplet>
 
+  override def toJson: JsValue = Json.obj(
+    "card1" -> card1.toJson,
+    "card2" -> card2.toJson,
+    "card3" -> card3.toJson
+  )
+
   override def toString: String = card1.toString + "+" + card2.toString + "+" + card3.toString
 
   override def equals(obj: Any): Boolean = obj match
@@ -46,3 +53,11 @@ object Triplet:
     val card2 = Card.fromXml((node \ "card2").head)
     val card3 = Card.fromXml((node \ "card3").head)
     Triplet(card1, card2, card3)
+
+  def fromJson(json: JsValue): ITriplet =
+    val card1 = Card.fromJson((json \ "card1").get)
+    val card2 = Card.fromJson((json \ "card2").get)
+    val card3 = Card.fromJson((json \ "card3").get)
+    Triplet(card1, card2, card3)
+
+  implicit val writes: Writes[ITriplet] = (triplet: ITriplet) => triplet.toJson

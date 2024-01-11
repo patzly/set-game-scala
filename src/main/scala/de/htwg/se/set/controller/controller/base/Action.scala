@@ -1,6 +1,7 @@
 package de.htwg.se.set.controller.controller.base
 
 import de.htwg.se.set.controller.IAction
+import play.api.libs.json.JsValue
 
 import scala.xml.Node
 
@@ -21,6 +22,8 @@ case class SelectCardsAction(coordinates: List[String]) extends IAction
 case class ExitAction() extends IAction
 
 case class LoadXmlAction(node: Node) extends IAction
+
+case class LoadJsonAction(json: JsValue) extends IAction
 
 case class UndoAction() extends IAction
 

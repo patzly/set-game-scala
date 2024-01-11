@@ -3,6 +3,7 @@ package de.htwg.se.set.controller.controller.base
 import de.htwg.se.set.controller.{IAction, IController, IState, IUserInput}
 import de.htwg.se.set.util.InputUtil.*
 import de.htwg.se.set.util.{InputUtil, PrintUtil}
+import play.api.libs.json.{JsValue, Json}
 
 import scala.xml.Elem
 
@@ -22,6 +23,8 @@ private class State(controller: IController) extends IState(controller):
       case _ => NoAction()
 
   override def toXml: Elem = <state>{getClass.getSimpleName}</state>
+
+  override def toJson: JsValue = Json.toJson(getClass.getSimpleName)
 
 case class SettingsState(controller: IController) extends State(controller):
 

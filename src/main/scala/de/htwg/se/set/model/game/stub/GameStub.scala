@@ -2,6 +2,7 @@ package de.htwg.se.set.model.game.stub
 
 import de.htwg.se.set.model.game.base.Deck
 import de.htwg.se.set.model.{ICard, IDeck, IGame, IPlayer}
+import play.api.libs.json.JsValue
 
 import scala.xml.Elem
 
@@ -36,3 +37,5 @@ case class GameStub() extends IGame:
   override def setMessage(message: String): IGame = ???
 
   override def toXml: Elem = ???
+
+  override def toJson: JsValue = ???

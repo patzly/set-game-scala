@@ -3,6 +3,7 @@ package de.htwg.se.set.model.game.base
 import com.google.inject.Inject
 import com.google.inject.name.Named
 import de.htwg.se.set.model.{ICard, IDeck, IGame, IPlayer}
+import play.api.libs.json.{JsValue, Json, Reads, Writes}
 
 import scala.xml.{Elem, Node, NodeSeq, Null}
 
@@ -35,6 +36,16 @@ case class Game @Inject() (@Named("columns") columns: Int,
       <message>{message}</message>
     </game>
 
+  override def toJson: JsValue = Json.obj(
+    "columns" -> Json.toJson(columns),
+    "deck" -> deck.toJson,
+    "tableCards" -> Json.toJson(tableCards)(Writes.seq[ICard](Card.writes)),
+    "playersCards" -> Json.toJson(playersCards)(Writes.seq[ICard](Card.writes)),
+    "players" -> Json.toJson(players)(Writes.seq[IPlayer](Player.writes)),
+    "selectedPlayer" -> selectedPlayer.map(_.toJson),
+    "message" -> Json.toJson(message)
+  )
+
   override def toString: String = "\n" + Grid(columns, tableCards, deck.easy)
 
 object Game:
@@ -48,4 +59,14 @@ object Game:
     val selectedPlayer = (node \ "selectedPlayer").headOption
       .flatMap(n => (n \ "player").headOption.map(Player.fromXml))
     val message = (node \ "message").text
+    Game(columns, deck, tableCards, playersCards, players, selectedPlayer, message)
+    
+  def fromJson(json: JsValue): IGame =
+    val columns = (json \ "columns").as[Int]
+    val deck = Deck.fromJson((json \ "deck").get)
+    val tableCards = (json \ "tableCards").as[List[JsValue]].map(Card.fromJson)
+    val playersCards = (json \ "playersCards").as[List[JsValue]].map(Card.fromJson)
+    val players = (json \ "players").as[List[JsValue]].map(Player.fromJson)
+    val selectedPlayer = (json \ "selectedPlayer").asOpt[IPlayer](Player.reads)
+    val message = (json \ "message").as[String]
     Game(columns, deck, tableCards, playersCards, players, selectedPlayer, message)

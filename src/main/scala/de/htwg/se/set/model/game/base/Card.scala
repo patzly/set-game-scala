@@ -2,6 +2,7 @@ package de.htwg.se.set.model.game.base
 
 import de.htwg.se.set.model.{Color, ICard, Shading, Symbol}
 import de.htwg.se.set.util.PrintUtil
+import play.api.libs.json.{JsError, JsSuccess, JsValue, Json, Reads, Writes}
 
 import scala.xml.{Elem, Node}
 
@@ -44,6 +45,14 @@ object Card:
         <selected>{selected}</selected>
       </card>
 
+    override def toJson: JsValue = Json.obj(
+      "number" -> Json.toJson(number),
+      "color" -> Json.toJson(color.toString),
+      "symbol" -> Json.toJson(symbol.toString),
+      "shading" -> Json.toJson(shading.toString),
+      "selected" -> Json.toJson(selected)
+    )
+
     override def toString: String =
       val string = s"$number${color.short}${symbol.short}${shading.short}"
       if selected then PrintUtil.cyan(string) else PrintUtil.yellow(string)
@@ -62,6 +71,13 @@ object Card:
         <symbol>{symbol}</symbol>
         <selected>{selected}</selected>
       </card>
+
+    override def toJson: JsValue = Json.obj(
+      "number" -> Json.toJson(number),
+      "color" -> Json.toJson(color.toString),
+      "symbol" -> Json.toJson(symbol.toString),
+      "selected" -> Json.toJson(selected)
+    )
 
     override def toString: String =
       val string = s"$number${color.short}${symbol.short}"
@@ -84,3 +100,17 @@ object Card:
         NormalCard(number, color, symbol, shading, selected)
       case None =>
         EasyCard(number, color, symbol, selected)
+
+  def fromJson(json: JsValue): ICard =
+    val number = (json \ "number").get.as[Int]
+    val color = Color.valueOf((json \ "color").get.as[String])
+    val symbol = Symbol.valueOf((json \ "symbol").get.as[String])
+    val selected = (json \ "selected").get.as[Boolean]
+    (json \ "shading").validate[String] match
+      case JsSuccess(shadingStr, _) =>
+        val shading = Shading.valueOf(shadingStr)
+        NormalCard(number, color, symbol, shading, selected)
+      case JsError(_) =>
+        EasyCard(number, color, symbol, selected)
+
+  implicit val writes: Writes[ICard] = (card: ICard) => card.toJson

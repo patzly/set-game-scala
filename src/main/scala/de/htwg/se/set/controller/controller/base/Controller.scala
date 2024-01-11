@@ -3,7 +3,12 @@ package de.htwg.se.set.controller.controller.base
 import com.google.inject.Inject
 import de.htwg.se.set.controller.{Event, IAction, IController, IState}
 import de.htwg.se.set.model.*
+import play.api.libs.json.Json
 
+import java.nio.charset.StandardCharsets
+import java.nio.file.{Files, Paths}
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import scala.xml.{PrettyPrinter, XML}
 
 case class Controller @Inject() (var settings: ISettings, var game: IGame) extends IController:
@@ -30,6 +35,7 @@ case class Controller @Inject() (var settings: ISettings, var game: IGame) exten
       case SelectCardsAction(coordinates) => undoManager.executeCommand(SelectCardsCommand(this, coordinates))
       case ExitAction() => undoManager.executeCommand(ExitCommand(this))
       case LoadXmlAction(node) => undoManager.executeCommand(LoadXmlCommand(this, node))
+      case LoadJsonAction(json) => undoManager.executeCommand(LoadJsonCommand(this, json))
       case UndoAction() => undoManager.undoCommand()
       case RedoAction() => undoManager.redoCommand()
       case _ =>
@@ -44,9 +50,12 @@ case class Controller @Inject() (var settings: ISettings, var game: IGame) exten
     notifyObservers(Event.STATE_CHANGED)
     notifyObservers(Event.GAME_MODE_CHANGED)
 
-  override def saveXml(): Unit =
-    val name = "set_game_state.xml"
-    XML.save(name, XML.loadString(PrettyPrinter(100, 2).format(snapshot.toXml)), "UTF-8", true, null)
+  override def save(): Unit =
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm")
+    val date = formatter.format(LocalDateTime.now)
+    val name = s"set_$date"
+    XML.save(name + ".xml", XML.loadString(PrettyPrinter(100, 2).format(snapshot.toXml)), "UTF-8", true, null)
+    Files.write(Paths.get(name + ".json"), Json.prettyPrint(snapshot.toJson).getBytes(StandardCharsets.UTF_8))
 
   override def canUndo: Boolean = undoManager.canUndo
 

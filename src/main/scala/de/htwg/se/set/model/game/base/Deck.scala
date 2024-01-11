@@ -3,6 +3,7 @@ package de.htwg.se.set.model.game.base
 import com.google.inject.Inject
 import com.google.inject.name.Named
 import de.htwg.se.set.model.{Color, ICard, IDeck, ITriplet, Shading, Symbol}
+import play.api.libs.json.{JsError, JsObject, JsResult, JsSuccess, JsValue, Json, OWrites, Reads, Writes}
 
 import scala.util.Random
 import scala.xml.{Elem, Node}
@@ -73,6 +74,8 @@ case class Deck @Inject() (@Named("easy") easy: Boolean) extends IDeck:
       <easy>{easy}</easy>
     </deck>
 
+  override def toJson: JsValue = Json.obj("easy" -> Json.toJson(easy))
+
   private trait CreationStrategy:
 
     def create: List[ICard]
@@ -102,4 +105,8 @@ object Deck:
 
   def fromXml(node: Node): IDeck =
     val easy = (node \ "easy").text.toBoolean
+    Deck(easy)
+
+  def fromJson(json: JsValue): IDeck =
+    val easy = (json \ "easy").as[Boolean]
     Deck(easy)

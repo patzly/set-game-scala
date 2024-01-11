@@ -2,8 +2,6 @@ package de.htwg.se.set.model.game.base
 
 import de.htwg.se.set.model.{ICard, IGrid}
 
-import scala.xml.{Elem, Node}
-
 case class Grid(columns: Int, cards: List[ICard], easy: Boolean) extends IGrid:
 
   if columns * 3 != cards.length then
@@ -16,13 +14,6 @@ case class Grid(columns: Int, cards: List[ICard], easy: Boolean) extends IGrid:
 
   private def line(columns: Int): String = "──" + ("┼" + "─" * columnWidth) * columns
 
-  def toXml: Elem =
-    <grid>
-      <columns>{columns}</columns>
-      <cards>{cards.map(_.toXml)}</cards>
-      <easy>{easy}</easy>
-    </grid>
-
   override def toString: String =
     val result = new StringBuilder(legend(columns) + "\n")
     for rowIndex <- 0 until 3 do
@@ -33,11 +24,3 @@ case class Grid(columns: Int, cards: List[ICard], easy: Boolean) extends IGrid:
         result.append("│" + (if cardIndex < cards.length then cards(cardIndex).toString else " " * columnWidth))
       result.append("\n")
     result.toString
-
-object Grid:
-  
-  def fromXml(node: Node): IGrid =
-    val columns = (node \ "columns").text.toInt
-    val cards = (node \ "cards" \ "card").map(Card.fromXml).toList
-    val easy = (node \ "easy").text.toBoolean
-    Grid(columns, cards, easy)

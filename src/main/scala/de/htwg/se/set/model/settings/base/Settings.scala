@@ -4,6 +4,7 @@ import com.google.inject.Inject
 import com.google.inject.name.Named
 import de.htwg.se.set.model.{GameMode, ISettings}
 import de.htwg.se.set.util.PrintUtil
+import play.api.libs.json.{JsValue, Json}
 
 import scala.xml.{Elem, Node}
 
@@ -28,6 +29,12 @@ case class Settings @Inject() (@Named("playerCount") playerCount: Int,
       <mode>{mode}</mode>
     </settings>
 
+  override def toJson: JsValue = Json.obj(
+    "playerCount" -> Json.toJson(playerCount),
+    "easy" -> Json.toJson(easy),
+    "mode" -> Json.toJson(mode.toString)
+  )
+
   override def equals(obj: Any): Boolean = obj match
     case other: Settings => playerCount == other.playerCount && easy == other.easy
     case _ => false
@@ -50,4 +57,10 @@ object Settings:
     val playerCount = (node \ "playerCount").text.toInt
     val easy = (node \ "easy").text.toBoolean
     val mode = GameMode.valueOf((node \ "mode").text)
+    Settings(playerCount, easy, mode)
+
+  def fromJson(json: JsValue): Settings =
+    val playerCount = (json \ "playerCount").get.as[Int]
+    val easy = (json \ "easy").get.as[Boolean]
+    val mode = GameMode.valueOf((json \ "mode").get.as[String])
     Settings(playerCount, easy, mode)
