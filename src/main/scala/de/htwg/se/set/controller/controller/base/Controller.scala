@@ -7,9 +7,10 @@ import play.api.libs.json.Json
 
 import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Paths}
+import java.security.MessageDigest
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import scala.xml.{PrettyPrinter, XML}
+import scala.xml.{Elem, PrettyPrinter, Utility, XML}
 
 case class Controller @Inject() (var settings: ISettings, var game: IGame) extends IController:
 
@@ -53,9 +54,28 @@ case class Controller @Inject() (var settings: ISettings, var game: IGame) exten
   override def save(): Unit =
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm")
     val date = formatter.format(LocalDateTime.now)
-    val name = s"set_$date"
-    XML.save(name + ".xml", XML.loadString(PrettyPrinter(100, 2).format(snapshot.toXml)), "UTF-8", true, null)
-    Files.write(Paths.get(name + ".json"), Json.prettyPrint(snapshot.toJson).getBytes(StandardCharsets.UTF_8))
+    val name = s"progress_$date"
+    saveXml(name)
+    saveJson(name)
+
+  private def saveXml(name: String): Unit =
+    val xmlSnapshot = snapshot.toXml
+    val hash = Snapshot.hash(Utility.trim(XML.loadString(xmlSnapshot.toString)).toString)
+    val xml =
+      <progress>
+        <hash>{hash}</hash>
+        {xmlSnapshot}
+      </progress>
+    XML.save(name + ".xml", XML.loadString(PrettyPrinter(100, 2).format(xml)), "UTF-8", true, null)
+
+  private def saveJson(name: String): Unit =
+    val jsonSnapshot = snapshot.toJson
+    val hash = Snapshot.hash(Json.stringify(jsonSnapshot))
+    val json = Json.obj(
+      "hash" -> hash,
+      "snapshot" -> jsonSnapshot
+    )
+    Files.write(Paths.get(name + ".json"), Json.prettyPrint(json).getBytes(StandardCharsets.UTF_8))
 
   override def canUndo: Boolean = undoManager.canUndo
 

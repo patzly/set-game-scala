@@ -6,6 +6,7 @@ import de.htwg.se.set.model.settings.base.Settings
 import de.htwg.se.set.model.{IGame, ISettings}
 import play.api.libs.json.{JsValue, Json}
 
+import java.security.MessageDigest
 import scala.xml.{Elem, Node}
 
 case class Snapshot(settings: ISettings, game: IGame, state: IState) extends ISnapshot:
@@ -48,3 +49,8 @@ object Snapshot:
       case "GameEndState" => GameEndState(controller)
       case _ => throw IllegalArgumentException("Invalid state")
     Snapshot(settings, game, state)
+
+  def hash(input: String): String =
+    val md = MessageDigest.getInstance("SHA-256")
+    val hashBytes = md.digest(input.getBytes("UTF-8"))
+    hashBytes.map("%02x".format(_)).mkString

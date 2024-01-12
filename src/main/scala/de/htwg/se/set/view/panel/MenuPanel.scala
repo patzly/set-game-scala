@@ -94,7 +94,9 @@ case class MenuPanel(controller: IController) extends BoxPanel(Orientation.Horiz
   def update(): Unit =
     undoButton.enabled = controller.canUndo
     redoButton.enabled = controller.canRedo
-    addButton.enabled = controller.game.selectedPlayer.isEmpty
+    val setsAvailable = controller.game.deck.findSets(controller.game.tableCards).nonEmpty
+    addButton.enabled = controller.game.selectedPlayer.isEmpty && 
+      (controller.game.columns < 6 || (controller.game.columns >= 6 && !setsAvailable))
     addButton.visible = controller.settings.mode == IN_GAME && !controller.settings.singlePlayer
     exitButton.visible = controller.settings.mode == IN_GAME
 

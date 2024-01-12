@@ -5,9 +5,9 @@ import de.htwg.se.set.model.GameMode.{GAME_END, IN_GAME, SETTINGS}
 import de.htwg.se.set.model.game.base.{Deck, Player, Triplet}
 import de.htwg.se.set.model.{ICard, ITriplet}
 import de.htwg.se.set.util.PrintUtil
-import play.api.libs.json.JsValue
+import play.api.libs.json.{JsValue, Json}
 
-import scala.xml.Node
+import scala.xml.{Node, Utility}
 
 private class Command(controller: IController) extends ICommand(controller):
 
@@ -71,14 +71,19 @@ case class AddColumnCommand(controller: IController) extends Command(controller)
     val cardsAdded = controller.game.deck.tableCards(
       controller.game.columns, controller.game.tableCards, controller.game.playersCards
     )
-    if cardsAdded.length > controller.game.tableCards.length then
+    val cardsAvailable = cardsAdded.length > controller.game.tableCards.length
+    val setsAvailable = controller.game.deck.findSets(controller.game.tableCards).nonEmpty
+    if cardsAvailable && controller.game.columns <= 6 then
       val msg = "One column of cards added to the table."
       println(msg)
       controller.setMessage(msg)
       controller.setTableCards(cardsAdded)
       controller.changeState(SelectPlayerState(controller))
-    else if controller.game.deck.findSets(controller.game.tableCards).nonEmpty then
-      val msg = "No more cards left, but there still is at least one SET to be found!"
+    else if setsAvailable then
+      val msg = if cardsAvailable && controller.game.columns > 6 then
+        "Maximum number of columns reached, but there still is at least one SET to be found!"
+      else
+        "No more cards left, but there still is at least one SET to be found!"
       println(PrintUtil.red(msg + "\n"))
       controller.setMessage(msg)
       controller.removeColumn()
@@ -169,8 +174,20 @@ case class ExitCommand(controller: IController) extends Command(controller):
 
 case class LoadXmlCommand(controller: IController, node: Node) extends Command(controller):
 
-  override def execute(): Unit = controller.restoreSnapshot(Snapshot.fromXml(node, controller))
+  override def execute(): Unit =
+    val hash = (node \ "hash").text
+    val xmlSnapshot = (node \ "snapshot").head
+    if hash == Snapshot.hash(Utility.trim(xmlSnapshot).toString) then
+      controller.restoreSnapshot(Snapshot.fromXml(xmlSnapshot, controller))
+    else
+      println(PrintUtil.red("Invalid XML progress file!"))
 
 case class LoadJsonCommand(controller: IController, json: JsValue) extends Command(controller):
 
-  override def execute(): Unit = controller.restoreSnapshot(Snapshot.fromJson(json, controller))
+  override def execute(): Unit =
+    val hash = (json \ "hash").get.as[String]
+    val jsonSnapshot = (json \ "snapshot").get
+    if hash == Snapshot.hash(Json.stringify(jsonSnapshot)) then
+      controller.restoreSnapshot(Snapshot.fromJson(jsonSnapshot, controller))
+    else
+      println(PrintUtil.red("Invalid JSON progress file!"))
