@@ -24,7 +24,7 @@ If two cards are the same and one card is different in any feature, then it is n
 
 ## License
 
-Copyright &copy; 2024 Matthias Elbel & Patrick Zedler. All rights reserved.
+Copyright &copy; 2023-2024 Matthias Elbel & Patrick Zedler. All rights reserved.
 
 [GNU General Public License version 3](https://www.gnu.org/licenses/gpl.txt)
 
