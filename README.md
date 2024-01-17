@@ -22,6 +22,20 @@ If two cards are the same and one card is different in any feature, then it is n
 * "Easy start" mode
 * Interactive GUI, game state representation as text-based UI
 
+## Docker
+
+You can run the SET game in a Docker container. To do so, you need to have Docker installed on your machine. Then run the following command in the root directory of the project:
+
+```bash
+docker run -it set-game-scala
+```
+
+If you are on Windows or Linux, you can run the following command instead to enable the GUI:
+
+```bash
+docker run -it -e HEADLESS=false set-game-scala
+```
+
 ## License
 
 Copyright &copy; 2023-2024 Matthias Elbel & Patrick Zedler. All rights reserved.
