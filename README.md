@@ -24,16 +24,23 @@ If two cards are the same and one card is different in any feature, then it is n
 
 ## Docker
 
-You can run the SET game in a Docker container. To do so, you need to have Docker installed on your machine. Then run the following command in the root directory of the project:
+You can run SET in a Docker container. To do so, you need to have Docker installed on your machine.  
+First build the Docker image by running the following command in the root directory of the project:
+
+```bash
+docker build -t set-game-scala .
+```
+
+Then you can run the game by executing the following command:
 
 ```bash
 docker run -it set-game-scala
 ```
 
-If you are on Windows or Linux, you can run the following command instead to enable the GUI:
+On macOS, you need to run the following command instead to disable the GUI as macOS does not support X11:
 
 ```bash
-docker run -it -e HEADLESS=false set-game-scala
+docker run -it -e HEADLESS=true set-game-scala
 ```
 
 ## License
