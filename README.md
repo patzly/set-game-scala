@@ -40,7 +40,7 @@ docker run -it set-game-scala
 On Linux, you can run the following command instead to enable the GUI:
 
 ```bash
-docker run -it -e HEADLESS=false -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix set-game-scala
+sudo docker run -it -e HEADLESS=false -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix set-game-scala
 ```
 
 ## License
