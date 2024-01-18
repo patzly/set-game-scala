@@ -37,10 +37,10 @@ Then you can run the game by executing the following command:
 docker run -it set-game-scala
 ```
 
-On macOS, you need to run the following command instead to disable the GUI as macOS does not support X11:
+On Linux, you can run the following command instead to enable the GUI:
 
 ```bash
-docker run -it -e HEADLESS=true set-game-scala
+docker run -it -e HEADLESS=false -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix set-game-scala
 ```
 
 ## License
