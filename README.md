@@ -18,18 +18,18 @@ If two cards are the same and one card is different in any feature, then it is n
 
 In easy mode, the game starts with 9 cards instead of 12 and without the shading feature. This makes it easier to find a SET.
 
+## Features
+
+* Singleplayer/Multiplayer mode
+* "Easy start" mode
+* Interactive GUI, game state representation as text-based UI
+
 ## Screenshots
 
 <a href="https://raw.githubusercontent.com/patzly/set-game-scala/main/assets/screen_1.png"><img src="assets/screen_1.png" width="250px"/></a>
 <a href="https://raw.githubusercontent.com/patzly/set-game-scala/main/assets/screen_2.png"><img src="assets/screen_2.png" width="250px"/></a>
 <a href="https://raw.githubusercontent.com/patzly/set-game-scala/main/assets/screen_3.png"><img src="assets/screen_3.png" width="250px"/></a>  
 <a href="https://raw.githubusercontent.com/patzly/set-game-scala/main/assets/screen_4.png"><img src="assets/screen_4.png" width="400px"/></a>
-
-## Features
-
-* Singleplayer/Multiplayer mode
-* "Easy start" mode
-* Interactive GUI, game state representation as text-based UI
 
 ## Docker
 
