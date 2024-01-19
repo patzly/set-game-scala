@@ -48,7 +48,6 @@ class CardsPanel(controller: IController, rows: Int, columns: Int) extends GridP
             val row = index / columns
             (col + 'A').toChar.toString + (row + 1).toString
           }).toList
-          println(selectedCoordinates)
           controller.handleAction(SelectCardsAction(selectedCoordinates))
     }
     contents += cardButton
