@@ -37,9 +37,10 @@ Then you can run the game by executing the following command:
 docker run -it set-game-scala
 ```
 
-On Linux, you can run the following command instead to enable the GUI:
+On Linux, you can execute the following commands instead to run the game with enabled GUI:
 
 ```bash
+sudo sxhost +local:docker
 sudo docker run -it -e HEADLESS=false -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix set-game-scala
 ```
 
