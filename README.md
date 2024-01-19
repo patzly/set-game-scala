@@ -16,13 +16,14 @@ The object of the game is to identify a 'SET' of three cards from 12 cards place
 A set contains of three cards in which each of the cards' features, looked at one-by-one, are the same on each card, or, are different on each card.
 If two cards are the same and one card is different in any feature, then it is not a SET. A SET must be either all the same or all different in each individual feature.
 
+In easy mode, the game starts with 9 cards instead of 12 and without the shading feature. This makes it easier to find a SET.
+
 ## Screenshots
 
 <a href="https://raw.githubusercontent.com/patzly/set-game-scala/main/assets/screen1.png"><img src="assets/screen1.png" width="150px"/></a>
 <a href="https://raw.githubusercontent.com/patzly/set-game-scala/main/assets/screen2.png"><img src="assets/screen2.png" width="150px"/></a>
 <a href="https://raw.githubusercontent.com/patzly/set-game-scala/main/assets/screen3.png"><img src="assets/screen3.png" width="150px"/></a>
 <a href="https://raw.githubusercontent.com/patzly/set-game-scala/main/assets/screen4.png"><img src="assets/screen4.png" width="150px"/></a>
-<a href="https://raw.githubusercontent.com/patzly/set-game-scala/main/assets/screen5.png"><img src="assets/screen5.png" width="150px"/></a>
 
 ## Features
 
