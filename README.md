@@ -20,10 +20,10 @@ In easy mode, the game starts with 9 cards instead of 12 and without the shading
 
 ## Screenshots
 
-<a href="https://raw.githubusercontent.com/patzly/set-game-scala/main/assets/screen_1.png"><img src="assets/screen_1.png" width="200px"/></a>
-<a href="https://raw.githubusercontent.com/patzly/set-game-scala/main/assets/screen_2.png"><img src="assets/screen_2.png" width="200px"/></a>
-<a href="https://raw.githubusercontent.com/patzly/set-game-scala/main/assets/screen_3.png"><img src="assets/screen_3.png" width="200px"/></a>  
-<a href="https://raw.githubusercontent.com/patzly/set-game-scala/main/assets/screen_4.png"><img src="assets/screen_4.png" width="200px"/></a>
+<a href="https://raw.githubusercontent.com/patzly/set-game-scala/main/assets/screen_1.png"><img src="assets/screen_1.png" width="300px"/></a>
+<a href="https://raw.githubusercontent.com/patzly/set-game-scala/main/assets/screen_2.png"><img src="assets/screen_2.png" width="300px"/></a>
+<a href="https://raw.githubusercontent.com/patzly/set-game-scala/main/assets/screen_3.png"><img src="assets/screen_3.png" width="300px"/></a>  
+<a href="https://raw.githubusercontent.com/patzly/set-game-scala/main/assets/screen_4.png"><img src="assets/screen_4.png" width="500px"/></a>
 
 ## Features
 
