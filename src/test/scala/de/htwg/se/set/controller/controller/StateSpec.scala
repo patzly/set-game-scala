@@ -1,14 +1,23 @@
 package de.htwg.se.set.controller.controller
 
-import de.htwg.se.set.controller.controller.base.{InvalidAction, *}
-import de.htwg.se.set.controller.controller.stub.ControllerStub
+import de.htwg.se.set.controller.controller.base.*
+import de.htwg.se.set.model.game.{Deck, Game, Player}
+import de.htwg.se.set.model.settings.Settings
 import de.htwg.se.set.util.InputUtil
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
 class StateSpec extends AnyWordSpec with Matchers:
 
-  private val controller = ControllerStub()
+  private def controller =
+    val settings = Settings(2, false)
+    val columns = 3
+    val easy = false
+    val deck = Deck(easy)
+    val cards = deck.tableCards(columns, List(), List())
+    val players = List(Player(1, false, easy, List()), Player(2, false, easy, List()))
+    val game = Game(columns, deck, cards, List(), players, None)
+    Controller(settings, game)
 
   "A SettingsState" should:
     val state = SettingsState(controller)

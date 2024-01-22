@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<progress>
+  <hash>8bd0d93049a8bb327db6fcdc580ede81361d89447df96afb655297fe1a18b0d7</hash>
+  <snapshot>
+    <settings>
+      <playerCount>1</playerCount>
+      <easy>false</easy>
+      <mode>SETTINGS</mode>
+    </settings>
+    <game>
+      <columns>4</columns>
+      <deck>
+        <easy>false</easy>
+      </deck>
+      <tableCards/>
+      <playersCards/>
+      <players/>
+      <selectedPlayer/>
+      <message/>
+    </game>
+    <state>SettingsState</state>
+  </snapshot>
+</progress>

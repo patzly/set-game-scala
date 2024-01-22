@@ -1,4 +1,4 @@
-package de.htwg.se.set.model.game.base
+package de.htwg.se.set.model.game
 
 import de.htwg.se.set.model.{ICard, ITriplet}
 import play.api.libs.json.{JsValue, Json, Reads, Writes}

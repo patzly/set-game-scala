@@ -1,0 +1,22 @@
+{
+  "hash" : "91bea172a951eb0652bae3f59ac4e83ff7a7dc45928daa37469beb3890200447",
+  "snapshot" : {
+    "settings" : {
+      "playerCount" : 2,
+      "easy" : false,
+      "mode" : "SETTINGS"
+    },
+    "game" : {
+      "columns" : 4,
+      "deck" : {
+        "easy" : false
+      },
+      "tableCards" : [ ],
+      "playersCards" : [ ],
+      "players" : [ ],
+      "selectedPlayer" : null,
+      "message" : ""
+    },
+    "state" : "SettingsState"
+  }
+}

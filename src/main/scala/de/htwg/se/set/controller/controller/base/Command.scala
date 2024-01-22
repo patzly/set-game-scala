@@ -2,14 +2,14 @@ package de.htwg.se.set.controller.controller.base
 
 import de.htwg.se.set.controller.{ICommand, IController}
 import de.htwg.se.set.model.GameMode.{GAME_END, IN_GAME, SETTINGS}
-import de.htwg.se.set.model.game.base.{Deck, Player, Triplet}
+import de.htwg.se.set.model.game.{Deck, Player, Triplet}
 import de.htwg.se.set.model.{ICard, ITriplet}
 import de.htwg.se.set.util.PrintUtil
 import play.api.libs.json.{JsValue, Json}
 
 import scala.xml.{Node, Utility}
 
-private class Command(controller: IController) extends ICommand(controller):
+class Command(controller: IController) extends ICommand(controller):
 
   private var snapshot: Option[Snapshot] = None
 

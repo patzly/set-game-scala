@@ -3,8 +3,8 @@ package de.htwg.se.set.controller.controller
 import de.htwg.se.set.controller.Event
 import de.htwg.se.set.controller.controller.base.Controller
 import de.htwg.se.set.model
-import de.htwg.se.set.model.game.base.*
-import de.htwg.se.set.model.settings.base.Settings
+import de.htwg.se.set.model.game.{Card, Deck, Game, Player, Triplet}
+import de.htwg.se.set.model.settings.Settings
 import de.htwg.se.set.model.{Color, Symbol}
 import de.htwg.se.set.util.*
 import org.scalatest.BeforeAndAfter

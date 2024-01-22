@@ -1,8 +1,8 @@
-package de.htwg.se.set.model.game.base
+package de.htwg.se.set.model.game
 
 import de.htwg.se.set.model.{Color, ICard, Shading, Symbol}
 import de.htwg.se.set.util.PrintUtil
-import play.api.libs.json.{JsError, JsSuccess, JsValue, Json, Reads, Writes}
+import play.api.libs.json.*
 
 import scala.xml.{Elem, Node}
 

@@ -1,8 +1,8 @@
 package de.htwg.se.set.controller.controller.base
 
 import de.htwg.se.set.controller.{IController, ISnapshot, IState}
-import de.htwg.se.set.model.game.base.Game
-import de.htwg.se.set.model.settings.base.Settings
+import de.htwg.se.set.model.game.Game
+import de.htwg.se.set.model.settings.Settings
 import de.htwg.se.set.model.{IGame, ISettings}
 import play.api.libs.json.{JsValue, Json}
 
