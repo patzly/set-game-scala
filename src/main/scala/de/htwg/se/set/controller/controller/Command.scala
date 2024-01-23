@@ -1,4 +1,4 @@
-package de.htwg.se.set.controller.controller.base
+package de.htwg.se.set.controller.controller
 
 import de.htwg.se.set.controller.{ICommand, IController}
 import de.htwg.se.set.model.GameMode.{GAME_END, IN_GAME, SETTINGS}

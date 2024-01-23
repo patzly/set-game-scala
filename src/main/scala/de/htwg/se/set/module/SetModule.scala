@@ -3,7 +3,7 @@ package de.htwg.se.set.module
 import com.google.inject.AbstractModule
 import com.google.inject.name.Names
 import de.htwg.se.set.controller.IController
-import de.htwg.se.set.controller.controller.base.Controller
+import de.htwg.se.set.controller.controller.Controller
 import de.htwg.se.set.model.game.{Deck, Game}
 import de.htwg.se.set.model.settings.Settings
 import de.htwg.se.set.model.{GameMode, ICard, IDeck, IGame, IPlayer, ISettings}

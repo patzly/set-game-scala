@@ -1,7 +1,7 @@
 package de.htwg.se.set.view.panel
 
 import de.htwg.se.set.controller.IController
-import de.htwg.se.set.controller.controller.base.{Controller, ExitAction}
+import de.htwg.se.set.controller.controller.{Controller, ExitAction}
 import de.htwg.se.set.util.PanelUtil.CompatButton
 import de.htwg.se.set.util.ResUtil
 

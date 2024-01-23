@@ -1,4 +1,4 @@
-package de.htwg.se.set.controller.controller.base
+package de.htwg.se.set.controller.controller
 
 import de.htwg.se.set.controller.{IAction, IController, IState, IUserInput}
 import de.htwg.se.set.util.InputUtil.*

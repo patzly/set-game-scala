@@ -1,6 +1,5 @@
 package de.htwg.se.set.controller.controller
 
-import de.htwg.se.set.controller.controller.base.*
 import de.htwg.se.set.model.game.{Deck, Game, Player}
 import de.htwg.se.set.model.settings.Settings
 import de.htwg.se.set.util.InputUtil

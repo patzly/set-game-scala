@@ -1,7 +1,7 @@
 package de.htwg.se.set.view.panel
 
 import de.htwg.se.set.controller.IController
-import de.htwg.se.set.controller.controller.base.{ChangePlayerCountAction, StartGameAction, SwitchEasyAction}
+import de.htwg.se.set.controller.controller.{ChangePlayerCountAction, StartGameAction, SwitchEasyAction}
 import de.htwg.se.set.util.PanelUtil.CompatButton
 import de.htwg.se.set.util.{PanelUtil, ResUtil}
 

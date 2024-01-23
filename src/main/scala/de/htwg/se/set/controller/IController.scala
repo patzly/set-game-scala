@@ -1,6 +1,6 @@
 package de.htwg.se.set.controller
 
-import de.htwg.se.set.controller.controller.base.Snapshot
+import de.htwg.se.set.controller.controller.Snapshot
 import de.htwg.se.set.model.*
 import de.htwg.se.set.util.Observable
 import play.api.libs.json.JsValue

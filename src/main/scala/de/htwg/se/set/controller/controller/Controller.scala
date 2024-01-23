@@ -1,4 +1,4 @@
-package de.htwg.se.set.controller.controller.base
+package de.htwg.se.set.controller.controller
 
 import com.google.inject.Inject
 import de.htwg.se.set.controller.{Event, IAction, IController, IState}
