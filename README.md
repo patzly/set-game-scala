@@ -13,7 +13,7 @@ The object of the game is to identify a 'SET' of three cards from 12 cards place
 * **Shading:** solid, striped, outlined
 * **Color:** red, green, purple
 
-A set contains of three cards in which each of the cards' features, looked at one-by-one, are the same on each card, or, are different on each card.
+A SET contains of three cards in which each of the cards' features, looked at one-by-one, are the same on each card, or, are different on each card.
 If two cards are the same and one card is different in any feature, then it is not a SET. A SET must be either all the same or all different in each individual feature.
 
 In easy mode, the game starts with 9 cards instead of 12 and without the shading feature. This makes it easier to find a SET.
