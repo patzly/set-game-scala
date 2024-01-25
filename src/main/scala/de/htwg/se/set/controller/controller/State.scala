@@ -7,7 +7,7 @@ import play.api.libs.json.{JsValue, Json}
 
 import scala.xml.Elem
 
-private class State(controller: IController) extends IState(controller):
+private class State extends IState:
 
   def print(): Unit = ()
 
@@ -26,7 +26,7 @@ private class State(controller: IController) extends IState(controller):
 
   override def toJson: JsValue = Json.toJson(getClass.getSimpleName)
 
-case class SettingsState(controller: IController) extends State(controller):
+case class SettingsState(controller: IController) extends State:
 
   override def print(): Unit =
     println(PrintUtil.bold("1") + " Start game")
@@ -40,7 +40,7 @@ case class SettingsState(controller: IController) extends State(controller):
       case NumberInput(3) => SwitchEasyAction()
       case other => super.handleInput(other)
 
-case class ChangePlayerCountState(controller: IController) extends State(controller):
+case class ChangePlayerCountState(controller: IController) extends State:
 
   override def print(): Unit = println("Enter number of players:")
 
@@ -49,7 +49,7 @@ case class ChangePlayerCountState(controller: IController) extends State(control
       case NumberInput(number) => ChangePlayerCountAction(number)
       case other => super.handleInput(other)
 
-case class SelectPlayerState(controller: IController) extends State(controller):
+case class SelectPlayerState(controller: IController) extends State:
 
   override def print(): Unit =
     if !controller.settings.singlePlayer then
@@ -68,7 +68,7 @@ case class SelectPlayerState(controller: IController) extends State(controller):
       case ExitInput => ExitAction()
       case other => super.handleInput(other)
 
-case class GameState(controller: IController) extends State(controller):
+case class GameState(controller: IController) extends State:
   
   private def player =
     controller.game.selectedPlayer match 
@@ -93,7 +93,7 @@ case class GameState(controller: IController) extends State(controller):
       case ExitInput => ExitAction()
       case other => super.handleInput(other)
 
-case class GameEndState(controller: IController) extends State(controller):
+case class GameEndState(controller: IController) extends State:
 
   override def print(): Unit =
     println("\n" + PrintUtil.yellow(PrintUtil.bold("All SETs found!")))

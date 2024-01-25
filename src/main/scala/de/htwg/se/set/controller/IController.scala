@@ -51,7 +51,7 @@ trait ISnapshot:
   def toXml: Elem
   def toJson: JsValue
 
-trait IState(controller: IController):
+trait IState:
 
   def print(): Unit
   def message: String
