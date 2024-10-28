@@ -9,8 +9,6 @@ import scala.xml.Elem
 
 private class State extends IState:
 
-  def print(): Unit = ()
-
   def message: String = ""
 
   def actionFromInput(input: String): IAction = NoAction()
@@ -28,10 +26,10 @@ private class State extends IState:
 
 case class SettingsState(controller: IController) extends State:
 
-  override def print(): Unit =
-    println(PrintUtil.bold("1") + " Start game")
-    println(PrintUtil.bold("2") + " Change number of players")
-    println(PrintUtil.bold("3") + " Switch to " + (if controller.settings.easy then "normal" else "easy") + " mode")
+  override def toString: String =
+    PrintUtil.bold("1") + " Start game" + "\n" +
+      PrintUtil.bold("2") + " Change number of players" + "\n" +
+      PrintUtil.bold("3") + " Switch to " + (if controller.settings.easy then "normal" else "easy") + " mode"
 
   override def actionFromInput(input: String): IAction =
     InputUtil.intInput(input, 1, 3, controller.canUndo, controller.canRedo, false) match
@@ -42,7 +40,7 @@ case class SettingsState(controller: IController) extends State:
 
 case class ChangePlayerCountState(controller: IController) extends State:
 
-  override def print(): Unit = println("Enter number of players:")
+  override def toString: String = "Enter number of players:"
 
   override def actionFromInput(input: String): IAction =
     InputUtil.intInput(input, 1, 10, controller.canUndo, controller.canRedo, false) match
@@ -51,9 +49,11 @@ case class ChangePlayerCountState(controller: IController) extends State:
 
 case class SelectPlayerState(controller: IController) extends State:
 
-  override def print(): Unit =
+  override def toString: String =
     if !controller.settings.singlePlayer then
-      println("Input player who found a SET (e.g. 1) or 0 if no SET can be found:")
+      "Input player who found a SET (e.g. 1) or 0 if no SET can be found:"
+    else
+      ""
 
   override def message: String = "Select player who found a SET or press ADD CARDS if no SET can be found."
 
@@ -69,17 +69,17 @@ case class SelectPlayerState(controller: IController) extends State:
       case other => super.handleInput(other)
 
 case class GameState(controller: IController) extends State:
+
+  override def toString: String =
+    if controller.settings.singlePlayer then
+      "Select 3 cards for a SET (e.g. A1 B2 C3):"
+    else
+      "Player " + player.number + ", select 3 cards for a SET (e.g. A1 B2 C3):"
   
   private def player =
     controller.game.selectedPlayer match 
       case Some(p) => p
       case None => throw IllegalStateException("No player selected")
-
-  override def print(): Unit =
-    if controller.settings.singlePlayer then
-      println("Select 3 cards for a SET (e.g. A1 B2 C3):")
-    else
-      println("Player " + player.number + ", select 3 cards for a SET (e.g. A1 B2 C3):")
 
   override def message: String =
     if controller.settings.singlePlayer then
@@ -95,11 +95,14 @@ case class GameState(controller: IController) extends State:
 
 case class GameEndState(controller: IController) extends State:
 
-  override def print(): Unit =
-    println("\n" + PrintUtil.yellow(PrintUtil.bold("All SETs found!")))
-    if !controller.settings.singlePlayer then
-      controller.game.players.sortBy(player => (-player.sets.length, player.number)).foreach(player => println(player))
-    println("\nType f to finish:")
+  override def toString: String =
+    val players = controller.game.players
+      .sortBy(player => (-player.sets.length, player.number))
+      .map(player => player.toString)
+      .mkString("\n")
+    "\n" + PrintUtil.yellow(PrintUtil.bold("All SETs found!"))
+      + (if !controller.settings.singlePlayer then "\n" + players else "")
+      + "\nType f to finish:"
 
   override def actionFromInput(input: String): IAction =
     InputUtil.finishInput(input, controller.canUndo, controller.canRedo) match

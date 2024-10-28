@@ -7,7 +7,6 @@ import play.api.libs.json.Json
 
 import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Paths}
-import java.security.MessageDigest
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import scala.xml.{Elem, PrettyPrinter, Utility, XML}
@@ -17,11 +16,11 @@ case class Controller @Inject() (var settings: ISettings, var game: IGame) exten
   private val undoManager = new UndoManager
   private var state: IState = SettingsState(this)
 
+  override def currentState: String = state.toString
+
   override def changeState(s: IState): Unit =
     state = s
     notifyObservers(Event.STATE_CHANGED)
-
-  override def printState(): Unit = state.print()
 
   override def actionFromInput(input: String): IAction = state.actionFromInput(input)
 

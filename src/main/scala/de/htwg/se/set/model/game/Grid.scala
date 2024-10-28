@@ -10,7 +10,7 @@ case class Grid(columns: Int, cards: List[ICard], easy: Boolean) extends IGrid:
   private def columnWidth: Int = if easy then 3 else 4
 
   private def legend(columns: Int): String =
-    "  " + (65 until 65 + columns).map(_.toChar).map("│" + _ + (" " * (columnWidth - 1))).mkString
+    ">>" + (65 until 65 + columns).map(_.toChar).map("│" + _ + (">" * (columnWidth - 1))).mkString
 
   private def line(columns: Int): String = "──" + ("┼" + "─" * columnWidth) * columns
 

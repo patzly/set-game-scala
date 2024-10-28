@@ -13,7 +13,7 @@ trait IController extends Observable:
   def game: IGame
   
   def changeState(s: IState): Unit
-  def printState(): Unit
+  def currentState: String
   def actionFromInput(input: String): IAction
   def handleAction(action: IAction): Unit
   def snapshot: Snapshot
@@ -52,8 +52,7 @@ trait ISnapshot:
   def toJson: JsValue
 
 trait IState:
-
-  def print(): Unit
+  
   def message: String
   def actionFromInput(input: String): IAction
   def handleInput(input: IUserInput): IAction

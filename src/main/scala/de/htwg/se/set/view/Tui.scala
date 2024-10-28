@@ -1,6 +1,6 @@
 package de.htwg.se.set.view
 
-import de.htwg.se.set.controller.controller.InvalidAction
+import de.htwg.se.set.controller.controller.{InvalidAction, NoAction}
 import de.htwg.se.set.controller.{Event, IAction, IController}
 import de.htwg.se.set.util.{Observer, PrintUtil}
 
@@ -13,7 +13,7 @@ case class Tui(controller: IController) extends Observer:
 
   println(PrintUtil.bold("Welcome to the SET Game!"))
   println(controller.settingsToString)
-  controller.printState()
+  println(controller.currentState)
   loop()
 
   @tailrec
@@ -34,5 +34,5 @@ case class Tui(controller: IController) extends Observer:
       case Event.SETTINGS_CHANGED => println(controller.settingsToString)
       case Event.CARDS_CHANGED => println(controller.gameToString)
       case Event.SETTINGS_OR_GAME_CHANGED => println(controller)
-      case Event.STATE_CHANGED => controller.printState()
+      case Event.STATE_CHANGED => println(controller.currentState)
       case _ =>
